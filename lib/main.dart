@@ -1,4 +1,5 @@
 import 'package:bom_front/view/hom_view.dart';
+import 'package:bom_front/view/timer_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      home: TimerApp(),
     );
   }
 }

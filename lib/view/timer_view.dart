@@ -1,9 +1,9 @@
-/* this is timer_model.dart */
-import 'package:bom_front/model/todo.dart';
-import 'package:bom_front/repository/timer_repository.dart';
+import 'package:bom_front/view/components/timer_appbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:bom_front/view/components/timer_appbar.dart';
+import 'package:bom_front/model/todo.dart';
+import 'package:bom_front/repository/timer_repository.dart';
 
 class TimerApp extends StatelessWidget {
   @override
@@ -21,12 +21,11 @@ class _TimerPageState extends State<TimerPage> {
   late Timer _timer; //타이머
   var _time = 0; //실제 늘어난 시간
   var _isRunning = false; // 시작/정지의 상태
-
+  int _total_time = 0;
   Todo todo = new Todo();
 
   void initState() {
-    final result = TimerRepository().getTimerData();
-    print(result);
+    TimerRepository().getTimerData();
     super.initState();
     updateData();
     //해당 일정의 시간, 카테고리 색,일정 내용 가져와야함
@@ -37,8 +36,9 @@ class _TimerPageState extends State<TimerPage> {
     super.dispose();
   }
 
-  void updateData() {
+  Future<void> updateData() async {
     _time = todo.time ?? 0;
+    _total_time = await TimerRepository().getTotalTimeData();
   }
 
   void _clickButton() {
@@ -56,11 +56,12 @@ class _TimerPageState extends State<TimerPage> {
     _timer = Timer.periodic(Duration(milliseconds: 10), (timer) {
       setState(() {
         _time++;
+        _total_time++;
         count++;
         if (count == 30) {
           count = 0;
           TimerRepository()
-              .postStarData(1); // 별개수 받아와야하는데 그거에 대해서 논의의          //별보내기
+              .postStarData(); // 별개수 받아와야하는데 그거에 대해서 논의의          //별보내기
         }
       });
     });
@@ -74,103 +75,101 @@ class _TimerPageState extends State<TimerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TimerAppBar(),
+      backgroundColor: Color(0xffC9A0F5),
       body: _buildbody(),
     );
   }
 
   Widget _buildbody() {
-    var min = '${_time ~/ 6000}'.padLeft(2, '0');
-    var sec = '${_time ~/ 100}'.padLeft(2, '0');
-    var hundredth = '${_time % 100}'.padLeft(2, '0');
+    int hours = (_time ~/ 216000).truncate();
+    int minutes = (_time ~/ 3600).truncate();
+    int seconds = (_time ~/ 60).truncate();
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 50),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: <Widget>[
-            Column(
+    int total_hours = (_total_time ~/ 216000).truncate();
+    int total_minutes = (_total_time ~/ 3600).truncate();
+    int total_seconds = (_total_time ~/ 60).truncate();
+
+    var hour = (hours % 60).toString().padLeft(2, '0');
+    var min = (minutes % 60).toString().padLeft(2, '0');
+    var sec = (seconds % 60).toString().padLeft(2, '0');
+
+    var total_hour = (total_hours % 60).toString().padLeft(2, '0');
+    var total_min = (total_minutes % 60).toString().padLeft(2, '0');
+    var total_sec = (total_seconds % 60).toString().padLeft(2, '0');
+
+    return (Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 360,
+            height: 360,
+            decoration: BoxDecoration(
+              color: Color(0xffA876DE),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white60,
+                width: 5,
+              ),
+            ),
+            child: Stack(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                Positioned(
+                  top: 20,
+                  right: 130,
+                  child: Text(
+                    "오늘\n" + "$total_hour:$total_min:$total_sec",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 25, color: Colors.white70),
+                  ),
                 ),
-                Container(
-                  width: 360,
-                  height: 360,
-                  // color: Colors.grey,
-                  decoration: BoxDecoration(
-                    // color: '$color',
-                    color: Colors.grey.shade200,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.black38,
-                      width: 5,
+                Align(
+                  alignment: Alignment.center,
+                  child: Positioned(
+                    child: TextButton(
+                      onPressed: () => setState(() {
+                        _clickButton();
+                      }),
+                      child: _isRunning
+                          ? Icon(
+                              Icons.pause,
+                              size: 300,
+                              color: Color(0xff9747FF),
+                            )
+                          : Icon(
+                              Icons.play_arrow,
+                              size: 300,
+                              color: Color(0xff9747FF),
+                            ),
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                          offset: Offset(10, 10),
-                          color: Colors.black38,
-                          blurRadius: 15),
-                      BoxShadow(
-                          offset: Offset(-10, -10),
-                          color: Colors.white.withOpacity(0.5),
-                          blurRadius: 15),
-                    ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Positioned(
+                    child: Text(
+                      "$hour:$min:$sec",
+                      style: TextStyle(fontSize: 80, color: Colors.white),
+                    ),
                   ),
                 ),
               ],
             ),
-            Positioned(
-              top: -20,
-              right: 110,
-              child: Container(
-                child: Image.asset(
-                  'images/character.png',
-                  width: 80,
-                  height: 80,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 150,
-              right: 30,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
               child: Text(
-                "$min:$sec:$hundredth",
-                style: TextStyle(fontSize: 60, color: Colors.grey.shade900),
-              ),
+            "허용앱 설정하러 가기",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white60,
+              decoration: TextDecoration.underline,
             ),
-            Positioned(
-              top: 100,
-              right: 70,
-              child: Container(
-                child: Text(
-                  "오늘은: 00:00:00",
-                  style: TextStyle(fontSize: 20, color: Colors.grey.shade900),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 130,
-              right: 80,
-              child: TextButton(
-                onPressed: () => setState(() {
-                  _clickButton();
-                }),
-                child: _isRunning
-                    ? Icon(
-                        Icons.pause,
-                        size: 100,
-                      )
-                    : Icon(
-                        Icons.play_arrow,
-                        size: 100,
-                      ),
-              ),
-            ),
-          ],
-        ),
+          ))
+        ],
       ),
-    );
+    ));
   }
 }
