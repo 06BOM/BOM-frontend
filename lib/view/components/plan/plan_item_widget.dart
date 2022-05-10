@@ -179,7 +179,7 @@ class _PlanItemState extends ConsumerState<PlanItem> {
                       child: ListTile(
                         enabled: !todo.check!,
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => TimerPage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => TimerPage(todo)));
                         },
                         onLongPress: () {
                           print(

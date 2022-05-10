@@ -1,30 +1,31 @@
+import 'package:bom_front/model/todo.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:bom_front/provider/timer_provider.dart';
-
 import '../provider/todo_provider.dart';
 
-// class TimerApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       home: TimerPage(),
-//     );
-//   }
-// }
+final timerProvider = StateNotifierProvider.family<TimerNotifier, TimerModel, int>((ref, id){
+  // ref.watch(todoListProvider).where((el) => el.planId == id).toList()[0].time;
+  return TimerNotifier(ref, id);
+},);
 
 class TimerPage extends ConsumerWidget {
-  TimerPage();
+  Todo todo;
+  TimerPage(this.todo);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(timerProvider);
-    print('building TimerPage =>>> ');
+    ref.watch(timerProvider(todo.planId!));
+    print('planItem ${todo.planId} ${todo.planName} rebuilding... in timer_view');
     return Scaffold(
       backgroundColor: Color(0xffC9A0F5),
-      appBar: AppBar(title: Text('My Timer App')),
+      appBar: AppBar(
+          title: Text('${todo.planName}'),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          foregroundColor: Colors.white,
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -43,12 +44,12 @@ class TimerPage extends ConsumerWidget {
               child: Stack(
                 children: <Widget>[
                   Positioned(
-                    child: ButtonsContainer(),
+                    child: ButtonsContainer(todo.planId),
                     top: -30,
                     right: -30,
                   ),
                   Positioned(
-                    child: TimerTextWidget(),
+                    child: TimerTextWidget(todo.planId),
                     top: 120,
                     right: 20,
                   ),
@@ -62,74 +63,42 @@ class TimerPage extends ConsumerWidget {
   }
 }
 
-final timerProvider = StateNotifierProvider<TimerNotifier, TimerModel>(
-  (ref){
-    return TimerNotifier();
-  },
-);
-
-final _timeLeftProvider = Provider<String>((ref) {
-  return ref.watch(timerProvider).timeLeft;
-});
-
-final timeLeftProvider = Provider<String>((ref) {
-  return ref.watch(_timeLeftProvider);
-});
-
 class TimerTextWidget extends HookConsumerWidget {
-  const TimerTextWidget({Key? key}) : super(key: key);
+  final planId;
+  const TimerTextWidget(this.planId, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timeLeft = ref.watch(timeLeftProvider);
+    final timeLeft = ref.watch(timerProvider(planId)).timeLeft;
     print('building TimerTextWidget $timeLeft');
     return Text(
-      timeLeft,
+      timeLeft ?? 'Error',
       style: TextStyle(fontSize: 80, color: Colors.white),
       textAlign: TextAlign.center,
     );
   }
 }
 
-int initState() {
-  int initialTime = 0;
-  var ref;
-  AsyncValue<int> user_time = ref.watch(userTimeLeftProvider);
-  user_time.when(
-      data: ((data) => initialTime = data),
-      error: (err, stack) => Text("Error: $err"),
-      loading: () => Container());
-
-  return initialTime;
-}
-
-final _buttonState = Provider<ButtonState>((ref) {
-  return ref.watch(timerProvider).buttonState;
-});
-
-final buttonProvider = Provider<ButtonState>((ref) {
-  return ref.watch(_buttonState);
-});
-
 class ButtonsContainer extends HookConsumerWidget {
-  const ButtonsContainer({Key? key}) : super(key: key);
+  final planId;
+  const ButtonsContainer(this.planId, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     print('building ButtonsContainer');
 
-    final state = ref.watch(buttonProvider);
+    final state = ref.watch(timerProvider(planId)).buttonState;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (state == ButtonState.initial) ...[
-          StartButton(),
+          StartButton(planId),
         ],
         if (state == ButtonState.started) ...[
-          PauseButton(),
+          PauseButton(planId),
         ],
         if (state == ButtonState.paused) ...[
-          StartButton(),
+          StartButton(planId),
         ],
       ],
     );
@@ -137,12 +106,13 @@ class ButtonsContainer extends HookConsumerWidget {
 }
 
 class StartButton extends ConsumerWidget {
-  const StartButton({Key? key}) : super(key: key);
+  final planId;
+  const StartButton(this.planId, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
       onPressed: () {
-        ref.read(timerProvider.notifier).start();
+        ref.read(timerProvider(planId).notifier).start();
         print("start pressed");
       },
       icon: Icon(
@@ -155,12 +125,13 @@ class StartButton extends ConsumerWidget {
 }
 
 class PauseButton extends ConsumerWidget {
-  const PauseButton({Key? key}) : super(key: key);
+  final planId;
+  const PauseButton(this.planId,{Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return IconButton(
       onPressed: () {
-        ref.read(timerProvider.notifier).pause();
+        ref.read(timerProvider(planId).notifier).pause();
         print("stop pressed");
       },
       icon: Icon(Icons.pause, color: Color(0xff9747FF)),
@@ -168,3 +139,15 @@ class PauseButton extends ConsumerWidget {
     );
   }
 }
+
+// int initState() {
+//   int initialTime = 0;
+//   var ref;
+//   AsyncValue<int> user_time = ref.watch(userTimeLeftProvider);
+//   user_time.when(
+//       data: ((data) => initialTime = data),
+//       error: (err, stack) => Text("Error: $err"),
+//       loading: () => Container());
+//
+//   return initialTime;
+// }
