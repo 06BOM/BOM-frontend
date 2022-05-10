@@ -4,8 +4,8 @@ import 'package:bom_front/provider/quiz/quiz_state.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html_character_entities/html_character_entities.dart';
-import 'dart:math' as math;
 import 'answer_card.dart';
+import 'completion_timer.dart';
 
 class QuizQuestions extends ConsumerWidget {
   final PageController pageController;
@@ -96,9 +96,7 @@ class QuizQuestions extends ConsumerWidget {
                             Border.all(color: Colors.greenAccent, width: 2)),
                     width: 80.0,
                     height: 80.0,
-                    child: CustomPaint(
-                      painter: timerBorderPaint(progress: 0.6, taskCompletedColor: Colors.blue, taskNotCompletedColor: Colors.white),
-                    ),
+                    child: AnimatedTask(),
                   ),
                 ],
               ),
@@ -185,41 +183,4 @@ class RingPaint extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => true;
-}
-
-class timerBorderPaint extends CustomPainter {
-  // timerBorderPaint(
-  //     this.progress, this.taskNotCompletedColor, this.taskCompletedColor);
-  timerBorderPaint(
-      {required this.progress, required this.taskNotCompletedColor, required this.taskCompletedColor});
-
-  final double progress;
-  final Color taskNotCompletedColor;
-  final Color taskCompletedColor;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final strokeWidth = size.width / 15.0;
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = (size.width - strokeWidth) / 2.7; // 2일때 꽉 찬다.
-
-    final backgroundpaint = Paint()
-      ..isAntiAlias = true
-      ..color = taskNotCompletedColor
-      ..strokeWidth = strokeWidth
-      ..style = PaintingStyle.stroke; //important set stroke style
-
-    canvas.drawCircle(center, radius, backgroundpaint);
-
-    final foregraoundPaint = Paint()
-      ..isAntiAlias = true
-      ..strokeWidth = strokeWidth
-      ..color = taskCompletedColor
-      ..style = PaintingStyle.stroke;
-    canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
-        -math.pi / 2, 2 * math.pi * progress, false, foregraoundPaint);
-  }
-
-  @override
-  bool shouldRepaint(covariant timerBorderPaint oldDelegate) => oldDelegate.progress != progress;
 }
