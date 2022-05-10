@@ -8,9 +8,11 @@ import 'dart:async';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class TimerNotifier extends StateNotifier<TimerModel> {
+
   TimerNotifier() : super(_initialState);
 
-  static int _initialTime = initState();
+  static int _initialTime = 0;
+
   static final _initialState = TimerModel(
     _durationString(_initialTime),
     ButtonState.initial,

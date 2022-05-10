@@ -3,20 +3,25 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:bom_front/provider/timer_provider.dart';
 
-class TimerApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: TimerPage(),
-    );
-  }
-}
+import '../provider/todo_provider.dart';
+
+// class TimerApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: TimerPage(),
+//     );
+//   }
+// }
 
 class TimerPage extends ConsumerWidget {
+  TimerPage();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print('building MyHomePage');
+    ref.watch(timerProvider);
+    print('building TimerPage =>>> ');
     return Scaffold(
       backgroundColor: Color(0xffC9A0F5),
       appBar: AppBar(title: Text('My Timer App')),
@@ -58,7 +63,9 @@ class TimerPage extends ConsumerWidget {
 }
 
 final timerProvider = StateNotifierProvider<TimerNotifier, TimerModel>(
-  (ref) => TimerNotifier(),
+  (ref){
+    return TimerNotifier();
+  },
 );
 
 final _timeLeftProvider = Provider<String>((ref) {

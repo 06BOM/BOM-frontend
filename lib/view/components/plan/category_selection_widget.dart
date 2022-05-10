@@ -18,10 +18,16 @@ class _BomCategoryState extends ConsumerState<BomCategory> {
   late List<bool> isSelected;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     isSelected = List.filled(widget.userCategory.length, false);
     int index = widget.data?.categoryId ?? 0;
     isSelected[index != 0 ? index - 1 : 0] = true;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if(isSelected.length < widget.userCategory.length) isSelected.add(false); // 생성시 initState에서는 userCategory값 증가를 모르기 때문
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -107,6 +113,7 @@ class _BomCategoryState extends ConsumerState<BomCategory> {
                       ],
                     ],
                     onPressed: (int index) {
+                      print('onPressed');
                       ref.read(categoryIdToCreate.notifier).state = index + 1;
                       setState(() {
                         for (int i = 0; i < isSelected.length; i++) {
