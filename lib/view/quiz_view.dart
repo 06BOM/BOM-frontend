@@ -33,7 +33,7 @@ class QuizScreen extends HookConsumerWidget {
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: AssetImage('assets/background.png'), // 배경 이미지
+          image: AssetImage('images/background.png'), // 배경 이미지
         ),
       ),
       child: Scaffold(
