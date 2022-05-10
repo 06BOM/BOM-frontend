@@ -27,15 +27,18 @@ class AnswerCard extends StatelessWidget {
     return GestureDetector(
         onTap: onTap,
         child: Container(
-          margin: const EdgeInsets.symmetric(
-            vertical: 12.0,
-            horizontal: 20.0,
-          ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 12.0,
-            horizontal: 20.0,
-          ),
-          width: double.infinity,
+          // margin: const EdgeInsets.symmetric(
+          //   vertical: 12.0,
+          //   horizontal: 20.0,
+          // ),
+          // padding: const EdgeInsets.symmetric(
+          //   vertical: 12.0,
+          //   horizontal: 20.0,
+          // ),
+          // width: double.infinity,
+          // width: MediaQuery.of(context).size.width,
+          width: 150,
+          height: 100,
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: boxShadow,
