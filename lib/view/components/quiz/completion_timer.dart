@@ -1,14 +1,67 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class QuizCompletionTimer extends StatelessWidget {
-  final double progress;
-  const QuizCompletionTimer({Key? key, required this.progress}) : super(key: key);
+class AnimatedTask extends StatefulWidget {
+  const AnimatedTask({Key? key}) : super(key: key);
+
+  @override
+  State<AnimatedTask> createState() => _AnimatedTaskState();
+}
+
+class _AnimatedTaskState extends State<AnimatedTask>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 7500));
+    super.initState();
+    _animationController.forward();
+    // _animationController.reverse(); // 반대
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    return Consumer(
+      builder: (context, ref, child) {
+        return AnimatedBuilder(
+            animation: _animationController,
+            builder: (BuildContext context, Widget? child) {
+              return QuizCompletionTimer(progress: _animationController.value);
+            });
+      },
+    );
+  }
+}
+
+class QuizCompletionTimer extends ConsumerWidget {
+  final double progress;
+
+  const QuizCompletionTimer({Key? key, required this.progress})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return CustomPaint(
-      painter: timerBorderPaint(progress: progress, taskCompletedColor: progress < 0.5 ? Colors.yellow : Colors.red, taskNotCompletedColor: Colors.black),
+      painter: timerBorderPaint(
+          progress: progress,
+          taskCompletedColor: progress < 0.5 ? Colors.yellow : Colors.red,
+          taskNotCompletedColor: Colors.black),
+      child: Center(
+        child: Text('${10 - (progress * 10).floor()}',
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 20.0)),
+      ),
     );
   }
 }
@@ -17,7 +70,9 @@ class timerBorderPaint extends CustomPainter {
   // timerBorderPaint(
   //     this.progress, this.taskNotCompletedColor, this.taskCompletedColor);
   timerBorderPaint(
-      {required this.progress, required this.taskNotCompletedColor, required this.taskCompletedColor}); // required for named parameter
+      {required this.progress,
+      required this.taskNotCompletedColor,
+      required this.taskCompletedColor}); // required for named parameter
 
   final double progress;
   final Color taskNotCompletedColor;
@@ -47,37 +102,6 @@ class timerBorderPaint extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant timerBorderPaint oldDelegate) => oldDelegate.progress != progress;
-}
-
-class AnimatedTask extends StatefulWidget {
-  const AnimatedTask({Key? key}) : super(key: key);
-
-  @override
-  State<AnimatedTask> createState() => _AnimatedTaskState();
-}
-
-class _AnimatedTaskState extends State<AnimatedTask> with SingleTickerProviderStateMixin{
-  late final AnimationController _animationController;
-
-  @override
-  void initState() {
-    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 7500));
-    super.initState();
-    _animationController.forward();
-    // _animationController.reverse(); // 반대
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(animation: _animationController, builder: (BuildContext context, Widget? child){
-      return QuizCompletionTimer(progress: _animationController.value);
-    });
-  }
+  bool shouldRepaint(covariant timerBorderPaint oldDelegate) =>
+      oldDelegate.progress != progress;
 }

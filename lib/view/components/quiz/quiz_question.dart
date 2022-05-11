@@ -79,51 +79,101 @@ class QuizQuestions extends ConsumerWidget {
                   ],
                 ),
               ),
-              // Divider(
-              //   color: Colors.grey[200],
-              //   height: 32.0,
-              //   thickness: 2.0,
-              //   indent: 20.0,
-              //   endIndent: 20.0,
-              // ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Stack(
+                alignment: Alignment.center,
                 children: [
                   Container(
-                    // padding: EdgeInsets.all(0.0),
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Colors.greenAccent, width: 2)),
-                    width: 80.0,
-                    height: 80.0,
-                    child: AnimatedTask(),
+                    width: 70.0,
+                    height: 70.0,
+                    child: CustomPaint(
+                      painter: circleDrawPaint(),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        // padding: EdgeInsets.all(0.0),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.greenAccent, width: 2)),
+                        width: 80.0,
+                        height: 80.0,
+                        child: AnimatedTask(),
+                      ),
+                    ],
                   ),
                 ],
               ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //   children: [
+              //     Container(
+              //       // padding: EdgeInsets.all(0.0),
+              //       decoration: BoxDecoration(
+              //           border:
+              //               Border.all(color: Colors.greenAccent, width: 2)),
+              //       width: 180.0,
+              //       height: 180.0,
+              //       child: CustomPaint(
+              //         painter: CrossDrawPaint(),
+              //         child: Container(),
+              //       ),
+              //     ),
+              //     Container(
+              //       // padding: EdgeInsets.all(0.0),
+              //       decoration: BoxDecoration(
+              //           border:
+              //               Border.all(color: Colors.greenAccent, width: 2)),
+              //       width: 180.0,
+              //       height: 180.0,
+              //       child: CustomPaint(
+              //         painter: RingPaint(),
+              //       ),
+              //     ),
+              //   ],
+              // ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Container(
-                    // padding: EdgeInsets.all(0.0),
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Colors.greenAccent, width: 2)),
-                    width: 180.0,
-                    height: 180.0,
-                    child: CustomPaint(
-                      painter: CrossDrawPaint(),
-                      child: Container(),
+                  GestureDetector(
+                    onTap: () => {print('O touch')},
+                    child: Container(
+                      child: Center(
+                        child: Text(
+                          'O',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 100,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 40,
+                                  color: Colors.blue,
+                                ),
+                              ]),
+                        ),
+                      ),
                     ),
                   ),
-                  Container(
-                    // padding: EdgeInsets.all(0.0),
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Colors.greenAccent, width: 2)),
-                    width: 180.0,
-                    height: 180.0,
-                    child: CustomPaint(
-                      painter: RingPaint(),
+                  GestureDetector(
+                    onTap: () => {print('X touch')},
+                    child: Container(
+                      child: Center(
+                        child: Text(
+                          'X',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 100,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 40,
+                                  color: Colors.red,
+                                ),
+                              ]),
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -147,40 +197,62 @@ class QuizQuestions extends ConsumerWidget {
   }
 }
 
-class CrossDrawPaint extends CustomPainter {
+class circleDrawPaint extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    Paint crossBrush = Paint()
-      ..color = Colors.red
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 30;
-    canvas.drawLine(const Offset(40, 40),
-        Offset(size.width - 40, size.height - 40), crossBrush);
-    canvas.drawLine(
-        Offset(size.width - 40, 40), Offset(40, size.height - 40), crossBrush);
+    final strokeWidth = size.width / 15.0;
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = (size.width - strokeWidth) / 2.7;
+
+    Paint brush = new Paint()
+      ..color = Colors.black
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.fill
+      ..strokeWidth = strokeWidth;
+    canvas.drawCircle(center, radius, brush);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    // TODO: implement shouldRepaint
     return true;
   }
 }
 
-class RingPaint extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final strokeWidth = size.width / 5.0;
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = (size.width - strokeWidth) / 2.7; // 2일때 꽉 찬다.
-
-    final backgroundpaint = Paint()
-      ..color = Colors.blue
-      ..strokeWidth = strokeWidth
-      ..style = PaintingStyle.stroke; //important set stroke style
-
-    canvas.drawCircle(center, radius, backgroundpaint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
-}
+// class CrossDrawPaint extends CustomPainter {
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     Paint crossBrush = Paint()
+//       ..color = Colors.red
+//       ..style = PaintingStyle.stroke
+//       ..strokeWidth = 30;
+//     canvas.drawLine(const Offset(40, 40),
+//         Offset(size.width - 40, size.height - 40), crossBrush);
+//     canvas.drawLine(
+//         Offset(size.width - 40, 40), Offset(40, size.height - 40), crossBrush);
+//   }
+//
+//   @override
+//   bool shouldRepaint(covariant CustomPainter oldDelegate) {
+//     return true;
+//   }
+// }
+//
+// class RingPaint extends CustomPainter {
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     final strokeWidth = size.width / 5.0;
+//     final center = Offset(size.width / 2, size.height / 2);
+//     final radius = (size.width - strokeWidth) / 2.7; // 2일때 꽉 찬다.
+//
+//     final backgroundpaint = Paint()
+//       ..color = Colors.blue
+//       ..strokeWidth = strokeWidth
+//       ..style = PaintingStyle.stroke; //important set stroke style
+//
+//     canvas.drawCircle(center, radius, backgroundpaint);
+//   }
+//
+//   @override
+//   bool shouldRepaint(CustomPainter oldDelegate) => true;
+// }

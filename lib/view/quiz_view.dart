@@ -27,6 +27,7 @@ class QuizScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final quizQuestions = ref.watch(quizQuestionProvider); // useProvider();
     final pageController = usePageController();
+
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -57,10 +58,10 @@ class QuizScreen extends HookConsumerWidget {
                 ref
                     .read(quizControllerProvider.notifier)
                     .nextQuestion(questions, pageController.page!.toInt());
-                if (pageController.page!.toInt() + 1 < questions.length) {
+                if (pageController.page!.toInt() + 1 < questions.length) { // 넘기감: page가 퀴즈 개수 보다 작을 경우
                   pageController.nextPage(
                     duration: const Duration(milliseconds: 250),
-                    curve: Curves.linear,
+                    curve: Curves.easeInOut,
                   );
                 }
               },
