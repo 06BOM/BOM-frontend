@@ -38,11 +38,11 @@ class TimerPage extends ConsumerWidget {
               willLeave = true;
               Navigator.of(context).pop();
             }, style: ElevatedButton.styleFrom(
-                primary: Colors.purple,
+                primary: const Color(0xffA876DE),
                 ), child: const Text('종료')),
             TextButton(
                 onPressed: () => Navigator.of(context).pop(), style: TextButton.styleFrom(
-              primary: Colors.purple,
+              primary: const Color(0xffA876DE),
             ),
                 child: const Text('계속'))
           ]

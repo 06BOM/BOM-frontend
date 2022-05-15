@@ -146,15 +146,28 @@ class _BomColorState extends ConsumerState<BomColor> {
             mainAxisSize: MainAxisSize.min,
             children: [
               buildColorPickerBlockVer(),
-              TextButton(
-                child: Text(
-                  '선택',
-                  style: TextStyle(fontSize: 20),
-                ),
-                onPressed: () {
-                  isSelected.add(false); // provider refresh해주기
-                  Navigator.of(context).pop();
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    child: Text(
+                      '선택',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: const Color(0xffA876DE),
+                    ),
+                    onPressed: () {
+                      isSelected.add(false); // provider refresh해주기
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                      onPressed: () => Navigator.of(context).pop(), style: TextButton.styleFrom(
+                    primary: const Color(0xffA876DE),
+                  ),
+                      child: const Text('취소', style: TextStyle(fontSize: 20)))
+                ],
               ),
             ],
           )));
