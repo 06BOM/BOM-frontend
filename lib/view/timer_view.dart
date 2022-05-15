@@ -13,29 +13,22 @@ class TimerPage extends ConsumerWidget {
   TimerPage(this.todo);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(timerProvider(todo.planId!));
-    print('planItem ${todo.planId} ${todo.planName} rebuilding... in timer_view');
-    return Scaffold(
-      backgroundColor: Color(0xffC9A0F5),
-      appBar: AppBar(
-          title: Text('${todo.planName}'),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          foregroundColor: Colors.white,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back), // <- 아이콘도 동일한 것을 사용
-            onPressed: () {
-              Navigator.pop(context);     // <- 이전 페이지로 이동.
-            },
-          ),
-      ),
-      body: WillPopScope(
-        onWillPop: (){
-          print('못나가');
-          return Future(() => false);
-        },
-        child: Center(
+    final usersTime = ref.watch(timerProvider(todo.planId!));
+    print('planItem ${todo.planId} ${todo.planName} ${usersTime.timeLeft} rebuilding... in timer_view');
+    return WillPopScope(
+      onWillPop: () async{
+
+      },
+      child: Scaffold(
+        backgroundColor: Color(0xffC9A0F5),
+        appBar: AppBar(
+            title: Text('${todo.planName}'),
+            centerTitle: true,
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
+            foregroundColor: Colors.white,
+        ),
+        body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

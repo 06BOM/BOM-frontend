@@ -90,18 +90,23 @@ class TodoList extends StateNotifier<List<Todo>> {
     ];
   }
 
-  void edit({required String id, required String description}) {
+  void timeEdit({required int id, required int userTime}) {
     state = [
       for (final todo in state)
         if (todo.planId == id)
           Todo(
               planId: todo.planId,
-              planName: description,
+              planName: todo.planName,
               check: todo.check,
               categoryId: todo.categoryId,
               dailyId: todo.dailyId,
               repetitionType: todo.repetitionType,
-              time: todo.time)
+              time: userTime,
+              categoryName: todo.categoryName,
+              color: todo.color,
+              type: todo.type,
+              userId: todo.userId
+          )
         else
           todo,
     ];

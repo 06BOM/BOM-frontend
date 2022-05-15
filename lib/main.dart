@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Team BOM',
       theme: ThemeData(primaryColor: Color(0xffA876DE)),
       home: const HomeScreen(),
