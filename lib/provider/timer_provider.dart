@@ -34,7 +34,7 @@ class TimerNotifier extends StateNotifier<TimerModel> {
 
   String _durationString(int duration) {
     if (duration % 30 == 0 && duration != 0) {
-      TimerRepository().postStarData();
+      // TimerRepository().postStarData(); // opcode 1로 뜸
     } //30분마다 전송
     final hour =
         (((duration / 60) / 60) % 60).floor().toString().padLeft(2, '0');

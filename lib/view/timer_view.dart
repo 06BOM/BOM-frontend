@@ -17,7 +17,37 @@ class TimerPage extends ConsumerWidget {
     print('planItem ${todo.planId} ${todo.planName} ${usersTime.timeLeft} rebuilding... in timer_view');
     return WillPopScope(
       onWillPop: () async{
-
+        // PauseButton(todo.planId);
+        bool willLeave = false;
+        await showDialog(context: context, builder: (_) => AlertDialog(
+          title: const Text('타이머를 종료하시겠습니까? 해당 플랜의 기록은 저장됩니다.'),
+          actions: [
+            ElevatedButton(onPressed: () {
+              int sumOfTimeSec = 0;
+              var arr = usersTime.timeLeft!.split(':');
+              for(int i = 0; i < arr.length; i++){
+                if(i == 0){
+                  sumOfTimeSec += 1800 * int.parse(arr[i]);
+                }else if(i == 1){
+                  sumOfTimeSec += 60 * int.parse(arr[i]);
+                }else{
+                  sumOfTimeSec += int.parse(arr[i]);
+                }
+              }
+              ref.read(todoListProvider.notifier).timeEdit(id: todo.planId!, userTime: sumOfTimeSec); // watch때문에 필요x
+              willLeave = true;
+              Navigator.of(context).pop();
+            }, style: ElevatedButton.styleFrom(
+                primary: Colors.purple,
+                ), child: const Text('종료')),
+            TextButton(
+                onPressed: () => Navigator.of(context).pop(), style: TextButton.styleFrom(
+              primary: Colors.purple,
+            ),
+                child: const Text('계속'))
+          ]
+        ));
+        return willLeave;
       },
       child: Scaffold(
         backgroundColor: Color(0xffC9A0F5),
