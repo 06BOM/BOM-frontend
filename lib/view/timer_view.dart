@@ -4,15 +4,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:bom_front/provider/timer_provider.dart';
 import '../provider/todo_provider.dart';
 
-final timerProvider = StateNotifierProvider.family<TimerNotifier, TimerModel, int>((ref, id){
-  // ref.watch(todoListProvider).where((el) => el.planId == id).toList()[0].time;
+final timerProvider = StateNotifierProvider.autoDispose.family<TimerNotifier, TimerModel, int>((ref, id){
   return TimerNotifier(ref, id);
 },);
 
 class TimerPage extends ConsumerWidget {
   Todo todo;
   TimerPage(this.todo);
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(timerProvider(todo.planId!));
@@ -25,38 +23,50 @@ class TimerPage extends ConsumerWidget {
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           foregroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back), // <- 아이콘도 동일한 것을 사용
+            onPressed: () {
+              Navigator.pop(context);     // <- 이전 페이지로 이동.
+            },
+          ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 360,
-              height: 360,
-              decoration: BoxDecoration(
-                color: Color(0xffA876DE),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.white60,
-                  width: 5,
+      body: WillPopScope(
+        onWillPop: (){
+          print('못나가');
+          return Future(() => false);
+        },
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 360,
+                height: 360,
+                decoration: BoxDecoration(
+                  color: Color(0xffA876DE),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.white60,
+                    width: 5,
+                  ),
+                ),
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                      child: ButtonsContainer(todo.planId),
+                      top: -30,
+                      right: -30,
+                    ),
+                    Positioned(
+                      child: TimerTextWidget(todo.planId),
+                      top: 120,
+                      right: 20,
+                    ),
+                  ],
                 ),
               ),
-              child: Stack(
-                children: <Widget>[
-                  Positioned(
-                    child: ButtonsContainer(todo.planId),
-                    top: -30,
-                    right: -30,
-                  ),
-                  Positioned(
-                    child: TimerTextWidget(todo.planId),
-                    top: 120,
-                    right: 20,
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

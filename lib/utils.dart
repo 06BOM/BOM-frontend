@@ -87,3 +87,11 @@ bool isToday(DateTime other) {
   return year == other.year && month == other.month
       && day == other.day;
 }
+
+String getSecToMinAnotherFormat(int num){
+  int hour = (num ~/ 3600).truncate();
+  int minute = (num ~/ 60).truncate();
+  int second = (num).truncate();
+
+  return "${hour}시간 ${minute}분";
+}

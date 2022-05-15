@@ -9,7 +9,7 @@ import '../../model/statistic_model.dart';
 class dailyAvgData extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<double> week_times = ref.watch(userWeekTimeProvider);
+    AsyncValue<int> week_times = ref.watch(userWeekTimeProvider);
     AsyncValue<int> week_stars = ref.watch(userWeekStarProvider);
 
     return Card(
@@ -35,21 +35,21 @@ class dailyAvgData extends ConsumerWidget {
                     week_times.when(
                         data: ((data) => data ~/ 60 > 59
                             ? Column(
-                                children: [
-                                  Text('${((data ~/ 60) ~/ 60).toString()}시간',
-                                      style: const TextStyle(
-                                        fontSize: 25,
-                                      )),
-                                  Text('${((data ~/ 60) % 60).toString()}분',
-                                      style: const TextStyle(
-                                        fontSize: 25,
-                                      ))
-                                ],
-                              )
-                            : Text('${(data ~/ 60).toString()}분',
+                          children: [
+                            Text('${((data ~/ 60) ~/ 60).toString()}시간',
                                 style: const TextStyle(
                                   fontSize: 25,
-                                ))),
+                                )),
+                            Text('${((data ~/ 60) % 60).toString()}분',
+                                style: const TextStyle(
+                                  fontSize: 25,
+                                ))
+                          ],
+                        )
+                            : Text('${(data ~/ 60).toString()}분',
+                            style: const TextStyle(
+                              fontSize: 25,
+                            ))),
                         error: (err, stack) => Text('Error: $err'),
                         loading: () => Container()),
                   ]),

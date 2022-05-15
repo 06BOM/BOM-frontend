@@ -9,7 +9,7 @@ import '../../model/statistic_model.dart';
 class monthAvgData extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<double> month_times = ref.watch(userMonthTimeProvider);
+    AsyncValue<int> month_times = ref.watch(userMonthTimeProvider);
     AsyncValue<int> month_stars = ref.watch(userMonthStarProvider);
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),

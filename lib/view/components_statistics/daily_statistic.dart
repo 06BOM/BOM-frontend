@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pie_chart/pie_chart.dart';
+
+import '../../provider/todo_provider.dart';
+import '../../utils.dart';
 
 class DailyChart extends StatelessWidget {
   Map<String, double> dataMap = {
@@ -13,25 +17,34 @@ class DailyChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child: PieChart(
-          chartType: ChartType.ring,
-          ringStrokeWidth: 10,
-          dataMap: dataMap,
-          centerText: "6시간 20분",
-          centerTextStyle: TextStyle(
-            fontSize: 30,
-            color: Colors.black,
-          ),
-          chartRadius: MediaQuery.of(context).size.width / 1.7,
-          legendOptions: LegendOptions(
-              legendPosition: LegendPosition.bottom,
-              legendShape: BoxShape.circle,
-              legendTextStyle: TextStyle()),
-          chartValuesOptions: ChartValuesOptions(
-            showChartValuesInPercentage: true,
-            showChartValueBackground: false,
-            showChartValues: false, // 값안보이게 하기
-          ),
+        child: Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            final todos = ref.watch(filteredTodos);
+            return PieChart(
+              chartType: ChartType.ring,
+              ringStrokeWidth: 10,
+              dataMap: dataMap,
+              centerText: "${getSecToMinAnotherFormat(todos.fold(
+                  0,
+                      (previous, current) =>
+                  previous +
+                      current.time!))}",
+              centerTextStyle: TextStyle(
+                fontSize: 30,
+                color: Colors.black,
+              ),
+              chartRadius: MediaQuery.of(context).size.width / 1.7,
+              legendOptions: LegendOptions(
+                  legendPosition: LegendPosition.bottom,
+                  legendShape: BoxShape.circle,
+                  legendTextStyle: TextStyle()),
+              chartValuesOptions: ChartValuesOptions(
+                showChartValuesInPercentage: true,
+                showChartValueBackground: false,
+                showChartValues: false, // 값안보이게 하기
+              ),
+            );
+          }
         ),
       ),
     );
