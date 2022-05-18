@@ -26,7 +26,7 @@ class QuizScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final quizQuestions = ref.watch(quizQuestionProvider); // useProvider();
-    final pageController = usePageController();
+    final pageController = usePageController(initialPage: 0);
 
     return Container(
       height: MediaQuery.of(context).size.height,
@@ -46,29 +46,29 @@ class QuizScreen extends HookConsumerWidget {
           ),
           loading: () => const Center(child: CircularProgressIndicator()),
         ),
-        bottomSheet: quizQuestions.maybeWhen(
-          data: (questions) {
-            final quizState = ref.watch(quizControllerProvider);
-            if (!quizState.answered) return const SizedBox.shrink();
-            return CustomButton(
-              title: pageController.page!.toInt() + 1 < questions.length
-                  ? 'Next Question'
-                  : 'See Results',
-              onTap: () {
-                ref
-                    .read(quizControllerProvider.notifier)
-                    .nextQuestion(questions, pageController.page!.toInt());
-                if (pageController.page!.toInt() + 1 < questions.length) { // 넘기감: page가 퀴즈 개수 보다 작을 경우
-                  pageController.nextPage(
-                    duration: const Duration(milliseconds: 250),
-                    curve: Curves.easeInOut,
-                  );
-                }
-              },
-            );
-          },
-          orElse: () => const SizedBox.shrink(),
-        ),
+        // bottomSheet: quizQuestions.maybeWhen(
+        //   data: (questions) {
+        //     final quizState = ref.watch(quizControllerProvider);
+        //     if (!quizState.answered) return const SizedBox.shrink();
+        //     return CustomButton(
+        //       title: pageController.page!.toInt() + 1 < questions.length
+        //           ? 'Next Question'
+        //           : 'See Results',
+        //       onTap: () {
+        //         ref
+        //             .read(quizControllerProvider.notifier)
+        //             .nextQuestion(questions, pageController.page!.toInt());
+        //         if (pageController.page!.toInt() + 1 < questions.length) { // 넘기감: page가 퀴즈 개수 보다 작을 경우
+        //           pageController.nextPage(
+        //             duration: const Duration(milliseconds: 250),
+        //             curve: Curves.easeInOut,
+        //           );
+        //         }
+        //       },
+        //     );
+        //   },
+        //   orElse: () => const SizedBox.shrink(),
+        // ),
       ),
     );
   }
