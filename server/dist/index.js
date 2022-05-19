@@ -69,25 +69,31 @@ wsServer.on("connection", function (socket) {
         console.log("Socket Event:".concat(event));
     });
     console.log('connection event: connected!');
-    socket.on("enter_room", function (nickname, roomName) {
-        if (countRoom(roomName) > 9) {
-            socket.emit("message specific user", socket.id, "정원초과로 입장하실 수 없습니다.😥");
-        }
-        else {
-            socket.data.nickname = nickname; // add
-            // console.log("socket.data.nickname: ", socket.data.nickname);
-            socket.join(roomName);
-            console.log(socket.rooms);
-            readyStorage.set(roomName, []);
-            checkQuestionsUsage.set(roomName, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-            var immScoreMap = new Map();
-            if (scoreListOfRooms.has(roomName)) {
-                immScoreMap = scoreListOfRooms.get(roomName);
+    socket.on("enter_room", function (_a) {
+        var nickname = _a.nickname, roomName = _a.roomName;
+        try {
+            if (countRoom(roomName) > 9) {
+                socket.emit("message specific user", socket.id, "정원초과로 입장하실 수 없습니다.😥");
             }
-            immScoreMap.set(socket.data.nickname, 0);
-            scoreListOfRooms.set(roomName, immScoreMap);
-            console.log("1. scoreListOfRooms: ", scoreListOfRooms);
-            socket.to(roomName).emit("welcome", socket.data.nickname, roomName, countRoom(roomName));
+            else {
+                socket.data.nickname = nickname; // add
+                // console.log("socket.data.nickname: ", socket.data.nickname);
+                socket.join(roomName);
+                console.log(socket.rooms);
+                readyStorage.set(roomName, []);
+                checkQuestionsUsage.set(roomName, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+                var immScoreMap = new Map();
+                if (scoreListOfRooms.has(roomName)) {
+                    immScoreMap = scoreListOfRooms.get(roomName);
+                }
+                immScoreMap.set(socket.data.nickname, 0);
+                scoreListOfRooms.set(roomName, immScoreMap);
+                console.log("1. scoreListOfRooms: ", scoreListOfRooms);
+                socket.to(roomName).emit("welcome", socket.data.nickname, roomName, countRoom(roomName));
+            }
+        }
+        catch (e) {
+            console.log(e);
         }
     });
     socket.on("new_message", function (msg, room, done) {

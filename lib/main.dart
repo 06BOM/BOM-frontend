@@ -1,4 +1,8 @@
-import 'package:bom_front/view/quiz_view.dart';
+import 'package:bom_front/view/create_room_screen.dart';
+import 'package:bom_front/view/join_room_screen.dart';
+import 'package:bom_front/view/main_menu_screen.dart';
+import 'package:bom_front/view/quiz_screen.dart';
+import 'package:bom_front/view/wating_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -7,35 +11,19 @@ void main() => runApp(
     child: MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.grey,
         bottomSheetTheme:
         const BottomSheetThemeData(backgroundColor: Colors.transparent),
       ),
-      home: MyApp(),
+      routes: {
+        MainMenuScreen.routeName: (context) => const MainMenuScreen(),
+        JoinRoomScreen.routeName: (context) => const JoinRoomScreen(),
+        CreateRoomScreen.routeName: (context) => const CreateRoomScreen(),
+        WaitingLobby.routeName: (context) => const WaitingLobby(),
+        QuizScreen.routeName: (context) => const QuizScreen(),
+      },
+      initialRoute: MainMenuScreen.routeName,
+      home: MainMenuScreen(),
     ),
   )
 );
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(onPressed: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => QuizScreen()));
-              }, child: Text('시작하시겠습니까?'))
-            ],
-          ),
-        )
-    );
-  }
-}

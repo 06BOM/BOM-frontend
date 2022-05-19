@@ -20,6 +20,7 @@ final quizQuestionProvider = FutureProvider.autoDispose<List<Question>>(
         difficulty: Difficulty.any));
 
 class QuizScreen extends HookConsumerWidget {
+  static String routeName = '/quiz-room';
   const QuizScreen({Key? key}) : super(key: key);
 
   @override

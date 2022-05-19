@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html_character_entities/html_character_entities.dart';
 import 'answer_card.dart';
-import 'completion_timer.dart';
 import 'dart:math' as math;
 
 class QuizQuestions extends ConsumerStatefulWidget {
@@ -27,31 +26,39 @@ class QuizQuestions extends ConsumerStatefulWidget {
 
 class _QuizQuestionsState extends ConsumerState<QuizQuestions> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  late Animation<double> _nextPage;
+  // late Animation<double> _nextPage;
   int _currentPage = 0;
+  // bool isRoundFinish = false;
 
   @override
   void initState() {
     _animationController = AnimationController(
         vsync: this, duration: Duration(seconds: 10));
-    _nextPage = Tween(begin: 0.0, end: 1.0).animate(_animationController);
+    // _nextPage = Tween(begin: 0.0, end: 1.0).animate(_animationController);
     super.initState();
     // _animationController.forward();
     // _animationController.reverse(); // 반대
 
-    _animationController.addListener(() {
+    _animationController.addListener(() async {
       if (_animationController.status == AnimationStatus.completed) {
-        print('_currentPage => ${_currentPage}');
-        _animationController.reset(); //Reset the controller
-        if (_currentPage < widget.questions.length - 1) {
-          _currentPage++;
-          widget.pageController.animateToPage(_currentPage,
-              duration: Duration(milliseconds: 300), curve: Curves.easeInSine);
-        } else {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QuizResults(state: widget.state, questions: widget.questions)));
-          _currentPage = 0;
-          print('_currentPage => ${_currentPage} in else');
-        }
+        // print('라운드 끝 -> 다음 라운드');
+        // isRoundFinish = true;
+        // print('isRoundFinish ${isRoundFinish}');
+        await Future.delayed(Duration(seconds: 3), (){
+          _animationController.reset(); //Reset the controller
+          // print('_currentPage => ${_currentPage}');
+          if (_currentPage < widget.questions.length - 1) {
+            _currentPage++;
+            widget.pageController.animateToPage(_currentPage,
+                duration: Duration(milliseconds: 300), curve: Curves.easeInSine);
+          } else {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QuizResults(state: widget.state, questions: widget.questions)));
+            _currentPage = 0;
+            // print('_currentPage => ${_currentPage} in else');
+          }
+        });
+        // isRoundFinish = false;
+        // print('isRoundFinish $isRoundFinish');
       }
     });
   }
@@ -65,7 +72,6 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with SingleTicker
   @override
   Widget build(BuildContext context) {
     _animationController.forward();
-    print('${_currentPage} in build method');
     return PageView.builder(
         controller: widget.pageController,
         physics: NeverScrollableScrollPhysics(),
@@ -75,8 +81,10 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with SingleTicker
           _animationController.forward();
         },
         itemBuilder: (BuildContext context, int index) {
-          print('index => ${index}');
+          // print('index => ${index}');
           final question = widget.questions[index];
+
+          // print('${_currentPage} in build method'); // on으로 특정 값을 받으면 이를 이용하여 정답을 보여주자
           return Column(
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

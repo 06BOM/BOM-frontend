@@ -1,3 +1,4 @@
+import 'package:bom_front/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'box_shadow.dart';
@@ -11,16 +12,16 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    // final width = MediaQuery.of(context).size.width;
 
     return GestureDetector(
         onTap: onTap,
         child: Container(
-          margin: const EdgeInsets.all(20.0),
+          margin: const EdgeInsets.all(10.0),
           height: 50.0,
-          width: double.infinity,
+          width: 100.0,
           decoration: BoxDecoration(
-            color: Colors.yellow[700],
+            color: bgColor,
             boxShadow: boxShadow,
             borderRadius: BorderRadius.circular(25.0),
           ),
@@ -30,6 +31,7 @@ class CustomButton extends StatelessWidget {
             style: const TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.w600,
+              color: Colors.white
             ),
           ),
         ));

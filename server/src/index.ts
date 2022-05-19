@@ -6,6 +6,7 @@ import { Server } from "socket.io";
 
 const app = express();
 app.use(express.json());
+
 const PORT = process.env.PORT || 3000;
 
 const handleListening = () => {
@@ -47,29 +48,33 @@ wsServer.on("connection", socket => {
     });
     console.log('connection event: connected!');
 
-	socket.on("enter_room", (nickname, roomName) => {
-        if ( countRoom(roomName) > 9 ){
-            socket.emit("message specific user", socket.id, "정원초과로 입장하실 수 없습니다.😥");
-        
-		} else {
-			socket.data.nickname = nickname; // add
-			// console.log("socket.data.nickname: ", socket.data.nickname);
-            socket.join(roomName);
-            console.log(socket.rooms);
+	socket.on("enter_room", ({nickname, roomName}) => { // 객체로 보내니까 객체로 받음
+        try{
+            if ( countRoom(roomName) > 9 ){
+                socket.emit("message specific user", socket.id, "정원초과로 입장하실 수 없습니다.😥");
+            
+            } else {
+                socket.data.nickname = nickname; // add
+                // console.log("socket.data.nickname: ", socket.data.nickname);
+                socket.join(roomName);
+                console.log(socket.rooms);
 
-			readyStorage.set(roomName, []);
-			checkQuestionsUsage.set(roomName, [0,0,0,0,0,0,0,0,0,0]); 
+                readyStorage.set(roomName, []);
+                checkQuestionsUsage.set(roomName, [0,0,0,0,0,0,0,0,0,0]); 
 
-			let immScoreMap = new Map();
-			if (scoreListOfRooms.has(roomName)) {
-				immScoreMap = scoreListOfRooms.get(roomName);
-			}
+                let immScoreMap = new Map();
+                if (scoreListOfRooms.has(roomName)) {
+                    immScoreMap = scoreListOfRooms.get(roomName);
+                }
 
-			immScoreMap.set(socket.data.nickname, 0);
-			scoreListOfRooms.set(roomName, immScoreMap);
-			console.log("1. scoreListOfRooms: ", scoreListOfRooms)
+                immScoreMap.set(socket.data.nickname, 0);
+                scoreListOfRooms.set(roomName, immScoreMap);
+                console.log("1. scoreListOfRooms: ", scoreListOfRooms)
 
-            socket.to(roomName).emit("welcome", socket.data.nickname, roomName, countRoom(roomName));
+                socket.to(roomName).emit("welcome", socket.data.nickname, roomName, countRoom(roomName));
+                }
+            } catch (e) {
+            console.log(e);
         }
     });
 
