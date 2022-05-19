@@ -8,7 +8,6 @@ import '../model/question.dart';
 import '../provider/quiz/quiz_provider.dart';
 import '../provider/quiz/quiz_state.dart';
 import '../repository/quiz/quiz_repository.dart';
-import 'components/quiz/custom_button.dart';
 import 'components/quiz/quiz_error.dart';
 import 'components/quiz/quiz_question.dart';
 import 'components/quiz/quiz_result.dart';
