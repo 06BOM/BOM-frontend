@@ -70,8 +70,8 @@ wsServer.on("connection", socket => {
                 immScoreMap.set(socket.data.nickname, 0);
                 scoreListOfRooms.set(roomName, immScoreMap);
                 console.log("1. scoreListOfRooms: ", scoreListOfRooms)
-
-                socket.to(roomName).emit("welcome", socket.data.nickname, roomName, countRoom(roomName));
+		
+				wsServer.to(roomName).emit("welcome", socket.data.nickname, roomName, countRoom(roomName));
                 }
             } catch (e) {
             console.log(e);

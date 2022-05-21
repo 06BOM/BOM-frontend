@@ -89,7 +89,9 @@ wsServer.on("connection", function (socket) {
                 immScoreMap.set(socket.data.nickname, 0);
                 scoreListOfRooms.set(roomName, immScoreMap);
                 console.log("1. scoreListOfRooms: ", scoreListOfRooms);
-                socket.to(roomName).emit("welcome", socket.data.nickname, roomName, countRoom(roomName));
+                // 유저가 방만들면 웨이팅룸으로 안들어가고 다른 유저가 참여를 눌러야 방만든 유저가 참여가능. 이때 방만든 유저만 참여되는 에러
+                // socket.to(roomName).emit("welcome", socket.data.nickname, roomName, countRoom(roomName)); 
+                wsServer.to(roomName).emit("welcome", socket.data.nickname, roomName, countRoom(roomName));
             }
         }
         catch (e) {

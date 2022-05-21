@@ -23,7 +23,7 @@ void main() => runApp(
         QuizScreen.routeName: (context) => const QuizScreen(),
       },
       initialRoute: MainMenuScreen.routeName,
-      home: MainMenuScreen(),
+      // home: MainMenuScreen(), // initialRoute때문에 두개가 잡힘
     ),
   )
 );
