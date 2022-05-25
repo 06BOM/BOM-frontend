@@ -1,3 +1,4 @@
+import 'package:bom_front/view/quiz_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -19,6 +20,7 @@ class _ForRouteState extends ConsumerState<ForRoute> {
         child: ElevatedButton(
           child: Text('게임 화면으로 이동'),
           onPressed: () => Navigator.pushNamed(context, MainMenuScreen.routeName),
+          // onPressed: () => Navigator.pushNamed(context, QuizScreen.routeName), // for test
         ),
       ),
     );

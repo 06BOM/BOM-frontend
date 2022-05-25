@@ -5,6 +5,7 @@ import 'package:bom_front/view/components/quiz/quiz_result.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html_character_entities/html_character_entities.dart';
+import '../../../utils/colors.dart';
 import 'answer_card.dart';
 import 'dart:math' as math;
 
@@ -24,8 +25,9 @@ class QuizQuestions extends ConsumerStatefulWidget {
   ConsumerState createState() => _QuizQuestionsState();
 }
 
-class _QuizQuestionsState extends ConsumerState<QuizQuestions> with SingleTickerProviderStateMixin {
+class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProviderStateMixin {
   late AnimationController _animationController;
+  late AnimationController _splashController; // for 준비 | 시작 term
   // late Animation<double> _nextPage;
   int _currentPage = 0;
   // bool isRoundFinish = false;
@@ -35,6 +37,8 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with SingleTicker
     _animationController = AnimationController(
         vsync: this, duration: Duration(seconds: 10));
     // _nextPage = Tween(begin: 0.0, end: 1.0).animate(_animationController);
+    _splashController = AnimationController(
+      vsync: this, duration: Duration(seconds: 2));
     super.initState();
     // _animationController.forward();
     // _animationController.reverse(); // 반대
@@ -61,31 +65,105 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with SingleTicker
         // print('isRoundFinish $isRoundFinish');
       }
     });
+
+    _splashController.addListener(() {
+      if (_splashController.status == AnimationStatus.completed) {
+        _splashController.reset();
+        if(_currentPage < widget.questions.length - 1){
+          _currentPage++;
+          widget.pageController.animateToPage(_currentPage,
+              duration: Duration(milliseconds: 300), curve: Curves.easeInSine);
+        }else {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QuizResults(state: widget.state, questions: widget.questions)));
+          _currentPage = 0;
+          print('_currentPage => ${_currentPage} in else');
+        }
+      }
+    });
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    _splashController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _animationController.forward();
+    _splashController.forward();
     return PageView.builder(
         controller: widget.pageController,
         physics: NeverScrollableScrollPhysics(),
         // itemCount: widget.questions.length,
         onPageChanged: (value) {
           //When page change, start the controller
-          _animationController.forward();
+          value % 2 == 0 ? _splashController.forward() : _animationController.forward();
         },
         itemBuilder: (BuildContext context, int index) {
           // print('index => ${index}');
           final question = widget.questions[index];
 
           // print('${_currentPage} in build method'); // on으로 특정 값을 받으면 이를 이용하여 정답을 보여주자
-          return Column(
+          return index % 2 == 0 ? Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 150.0,
+                color: bgColor,
+                margin: const EdgeInsets.only(
+                  top: 80.0,
+                ),
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Stack(
+                      children: <Widget>[
+                        Text(
+                          // index < 2 ? '준비':'시작',
+                          '시작',
+                          style: TextStyle(
+                              fontSize: 50,
+                              fontWeight: FontWeight.w500,
+                              foreground: Paint()
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 3
+                                ..color = Colors.grey[300]!,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 25.0,
+                                  color: Colors.black.withOpacity(0.2),
+                                  offset: Offset(5.0, 5.0),
+                                ),
+                              ],
+                              letterSpacing: 4.0),
+                        ),
+                        Text(
+                          // index < 2 ? '준비':'시작',
+                          '시작',
+                          style: TextStyle(
+                              fontSize: 50,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.yellow,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 2.0,
+                                  color: Colors.black.withOpacity(0.2),
+                                  offset: Offset(5.0, 5.0),
+                                ),
+                              ],
+                              letterSpacing: 4.0),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ) : Column(
             // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
