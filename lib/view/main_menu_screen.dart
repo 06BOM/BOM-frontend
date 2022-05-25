@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../network/socket_method.dart';
 import 'components/quiz/custom_button.dart';
 import 'create_room_screen.dart';
 import 'join_room_screen.dart';
 
-class MainMenuScreen extends StatelessWidget {
+class MainMenuScreen extends ConsumerStatefulWidget {
   static String routeName = '/main-menu';
 
   const MainMenuScreen({Key? key}) : super(key: key);
+
+  @override
+  ConsumerState<MainMenuScreen> createState() => _MainMenuScreenState();
+}
+
+class _MainMenuScreenState extends ConsumerState<MainMenuScreen> {
+  final SocketMethods _socketMethods = SocketMethods(); // connect
 
   void createRoom(BuildContext context) {
     Navigator.pushNamed(context, CreateRoomScreen.routeName);
@@ -16,9 +25,15 @@ class MainMenuScreen extends StatelessWidget {
   void joinRoom(BuildContext context) {
     Navigator.pushNamed(context, JoinRoomScreen.routeName);
   }
-
+  @override
+  void dispose() {
+    print(context);
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
+    _socketMethods.checkConnect();
+    print('context : $context in MainMenuScreen');
     return Scaffold(
           body: Center(
             child: Row(

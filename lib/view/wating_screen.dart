@@ -9,16 +9,16 @@ import '../network/socket_method.dart';
 import 'components/quiz/custom_textfield.dart';
 import 'components/quiz/game_ready_button.dart';
 
-class WaitingLobby extends StatefulWidget {
+class WaitingLobby extends ConsumerStatefulWidget {
   static String routeName = '/waiting-room';
 
   const WaitingLobby({Key? key}) : super(key: key);
 
   @override
-  State<WaitingLobby> createState() => _WaitingLobbyState();
+  ConsumerState<WaitingLobby> createState() => _WaitingLobbyState();
 }
 
-class _WaitingLobbyState extends State<WaitingLobby>
+class _WaitingLobbyState extends ConsumerState<WaitingLobby>
     with SingleTickerProviderStateMixin {
   final roomIdController = TextEditingController();
   late AnimationController _controller;
@@ -41,12 +41,11 @@ class _WaitingLobbyState extends State<WaitingLobby>
   @override
   void initState() {
     super.initState();
-    _socketMethods.exitRoomAnswerListener(context);
     _controller = new AnimationController(
         vsync: this, duration: Duration(seconds: watingTime));
     // animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
     _controller.addListener(() async {
-      print('addlistener');
+      print('addlistener'); // 5 -> 4-> 3 -> 2 때문에 출력
       if (_controller.status == AnimationStatus.completed) {
         // _controller.reset(); // 0초가 되면 5로 되돌아옴
         print('_controller.status == AnimationStatus.completed');
@@ -67,6 +66,10 @@ class _WaitingLobbyState extends State<WaitingLobby>
         }
       }
     });
+    _socketMethods.showGameRoom();
+    _socketMethods.displayScoreboardListener();
+    _socketMethods.toggleTimerListener(ref, _controller);
+    _socketMethods.exitRoomAnswerListener(context);
   }
 
   // final SocketMethods _socketMethods = SocketMethods();
@@ -84,6 +87,8 @@ class _WaitingLobbyState extends State<WaitingLobby>
   @override
   void dispose() {
     super.dispose();
+    print(context);
+    // _socketMethods.disconnect();
     _controller.dispose();
     roomIdController.dispose();
     pageController.dispose();
@@ -91,10 +96,16 @@ class _WaitingLobbyState extends State<WaitingLobby>
 
   @override
   Widget build(BuildContext context) {
-    // _controller.forward();
     // final clientStateProvider = Provider.of<ClientDataProvider>(context);
-    // _controller.forward();
-    print('wating sreen building...');
+    final roomName = ref.watch(roomDataProvider);
+    bool trigger = ref.watch(timerProvider.notifier).state;
+    print('time trigger => ${trigger}');
+    // if(trigger){
+    //   _controller.forward();
+    // }
+    // final roomName = ref.watch(roomNameProvider);
+    // print('wating sreen building...');
+    // print('context : $context in WaitingLobby');
     return SafeArea(
         child: Container(
             height: MediaQuery.of(context).size.height,
@@ -105,20 +116,18 @@ class _WaitingLobbyState extends State<WaitingLobby>
                 image: AssetImage('images/background.png'), // 배경 이미지
               ),
             ),
-            child: Consumer(
-              builder: (context, ref, child) {
-                final roomName = ref.watch(roomDataProvider)[0];
-                print('${roomName} in Consumer of wating sreen building...');
-                return Scaffold(
+            child:Scaffold(
                   backgroundColor: Colors.transparent,
                   appBar: AppBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0.0,
                     leading: GestureDetector(
                       child: Transform(
                           transform: Matrix4.rotationY(math.pi),
                           alignment: Alignment.center,
                           child: Icon(Icons.logout, color: Colors.white)),
                       onTap: () {
-                        _socketMethods.handleRoomExit(context, roomName);
+                        _socketMethods.handleRoomExit(context, roomName[0]);
                         // Navigator.pop(context);
                       },
                     ),
@@ -126,7 +135,7 @@ class _WaitingLobbyState extends State<WaitingLobby>
                       GestureDetector(
                         onTap: () {},
                         child: Icon(
-                          Icons.settings,
+                          Icons.settings, color: Colors.white
                         ),
                       ),
                     ],
@@ -175,7 +184,7 @@ class _WaitingLobbyState extends State<WaitingLobby>
                             isReadOnly: true,
                           ),
                           const SizedBox(height: 20),
-                          GameReadyButton(controller: _controller),
+                          GameReadyButton(controller: _controller, gameRoomInfo: roomName, socketObj: _socketMethods),
                           Expanded(
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
@@ -257,9 +266,7 @@ class _WaitingLobbyState extends State<WaitingLobby>
                       );
                     },
                   ),
-                );
-              },
-            ),
+                ),
         ));
   }
 }

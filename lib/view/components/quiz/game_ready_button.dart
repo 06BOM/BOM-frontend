@@ -1,23 +1,40 @@
 // isPartyLeader : true일 경우 시작 -> 단, 플레이어가 2명 이상일경우 겜임시작 버튼 활성화
+import 'package:bom_front/network/socket_method.dart';
+import 'package:bom_front/provider/room_data_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'custom_button.dart';
 
-class GameReadyButton extends StatefulWidget {
+class GameReadyButton extends ConsumerStatefulWidget {
   AnimationController controller;
-  GameReadyButton({Key? key, required this.controller}) : super(key: key);
+  final gameRoomInfo;
+  final SocketMethods socketObj;
+
+  GameReadyButton(
+      {Key? key,
+      required this.controller,
+      required this.gameRoomInfo,
+      required this.socketObj})
+      : super(key: key);
 
   @override
-  State<GameReadyButton> createState() => _GameReadyButtonState();
+  ConsumerState<GameReadyButton> createState() => _GameReadyButtonState();
 }
 
-class _GameReadyButtonState extends State<GameReadyButton> {
+class _GameReadyButtonState extends ConsumerState<GameReadyButton> {
   // final SocketMethods _socketMethods = SocketMethods();
   var playerMe = null;
   bool isBtn = true;
 
-  // late RoomDataProvider game;
+  @override
+  void initState() {
+    widget.socketObj.checkReadyListener(widget.gameRoomInfo[0]);
+    widget.socketObj.isCompleteReadyListener(ref);
+    super.initState();
+  }
 
+  // late RoomDataProvider game;
   // @override
   // void initState() {
   //   game = Provider.of<RoomDataProvider>(context, listen: false);
@@ -40,10 +57,10 @@ class _GameReadyButtonState extends State<GameReadyButton> {
   //     isBtn = false;
   //   });
   // }
-  void handleStart() {
-    widget.controller.forward();
+  void toggleButton() {
+    widget.socketObj.toggleReadyButton(widget.gameRoomInfo[0]);
     setState(() {
-      isBtn = false;
+      isBtn = !isBtn;
     });
   }
 
@@ -58,12 +75,26 @@ class _GameReadyButtonState extends State<GameReadyButton> {
     //           print('게임 준비 클릭 -> 로직 작성하기');
     //         },
     //         title: '게임 준비');
-    return isBtn
-        ? CustomButton(onTap: () => handleStart(), title: '게임 시작')
-        : CustomButton(
-            onTap: () {
-              print('게임 준비 클릭 -> 로직 작성하기');
-            },
-            title: '게임 준비');
+    // if(ref.watch(timerProvider.notifier).state){ // 리렌더링시 주의
+    //   widget.controller.forward();
+    //   // ref.read(timerProvider.notifier).state = false;
+    // }
+    return widget.gameRoomInfo[3] != 0
+        ? (isBtn
+            ? CustomButton(
+                onTap: () {
+                  toggleButton();
+                },
+                title: '게임 준비')
+            : CustomButton(
+                onTap: () {
+                  toggleButton();
+                },
+                title: '준비 취소'))
+        : CustomButton(title: '게임 시작', onTap: () {
+          if(ref.watch(readyDataProvider.notifier).state){
+            widget.socketObj.startGame(widget.gameRoomInfo[0]);
+          }
+    });
   }
 }

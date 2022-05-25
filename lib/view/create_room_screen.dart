@@ -32,16 +32,17 @@ class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
   @override
   void dispose() {
     super.dispose();
+    print(context);
     _nickNameController.dispose();
     _roomNameController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
     // ref.watch(roomDataProvider);
-    print("create sreen building...");
+    // print("create sreen building...");
+    // print('context : $context in CreateRoomScreen');
 
     return Scaffold(
           body: Container(
