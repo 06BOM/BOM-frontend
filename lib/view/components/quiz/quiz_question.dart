@@ -2,6 +2,7 @@ import 'package:bom_front/model/question.dart';
 import 'package:bom_front/provider/quiz/quiz_provider.dart';
 import 'package:bom_front/provider/quiz/quiz_state.dart';
 import 'package:bom_front/view/components/quiz/quiz_result.dart';
+import 'package:bom_front/view/components/quiz/quiz_splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html_character_entities/html_character_entities.dart';
@@ -69,7 +70,7 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
     _splashController.addListener(() {
       if (_splashController.status == AnimationStatus.completed) {
         _splashController.reset();
-        if(_currentPage < widget.questions.length - 1){
+        if(_currentPage < 22 - 1){ // widget.questions.length - 1
           _currentPage++;
           widget.pageController.animateToPage(_currentPage,
               duration: Duration(milliseconds: 300), curve: Curves.easeInSine);
@@ -98,213 +99,167 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
         // itemCount: widget.questions.length,
         onPageChanged: (value) {
           //When page change, start the controller
-          value % 2 == 0 ? _splashController.forward() : _animationController.forward();
+          if(value > 1 && value % 2 != 0 ){
+            _animationController.forward();
+          }
+          else{
+            _splashController.forward();
+          }
         },
         itemBuilder: (BuildContext context, int index) {
-          // print('index => ${index}');
-          final question = widget.questions[index];
-
+          print('index => ${index} // ${_currentPage} in build method');
           // print('${_currentPage} in build method'); // on으로 특정 값을 받으면 이를 이용하여 정답을 보여주자
-          return index % 2 == 0 ? Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 150.0,
-                color: bgColor,
-                margin: const EdgeInsets.only(
-                  top: 80.0,
-                ),
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Stack(
-                      children: <Widget>[
-                        Text(
-                          // index < 2 ? '준비':'시작',
-                          '시작',
-                          style: TextStyle(
-                              fontSize: 50,
-                              fontWeight: FontWeight.w500,
-                              foreground: Paint()
-                                ..style = PaintingStyle.stroke
-                                ..strokeWidth = 3
-                                ..color = Colors.grey[300]!,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 25.0,
-                                  color: Colors.black.withOpacity(0.2),
-                                  offset: Offset(5.0, 5.0),
-                                ),
-                              ],
-                              letterSpacing: 4.0),
-                        ),
-                        Text(
-                          // index < 2 ? '준비':'시작',
-                          '시작',
-                          style: TextStyle(
-                              fontSize: 50,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.yellow,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 2.0,
-                                  color: Colors.black.withOpacity(0.2),
-                                  offset: Offset(5.0, 5.0),
-                                ),
-                              ],
-                              letterSpacing: 4.0),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ) : Column(
-            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 200.0,
-                color: Colors.black.withOpacity(0.2),
-                margin: const EdgeInsets.only(
-                  top: 80.0,
-                ),
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Q ${index + 1} / ${widget.questions.length}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 30.0),
-                    Container(
-                      width: MediaQuery.of(context).size.width - 2.0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+          if(index == 0) return QuizSplashView(title: '준비');
+          else if(index == 1) return QuizSplashView(title: '시작');
+          else if(index > 1 && index % 2 == 0) return QuizSplashView(title: '${index - 1} 라운드');
+          else {
+            final idx = (index - 2) / 2;
+            final question = widget.questions[idx.round()];
+            return Column(
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 200.0,
+                  color: Colors.black.withOpacity(0.2),
+                  margin: const EdgeInsets.only(
+                    top: 80.0,
+                  ),
+                  child: Column(
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Padding(
-                              padding:
-                              const EdgeInsets.symmetric(horizontal: 20.0),
-                              child: Text(
-                                HtmlCharacterEntities.decode(question.question),
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                          Text(
+                            'Q ${index - 1} / ${widget.questions.length}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 70.0,
-                    height: 70.0,
-                    child: CustomPaint(
-                      painter: circleDrawPaint(),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                      SizedBox(height: 30.0),
                       Container(
-                        // padding: EdgeInsets.all(0.0),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.greenAccent, width: 2)),
-                        width: 80.0,
-                        height: 80.0,
-                        child: AnimatedBuilder(
-                            animation: _animationController,
-                            builder: (BuildContext context, Widget? child) {
-                              return QuizCompletionTimer(progress: _animationController.value);
-                            }),
+                        width: MediaQuery.of(context).size.width - 2.0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                                child: Text(
+                                  HtmlCharacterEntities.decode(
+                                      question.question),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  GestureDetector(
-                    onTap: () => {print('O touch')},
-                    child: Container(
-                      child: Center(
-                        child: Text(
-                          'O',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 100,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 40,
-                                  color: Colors.blue,
-                                ),
-                              ]),
+                ),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: 70.0,
+                      height: 70.0,
+                      child: CustomPaint(
+                        painter: circleDrawPaint(),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          // padding: EdgeInsets.all(0.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.greenAccent, width: 2)),
+                          width: 80.0,
+                          height: 80.0,
+                          child: AnimatedBuilder(
+                              animation: _animationController,
+                              builder: (BuildContext context, Widget? child) {
+                                return QuizCompletionTimer(
+                                    progress: _animationController.value);
+                              }),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    GestureDetector(
+                      onTap: () => {print('O touch')},
+                      child: Container(
+                        child: Center(
+                          child: Text(
+                            'O',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 100,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 40,
+                                    color: Colors.blue,
+                                  ),
+                                ]),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () => {print('X touch')},
-                    child: Container(
-                      child: Center(
-                        child: Text(
-                          'X',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 100,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 40,
-                                  color: Colors.red,
-                                ),
-                              ]),
+                    GestureDetector(
+                      onTap: () => {print('X touch')},
+                      child: Container(
+                        child: Center(
+                          child: Text(
+                            'X',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 100,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 40,
+                                    color: Colors.red,
+                                  ),
+                                ]),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: question.answers
-                    .map((e) => AnswerCard(
-                    answer: e,
-                    isSelected: e == widget.state.selectedAnswer,
-                    isCorrect: e == question.correctAnswer,
-                    isDisplayingAnswer: widget.state.answered,
-                    onTap: () => ref
-                        .read(quizControllerProvider.notifier)
-                        .submitAnswer(question, e)))
-                    .toList(),
-              ),
-            ],
-          );
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: question.answers
+                      .map((e) => AnswerCard(
+                          answer: e,
+                          isSelected: e == widget.state.selectedAnswer,
+                          isCorrect: e == question.correctAnswer,
+                          isDisplayingAnswer: widget.state.answered,
+                          onTap: () => ref
+                              .read(quizControllerProvider.notifier)
+                              .submitAnswer(question, e)))
+                      .toList(),
+                ),
+              ],
+            );
+          }
         });
   }
 }
