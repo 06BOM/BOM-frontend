@@ -25,6 +25,22 @@ class RoomData extends StateNotifier<List<dynamic>> {
   }
 }
 
+final roundDataProvider = StateNotifierProvider<roundNotifier, List<dynamic>>((ref) {
+  return roundNotifier();
+});
+
+class roundNotifier extends StateNotifier<List<dynamic>> {
+  roundNotifier() : super([]);
+
+  void updateRoundData(List<dynamic> data) {
+    print('$data in updateRoundData (provider)');
+    // _roomData = GameRoomState.fromMap(data);
+    // state = [...state, data];
+    state = data;
+    // ref.read(roomNameProvider.notifier).state = data[0];
+  }
+}
+
 // final readyDataProvider = StateNotifierProvider<ReadyData, List<dynamic>>((ref) {
 //   return ReadyData();
 // });

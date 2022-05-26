@@ -6,6 +6,8 @@ import 'package:bom_front/view/components/quiz/quiz_splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html_character_entities/html_character_entities.dart';
+import '../../../network/socket_method.dart';
+import '../../../provider/room_data_provider.dart';
 import '../../../utils/colors.dart';
 import 'answer_card.dart';
 import 'dart:math' as math;
@@ -14,12 +16,14 @@ class QuizQuestions extends ConsumerStatefulWidget {
   final PageController pageController;
   final QuizState state;
   final List<Question> questions;
+  final String roomName;
 
   QuizQuestions({
     Key? key,
     required this.pageController,
     required this.state,
     required this.questions,
+    required this.roomName,
   }) : super(key: key);
 
   @override
@@ -31,25 +35,34 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
   late AnimationController _splashController; // for 준비 | 시작 term
   // late Animation<double> _nextPage;
   int _currentPage = 0;
+  int roundIndex = 0;
   // bool isRoundFinish = false;
+  final SocketMethods _socketMethods = SocketMethods();
 
   @override
   void initState() {
+    _socketMethods.createRoundListener(ref);
+    _socketMethods.getAnswerListener();
+    _socketMethods.changeScoreListener();
+    _socketMethods.oxListener();
     _animationController = AnimationController(
         vsync: this, duration: Duration(seconds: 10));
     // _nextPage = Tween(begin: 0.0, end: 1.0).animate(_animationController);
     _splashController = AnimationController(
       vsync: this, duration: Duration(seconds: 2));
     super.initState();
-    // _animationController.forward();
-    // _animationController.reverse(); // 반대
-
     _animationController.addListener(() async {
       if (_animationController.status == AnimationStatus.completed) {
         // print('라운드 끝 -> 다음 라운드');
         // isRoundFinish = true;
         // print('isRoundFinish ${isRoundFinish}');
+        _socketMethods.answerQuestion(widget.roomName);
+        // _socketMethods.fetchQuestion(widget.roomName);
+        roundIndex = ((_currentPage - 2) / 2).round();
+        print('roundIndex: $roundIndex');
         await Future.delayed(Duration(seconds: 3), (){
+          _socketMethods.scoreRound(roundIndex, widget.roomName);//
+          _socketMethods.fetchQuestion(widget.roomName);
           _animationController.reset(); //Reset the controller
           // print('_currentPage => ${_currentPage}');
           if (_currentPage < widget.questions.length - 1) {
@@ -109,10 +122,14 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
         itemBuilder: (BuildContext context, int index) {
           print('index => ${index} // ${_currentPage} in build method');
           // print('${_currentPage} in build method'); // on으로 특정 값을 받으면 이를 이용하여 정답을 보여주자
-          if(index == 0) return QuizSplashView(title: '준비');
-          else if(index == 1) return QuizSplashView(title: '시작');
-          else if(index > 1 && index % 2 == 0) return QuizSplashView(title: '${index - 1} 라운드');
-          else {
+          if(index == 0) {
+            return QuizSplashView(title: '준비');
+          } else if(index == 1) {
+            return QuizSplashView(title: '시작');
+          } else if(index > 1 && index % 2 == 0) {
+            // _socketMethods.fetchQuestion(ref.watch(roomDataProvider)[0]); -> build에 놓으면 두 socket에서 동시에 부름 -> 이중 호출
+            return QuizSplashView(title: '${index - 1} 라운드');
+          } else {
             final idx = (index - 2) / 2;
             final question = widget.questions[idx.round()];
             return Column(
@@ -203,7 +220,10 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GestureDetector(
-                      onTap: () => {print('O touch')},
+                      onTap: () => {
+                        print('O touch'),
+                        _socketMethods.selectOX('o')
+                      },
                       child: Container(
                         child: Center(
                           child: Text(
@@ -223,7 +243,10 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => {print('X touch')},
+                      onTap: () => {
+                        print('X touch'),
+                        _socketMethods.selectOX('x')
+                      },
                       child: Container(
                         child: Center(
                           child: Text(

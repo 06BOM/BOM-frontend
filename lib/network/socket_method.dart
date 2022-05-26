@@ -90,6 +90,35 @@ class SocketMethods {
     });
   }
 
+  void fetchQuestion(String roomName){
+    print('run fetchQuestion');
+    _socketClient.emit("question", {
+      'roomName': roomName,
+    });
+  }
+
+  void answerQuestion(String roomName){
+    print('run answerQuestion');
+    _socketClient.emit("answer", {
+      'roomName': roomName,
+    });
+  }
+
+  void selectOX(String ox){
+    _socketClient.emit("ox", {
+      'userId': 1,
+      'ox': ox,
+    });
+  }
+
+  void scoreRound(int index, String roomName){
+    print('run scoreRound $index');
+    _socketClient.emit("score", {
+      'index': index,
+      'roomName': roomName
+    });
+  }
+
   void isCompleteReadyListener(WidgetRef ref) {
     _socketClient.on('ready', (data) {
       ref.read(readyDataProvider.notifier).state = data; // data = true
@@ -150,22 +179,49 @@ class SocketMethods {
 
   void displayScoreboardListener(){
     _socketClient.on('scoreboard display', (users){
-      print(users); // [["유저1",0],["유저2",0]] -> users로 전역변수로 둬야함
+      print('$users in displayScoreboardListener'); // [["유저1",0],["유저2",0]] -> users로 전역변수로 둬야함
     });
   }
 
   void showGameRoom(){
     _socketClient.on('showGameRoom', (data){
-      print(data); // null
+      print('$data in showGameRoom'); // null
     });
   }
 
   void toggleTimerListener(WidgetRef ref, AnimationController controller){
     _socketClient.on('timer', (toggle){ // true
+      print('$toggle in toggleTimerListener');
       ref.read(timerProvider.notifier).state = toggle; // 바뀌어도 rebuilding이 안됨.
       controller.forward();
     });
   }
+
+  void createRoundListener(WidgetRef ref){
+    _socketClient.on('round', (data){
+      print('$data in createRoundListener');
+      ref.watch(roundDataProvider.notifier).updateRoundData(data);
+    });
+  }
+
+  void getAnswerListener(){ // 굳이 따로 받는 것보다 위에서 부터 받는게 어떤가?
+    _socketClient.on('answer', (data){
+      print('$data in getAnswerListener');
+    });
+  }
+
+  void oxListener(){ // 필요한지 의문
+    _socketClient.on('ox', (data){
+      print('$data in OXListener');
+    });
+  }
+
+  void changeScoreListener(){
+    _socketClient.on('score change', (data){
+      print('$data in changeScoreListener');
+    });
+  }
+
 
 // void updateRoomListener(BuildContext context) {
 //   _socketClient.on('createRoomSuccess', (room) {

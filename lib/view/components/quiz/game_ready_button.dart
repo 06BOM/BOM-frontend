@@ -94,6 +94,8 @@ class _GameReadyButtonState extends ConsumerState<GameReadyButton> {
         : CustomButton(title: '게임 시작', onTap: () {
           if(ref.watch(readyDataProvider.notifier).state){
             widget.socketObj.startGame(widget.gameRoomInfo[0]);
+            widget.socketObj.fetchQuestion(widget.gameRoomInfo[0]);
+            print('in game ready button');
           }
     });
   }

@@ -7,6 +7,7 @@ import '../model/failure.dart';
 import '../model/question.dart';
 import '../provider/quiz/quiz_provider.dart';
 import '../provider/quiz/quiz_state.dart';
+import '../provider/room_data_provider.dart';
 import '../repository/quiz/quiz_repository.dart';
 import 'components/quiz/quiz_error.dart';
 import 'components/quiz/quiz_question.dart';
@@ -78,12 +79,14 @@ class QuizScreen extends HookConsumerWidget {
     if (questions.isEmpty) return QuizError(message: 'No questions found.');
     return Consumer(builder: (context, ref, child) {
       final quizState = ref.watch(quizControllerProvider);
+      final roomName = ref.watch(roomDataProvider)[0];
       return quizState.status == QuizStatus.complete
           ? QuizResults(state: quizState, questions: questions)
           : QuizQuestions(
         pageController: pageController,
         state: quizState,
         questions: questions,
+        roomName: roomName,
       );
     });
   }
