@@ -35,7 +35,6 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
 
   @override
   void initState() {
-    _socketMethods.changeScoreListener();
     _socketMethods.oxListener();
     _animationController = AnimationController(
         vsync: this, duration: Duration(seconds: 10));
@@ -84,6 +83,7 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
   @override
   void didChangeDependencies() {
     _splashController.forward();
+    _socketMethods.changeScoreListener(ref);
     _socketMethods.createRoundListener(ref);
     _socketMethods.getAnswerListener(ref);
     _socketMethods.fetchQuestion(ref); // wating_screen의 화면전환 이전에 해당 로직을 짰지만 화면이 바뀌면서 on 과정이 먹히는 현상 발생. 따라서 처음 quiz얻기위해 여기로 이동
@@ -134,13 +134,12 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: 200.0,
+                      height: 150.0,
                       color: Colors.black.withOpacity(0.2),
                       margin: const EdgeInsets.only(
                         top: 10.0,
                       ),
                       child: Column(
-                        // mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -155,50 +154,64 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
                               ),
                             ],
                           ),
-                          SizedBox(height: 30.0),
-                          Container(
-                            width: MediaQuery.of(context).size.width - 2.0,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20.0),
-                                    child: !isShowAnswerView ? Text(ref.watch(roundDataProvider)[0],
+                          SizedBox(height: 20.0),
+                          Flexible(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 1,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 5.0,
+                              ),
+                              width: MediaQuery.of(context).size.width - 2.0,
+                              height:100.0,
+                              child: !isShowAnswerView ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      ref.watch(roundDataProvider)[0],
                                       style: const TextStyle(
                                         color: Colors.white,
-                                        fontSize: 24.0,
-                                        fontWeight: FontWeight.w500,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    ) : Container(
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.greenAccent, width: 2)),
-                                      width: MediaQuery.of(context).size.width,
-                                      child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text('해설: ${ref.watch(answerProvider)[1]}',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 24.0,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            Text('정답: ${ref.watch(answerProvider)[0]}',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 24.0,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            )
-                                          ]),
+                                      softWrap: true, // 텍스트가 영역을 넘어갈 경우 줄바꿈 여부
+                                      textAlign: TextAlign.center, // 정렬
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ) : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    '정답: ${ref.watch(answerProvider)[0]}',
+                                    style: const TextStyle(
+                                      color: Colors.lightGreenAccent,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 15),
+                                  Flexible(
+                                    child: Text(
+                                      '해설: ${ref.watch(answerProvider)[1]}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      softWrap: true, // 텍스트가 영역을 넘어갈 경우 줄바꿈 여부
+                                      textAlign: TextAlign.center, // 정렬
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -286,6 +299,11 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
                         ),
                       ],
                     ),
+                    Expanded(child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [Scoreboard(idx: index)],
+                    )
+                    )
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.spaceAround,
                     //   children: question.answers
@@ -303,6 +321,168 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
                 );
           }
         });
+  }
+}
+
+class Scoreboard extends ConsumerWidget {
+  final int idx;
+  const Scoreboard({Key? key, required this.idx}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final usersScoreInfo = ref.watch(scoreProvider.notifier).state;
+    usersScoreInfo.sort((a,b) => a[1].compareTo(b[1]));
+    for (var player in usersScoreInfo.reversed) {
+      print('each player info => ${player} / ${player[1]}');
+    }
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 1,
+          color: Colors.red,
+        ),
+      ),
+      padding: EdgeInsets.only(bottom: 50.0, right: 10.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(Icons.military_tech, size: 30.0,color: Color(0xffA876DE)),
+            ],
+          ),
+          for (var i = 0; i < usersScoreInfo.length; i++)
+            Padding(
+              padding: const EdgeInsets.all(2),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: <Widget>[
+                      Text(
+                        idx == 0 ? '1등' : '${i+1}등',
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            foreground: Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 3
+                              ..color = Colors.grey[300]!,
+                            shadows: [
+                              Shadow(
+                                blurRadius: 30.0,
+                                color: Colors.blue,
+                                offset: Offset(2.0, 2.0),
+                              ),
+                            ]
+                        ),
+                      ),
+                      Text(
+                        idx == 0 ? '1등' : '${i+1}등',
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.yellow,
+                            shadows: [
+                              Shadow(
+                                blurRadius: 30.0,
+                                color: Colors.blue,
+                                offset: Offset(2.0, 2.0),
+                              ),
+                            ]
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 13.0,
+                  ),
+                  Stack(
+                    children: <Widget>[
+                      // Stroked text as border.
+                      Text(
+                        idx == 0 ? '0' : '${usersScoreInfo[i][0]}',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 3
+                            ..color = Colors.grey[300]!,
+                          shadows: [
+                            Shadow(
+                              blurRadius: 30.0,
+                              color: Colors.blue,
+                              offset: Offset(2.0, 2.0),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Solid text as fill.
+                      Text(
+                        idx == 0 ? '0': '${usersScoreInfo[i][0]}',
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.yellow,
+                            shadows: [
+                              Shadow(
+                                blurRadius: 30.0,
+                                color: Colors.blue,
+                                offset: Offset(2.0, 2.0),
+                              ),
+                            ]
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 13.0,),
+                  Stack(
+                    children: <Widget>[
+                      // Stroked text as border.
+                      Text(
+                        '${usersScoreInfo[i][1]}',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 3
+                            ..color = Colors.grey[300]!,
+                          shadows: [
+                            Shadow(
+                              blurRadius: 30.0,
+                              color: Colors.blue,
+                              offset: Offset(2.0, 2.0),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Solid text as fill.
+                      Text(
+                        '${usersScoreInfo[i][1]}',
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.yellow,
+                            shadows: [
+                              Shadow(
+                                blurRadius: 30.0,
+                                color: Colors.blue,
+                                offset: Offset(2.0, 2.0),
+                              ),
+                            ]
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }
 

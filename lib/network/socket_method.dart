@@ -1,14 +1,11 @@
 import 'package:bom_front/network/socket_client.dart';
-import 'package:bom_front/view/create_room_screen.dart';
-import 'package:bom_front/view/forRoute.dart';
 import 'package:bom_front/view/wating_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/src/consumer.dart';
-
+import 'dart:convert';
 import '../provider/room_data_provider.dart';
 import '../utils/utils.dart';
-import '../view/main_menu_screen.dart';
 
 class SocketMethods {
   // final _socketClient = SocketClient.instance.socket != null ? SocketClient.instance.socket : throw new Error();
@@ -108,7 +105,7 @@ class SocketMethods {
     });
   }
 
-  void selectOX(String ox){
+  void  selectOX(String ox){
     _socketClient.emit("ox", {
       'userId': 1,
       'ox': ox,
@@ -181,9 +178,11 @@ class SocketMethods {
     });
   }
 
-  void displayScoreboardListener(){
+  void displayScoreboardListener(WidgetRef ref){
     _socketClient.on('scoreboard display', (users){
-      print('$users in displayScoreboardListener'); // [["유저1",0],["유저2",0]] -> users로 전역변수로 둬야함
+      List<dynamic> list = json.decode(users);
+      print('${list} in displayScoreboardListener'); // "[["유저1",0],["유저2",0]]" -> users로 전역변수로 둬야함
+      ref.watch(scoreProvider.notifier).updateScore(list);
     });
   }
 
@@ -223,9 +222,11 @@ class SocketMethods {
     });
   }
 
-  void changeScoreListener(){
+  void changeScoreListener(WidgetRef ref){
     _socketClient.on('score change', (data){
-      print('$data in changeScoreListener');
+      List<dynamic> list = json.decode(data);
+      print('$list in changeScoreListener');
+      ref.watch(scoreProvider.notifier).updateScore(list);
     });
   }
 

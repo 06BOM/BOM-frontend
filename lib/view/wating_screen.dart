@@ -57,12 +57,12 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
       }
     });
     _socketMethods.showGameRoom();
-    _socketMethods.displayScoreboardListener();
   }
 
   @override
   void didChangeDependencies() {
     _socketMethods.toggleTimerListener(ref, _controller);
+    _socketMethods.displayScoreboardListener(ref);
     _socketMethods.exitRoomAnswerListener(context);
     super.didChangeDependencies();
   }

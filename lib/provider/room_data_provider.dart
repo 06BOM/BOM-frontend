@@ -48,6 +48,18 @@ class AnswerNotifier extends StateNotifier<List<dynamic>> {
   }
 }
 
+final scoreProvider = StateNotifierProvider<ScoreNotifier, List<dynamic>>((ref) {
+  return ScoreNotifier();
+});
+
+class ScoreNotifier extends StateNotifier<List<dynamic>> {
+  ScoreNotifier() : super([]);
+
+  void updateScore(List<dynamic> data){
+    state = data;
+  }
+}
+
 
 final readyDataProvider = StateProvider<bool>((ref) {
   return false;
