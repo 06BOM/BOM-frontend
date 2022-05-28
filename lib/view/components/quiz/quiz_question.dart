@@ -47,12 +47,10 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
     super.initState();
     _animationController.addListener(() async {
       if (_animationController.status == AnimationStatus.completed) {
-        // print('라운드 끝 -> 다음 라운드');
-        isRoundFinish = true;
         roundIndex = ((_currentPage - 2) / 2).round();
-        print('roundIndex: $roundIndex');
+        print('roundIndex: $roundIndex | 라운드 종료 -> 정답 공개');
+        _socketMethods.answerQuestion(widget.roomName); // 왜 roundIndex를 출력해보는 block에 이를 놓으면 answer가 서버에 두번 emit되는 형태로 가지?
         await Future.delayed(Duration(seconds: 3), (){
-          _socketMethods.answerQuestion(widget.roomName); // 왜 roundIndex를 출력해보는 block에 이를 놓으면 answer가 서버에 두번 emit되는 형태로 가지?
           _socketMethods.scoreRound(roundIndex, widget.roomName);
           _socketMethods.fetchQuestion(ref);
           _animationController.reset(); //Reset the controller
@@ -63,10 +61,12 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
           } else {
             print('finish : _currentPage => ${_currentPage} in else');
             // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QuizResults(state: widget.state, questions: widget.questions)));
-            _currentPage = 0;
+            // _currentPage = 0;
           }
         });
-        isRoundFinish = false;
+        setState(() {
+          isRoundFinish = false;
+        });
       }
     });
 
@@ -128,7 +128,6 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
             return QuizSplashView(title: '시작');
           } else if(index > 1 && index % 2 == 0) {
             // _socketMethods.fetchQuestion(ref.watch(roomDataProvider)[0]); -> build에 놓으면 두 socket에서 동시에 부름 -> 이중 호출
-            print('Q: ${ref.watch(roundDataProvider.notifier).state} / A : ${ref.watch(answerProvider.notifier).state}');
             return QuizSplashView(title: '${idx + 1} 라운드');
           } else {
             print('Q: ${ref.watch(roundDataProvider.notifier).state} / A : ${ref.watch(answerProvider.notifier).state}');
