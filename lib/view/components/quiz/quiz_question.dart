@@ -14,15 +14,11 @@ import 'dart:math' as math;
 
 class QuizQuestions extends ConsumerStatefulWidget {
   final PageController pageController;
-  final QuizState state;
-  final List<Question> questions;
   final String roomName;
 
   QuizQuestions({
     Key? key,
     required this.pageController,
-    required this.state,
-    required this.questions,
     required this.roomName,
   }) : super(key: key);
 
@@ -36,13 +32,11 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
   // late Animation<double> _nextPage;
   int _currentPage = 0;
   int roundIndex = 0;
-  // bool isRoundFinish = false;
+  bool isRoundFinish = false;
   final SocketMethods _socketMethods = SocketMethods();
 
   @override
   void initState() {
-    _socketMethods.createRoundListener(ref);
-    _socketMethods.getAnswerListener();
     _socketMethods.changeScoreListener();
     _socketMethods.oxListener();
     _animationController = AnimationController(
@@ -54,29 +48,25 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
     _animationController.addListener(() async {
       if (_animationController.status == AnimationStatus.completed) {
         // print('라운드 끝 -> 다음 라운드');
-        // isRoundFinish = true;
-        // print('isRoundFinish ${isRoundFinish}');
-        _socketMethods.answerQuestion(widget.roomName);
-        // _socketMethods.fetchQuestion(widget.roomName);
+        isRoundFinish = true;
         roundIndex = ((_currentPage - 2) / 2).round();
         print('roundIndex: $roundIndex');
         await Future.delayed(Duration(seconds: 3), (){
-          _socketMethods.scoreRound(roundIndex, widget.roomName);//
-          _socketMethods.fetchQuestion(widget.roomName);
+          _socketMethods.answerQuestion(widget.roomName); // 왜 roundIndex를 출력해보는 block에 이를 놓으면 answer가 서버에 두번 emit되는 형태로 가지?
+          _socketMethods.scoreRound(roundIndex, widget.roomName);
+          _socketMethods.fetchQuestion(ref);
           _animationController.reset(); //Reset the controller
-          // print('_currentPage => ${_currentPage}');
-          if (_currentPage < widget.questions.length - 1) {
+          if (_currentPage < 22 - 1) {
             _currentPage++;
             widget.pageController.animateToPage(_currentPage,
                 duration: Duration(milliseconds: 300), curve: Curves.easeInSine);
           } else {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QuizResults(state: widget.state, questions: widget.questions)));
+            print('finish : _currentPage => ${_currentPage} in else');
+            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QuizResults(state: widget.state, questions: widget.questions)));
             _currentPage = 0;
-            // print('_currentPage => ${_currentPage} in else');
           }
         });
-        // isRoundFinish = false;
-        // print('isRoundFinish $isRoundFinish');
+        isRoundFinish = false;
       }
     });
 
@@ -88,12 +78,20 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
           widget.pageController.animateToPage(_currentPage,
               duration: Duration(milliseconds: 300), curve: Curves.easeInSine);
         }else {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QuizResults(state: widget.state, questions: widget.questions)));
-          _currentPage = 0;
-          print('_currentPage => ${_currentPage} in else');
+          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QuizResults(state: widget.state, questions: widget.questions)));
+          // _currentPage = 0;
+          print('finish : _currentPage => ${_currentPage} in else');
         }
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    _socketMethods.createRoundListener(ref);
+    _socketMethods.getAnswerListener(ref);
+    _socketMethods.fetchQuestion(ref); // wating_screen의 화면전환 이전에 해당 로직을 짰지만 화면이 바뀌면서 on 과정이 먹히는 현상 발생. 따라서 처음 quiz얻기위해 여기로 이동
+    super.didChangeDependencies();
   }
 
   @override
@@ -121,17 +119,21 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
         },
         itemBuilder: (BuildContext context, int index) {
           print('index => ${index} // ${_currentPage} in build method');
+          print('isround finish : $isRoundFinish');
           // print('${_currentPage} in build method'); // on으로 특정 값을 받으면 이를 이용하여 정답을 보여주자
+          final int idx = ((index - 2) / 2).round();
           if(index == 0) {
             return QuizSplashView(title: '준비');
           } else if(index == 1) {
             return QuizSplashView(title: '시작');
           } else if(index > 1 && index % 2 == 0) {
             // _socketMethods.fetchQuestion(ref.watch(roomDataProvider)[0]); -> build에 놓으면 두 socket에서 동시에 부름 -> 이중 호출
-            return QuizSplashView(title: '${index - 1} 라운드');
+            print('Q: ${ref.watch(roundDataProvider.notifier).state} / A : ${ref.watch(answerProvider.notifier).state}');
+            return QuizSplashView(title: '${idx + 1} 라운드');
           } else {
-            final idx = (index - 2) / 2;
-            final question = widget.questions[idx.round()];
+            print('Q: ${ref.watch(roundDataProvider.notifier).state} / A : ${ref.watch(answerProvider.notifier).state}');
+            // final question = widget.questions[idx.round()];
+            print('game view building...');
             return Column(
               // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -149,7 +151,7 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            'Q ${index - 1} / ${widget.questions.length}',
+                            'Q) ${idx} / 10',
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20.0,
@@ -168,9 +170,7 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 20.0),
-                                child: Text(
-                                  HtmlCharacterEntities.decode(
-                                      question.question),
+                                child: Text(ref.watch(roundDataProvider)[0],
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 24.0,
@@ -267,19 +267,19 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: question.answers
-                      .map((e) => AnswerCard(
-                          answer: e,
-                          isSelected: e == widget.state.selectedAnswer,
-                          isCorrect: e == question.correctAnswer,
-                          isDisplayingAnswer: widget.state.answered,
-                          onTap: () => ref
-                              .read(quizControllerProvider.notifier)
-                              .submitAnswer(question, e)))
-                      .toList(),
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //   children: question.answers
+                //       .map((e) => AnswerCard(
+                //           answer: e,
+                //           isSelected: e == widget.state.selectedAnswer,
+                //           isCorrect: e == question.correctAnswer,
+                //           isDisplayingAnswer: widget.state.answered,
+                //           onTap: () => ref
+                //               .read(quizControllerProvider.notifier)
+                //               .submitAnswer(question, e)))
+                //       .toList(),
+                // ),
               ],
             );
           }

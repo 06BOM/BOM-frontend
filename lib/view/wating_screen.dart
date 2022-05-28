@@ -49,18 +49,22 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
           'on controller listening... $_currentPage'); // _controller의 5 -> 4-> 3 -> 2 때문에 출력
       if (_controller.status == AnimationStatus.completed) {
         // _controller.reset(); // 0초가 되면 5로 되돌아옴
-        print('0초');
-        Navigator.pushNamed(
-            context,
-            QuizScreen
-                .routeName); // Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen()));
-        print('successfully move');
+          Navigator.pushNamed(
+              context,
+              QuizScreen
+                  .routeName); // Navigator.push(context, MaterialPageRoute(builder: (context) => QuizScreen()));
+          print('successfully move');
       }
     });
     _socketMethods.showGameRoom();
     _socketMethods.displayScoreboardListener();
+  }
+
+  @override
+  void didChangeDependencies() {
     _socketMethods.toggleTimerListener(ref, _controller);
     _socketMethods.exitRoomAnswerListener(context);
+    super.didChangeDependencies();
   }
 
   // final SocketMethods _socketMethods = SocketMethods();
@@ -88,9 +92,9 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
   @override
   Widget build(BuildContext context) {
     // final clientStateProvider = Provider.of<ClientDataProvider>(context);
-    final roomName = ref.watch(roomDataProvider);
-    bool trigger = ref.watch(timerProvider.notifier).state;
-    print('time trigger => ${trigger}');
+    // final roomName = ref.watch(roomDataProvider);
+    // bool trigger = ref.watch(timerProvider.notifier).state;
+    // print('time trigger => ${trigger}');
 
     return SafeArea(
         child: Container(
@@ -113,7 +117,7 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
                 alignment: Alignment.center,
                 child: Icon(Icons.logout, color: Colors.white)),
             onTap: () {
-              _socketMethods.handleRoomExit(context, roomName[0]);
+              _socketMethods.handleRoomExit(context, ref);
               // Navigator.pop(context);
             },
           ),
@@ -159,7 +163,6 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
             const SizedBox(height: 20),
             GameReadyButton(
                 controller: _controller,
-                gameRoomInfo: roomName,
                 socketObj: _socketMethods),
             Expanded(
                 child: Container(

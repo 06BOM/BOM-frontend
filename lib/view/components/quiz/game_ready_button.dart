@@ -8,13 +8,11 @@ import 'custom_button.dart';
 
 class GameReadyButton extends ConsumerStatefulWidget {
   AnimationController controller;
-  final gameRoomInfo;
   final SocketMethods socketObj;
 
   GameReadyButton(
       {Key? key,
       required this.controller,
-      required this.gameRoomInfo,
       required this.socketObj})
       : super(key: key);
 
@@ -29,9 +27,16 @@ class _GameReadyButtonState extends ConsumerState<GameReadyButton> {
 
   @override
   void initState() {
-    widget.socketObj.checkReadyListener(widget.gameRoomInfo[0]);
-    widget.socketObj.isCompleteReadyListener(ref);
+    // widget.socketObj.checkReadyListener(ref);
+    // widget.socketObj.isCompleteReadyListener(ref);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    widget.socketObj.checkReadyListener(ref);
+    widget.socketObj.isCompleteReadyListener(ref);
+    super.didChangeDependencies();
   }
 
   // late RoomDataProvider game;
@@ -58,7 +63,7 @@ class _GameReadyButtonState extends ConsumerState<GameReadyButton> {
   //   });
   // }
   void toggleButton() {
-    widget.socketObj.toggleReadyButton(widget.gameRoomInfo[0]);
+    widget.socketObj.toggleReadyButton(ref);
     setState(() {
       isBtn = !isBtn;
     });
@@ -79,7 +84,8 @@ class _GameReadyButtonState extends ConsumerState<GameReadyButton> {
     //   widget.controller.forward();
     //   // ref.read(timerProvider.notifier).state = false;
     // }
-    return widget.gameRoomInfo[3] != 0
+    int isRoomHost = ref.watch(roomDataProvider.notifier).state[3];
+    return isRoomHost != 0
         ? (isBtn
             ? CustomButton(
                 onTap: () {
@@ -93,8 +99,7 @@ class _GameReadyButtonState extends ConsumerState<GameReadyButton> {
                 title: '준비 취소'))
         : CustomButton(title: '게임 시작', onTap: () {
           if(ref.watch(readyDataProvider.notifier).state){
-            widget.socketObj.startGame(widget.gameRoomInfo[0]);
-            widget.socketObj.fetchQuestion(widget.gameRoomInfo[0]);
+            widget.socketObj.startGame(ref);
             print('in game ready button');
           }
     });

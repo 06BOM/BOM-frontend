@@ -25,32 +25,32 @@ class RoomData extends StateNotifier<List<dynamic>> {
   }
 }
 
-final roundDataProvider = StateNotifierProvider<roundNotifier, List<dynamic>>((ref) {
-  return roundNotifier();
+final roundDataProvider = StateNotifierProvider<RoundNotifier, List<dynamic>>((ref) {
+  return RoundNotifier();
 });
 
-class roundNotifier extends StateNotifier<List<dynamic>> {
-  roundNotifier() : super([]);
+class RoundNotifier extends StateNotifier<List<dynamic>> {
+  RoundNotifier() : super([]);
 
   void updateRoundData(List<dynamic> data) {
     print('$data in updateRoundData (provider)');
-    // _roomData = GameRoomState.fromMap(data);
-    // state = [...state, data];
-    state = data;
-    // ref.read(roomNameProvider.notifier).state = data[0];
+    state = data; // [과학문제1, 1]
   }
 }
 
-// final readyDataProvider = StateNotifierProvider<ReadyData, List<dynamic>>((ref) {
-//   return ReadyData();
-// });
-//
-// class ReadyData extends StateNotifier<List<dynamic>>{
-//   ReadyData(): super([]);
-//   void updateReadyData(List<dynamic> data){
-//     state = data;
-//   }
-// }
+final answerProvider = StateNotifierProvider<AnswerNotifier, List<dynamic>>((ref) {
+  return AnswerNotifier();
+});
+
+class AnswerNotifier extends StateNotifier<List<dynamic>> {
+  AnswerNotifier() : super([]);
+
+  void updateAnswerData(List<dynamic> data) {
+    print('$data in updateAnswerData (provider)');
+    state = data; // [0, 설명1]
+  }
+}
+
 
 final readyDataProvider = StateProvider<bool>((ref) {
   return false;

@@ -13,12 +13,12 @@ import 'components/quiz/quiz_error.dart';
 import 'components/quiz/quiz_question.dart';
 import 'components/quiz/quiz_result.dart';
 
-final quizQuestionProvider = FutureProvider.autoDispose<List<Question>>(
-        (ref) => ref.watch(quizRepositoryProvider).getQuestions(
-      // refresh를 위한 watch
-        numQuestions: 5,
-        categoryId: Random().nextInt(24) + 9, // 9 ~ 32
-        difficulty: Difficulty.any));
+// final quizQuestionProvider = FutureProvider.autoDispose<List<Question>>(
+//         (ref) => ref.watch(quizRepositoryProvider).getQuestions(
+//       // refresh를 위한 watch
+//         numQuestions: 5,
+//         categoryId: Random().nextInt(24) + 9, // 9 ~ 32
+//         difficulty: Difficulty.any));
 
 class QuizScreen extends HookConsumerWidget {
   static String routeName = '/quiz-room';
@@ -26,7 +26,7 @@ class QuizScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final quizQuestions = ref.watch(quizQuestionProvider); // useProvider();
+    // final quizQuestions = ref.watch(quizQuestionProvider); // useProvider();
     final pageController = usePageController(initialPage: 0);
 
     return Container(
@@ -40,13 +40,14 @@ class QuizScreen extends HookConsumerWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent, // 필수
-        body: quizQuestions.when(
-          data: (questions) => _buildBody(context, pageController, questions),
-          error: (error, _) => QuizError(
-            message: error is Failure ? error.message : 'Something went wrong!',
-          ),
-          loading: () => const Center(child: CircularProgressIndicator()),
-        ),
+        body: _buildBody(context, pageController)
+        // body: quizQuestions.when(
+        //   data: (questions) => _buildBody(context, pageController, questions),
+        //   error: (error, _) => QuizError(
+        //     message: error is Failure ? error.message : 'Something went wrong!',
+        //   ),
+        //   loading: () => const Center(child: CircularProgressIndicator()),
+        // ),
         // bottomSheet: quizQuestions.maybeWhen(
         //   data: (questions) {
         //     final quizState = ref.watch(quizControllerProvider);
@@ -74,20 +75,21 @@ class QuizScreen extends HookConsumerWidget {
     );
   }
 
-  Widget _buildBody(BuildContext context, PageController pageController,
-      List<Question> questions) {
-    if (questions.isEmpty) return QuizError(message: 'No questions found.');
+  Widget _buildBody(BuildContext context, PageController pageController) {
     return Consumer(builder: (context, ref, child) {
-      final quizState = ref.watch(quizControllerProvider);
+      // final quizState = ref.watch(quizControllerProvider);
       final roomName = ref.watch(roomDataProvider)[0];
-      return quizState.status == QuizStatus.complete
-          ? QuizResults(state: quizState, questions: questions)
-          : QuizQuestions(
-        pageController: pageController,
-        state: quizState,
-        questions: questions,
-        roomName: roomName,
-      );
+      return QuizQuestions(
+          pageController: pageController,
+          roomName: roomName,)
+        // quizState.status == QuizStatus.complete
+        //   ? QuizResults(state: quizState, questions: questions)
+        //   : QuizQuestions(
+        // pageController: pageController,
+        // state: quizState,
+        // questions: questions,
+        // roomName: roomName,)
+      ;
     });
   }
 }

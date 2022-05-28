@@ -55,8 +55,8 @@ class SocketMethods {
     }
   }
 
-  void handleRoomExit(BuildContext context, String roomName) {
-    print(roomName);
+  void handleRoomExit(BuildContext context, WidgetRef ref) {
+    String roomName = ref.watch(roomDataProvider.notifier).state[0];
     if (roomName != "") {
       _socketClient.emit('exit_room', {
         "roomName": roomName,
@@ -70,7 +70,8 @@ class SocketMethods {
     });
   }
 
-  void checkReadyListener(String roomName) {
+  void checkReadyListener(WidgetRef ref) {
+    String roomName = ref.watch(roomDataProvider.notifier).state[0];
     _socketClient.on('ready check', (data) { // data 전달 안할 시 null
       _socketClient.emit('ready check', {
         "roomName": roomName,
@@ -78,20 +79,23 @@ class SocketMethods {
     });
   }
 
-  void toggleReadyButton(String roomName) {
+  void toggleReadyButton(WidgetRef ref) {
+    String roomName = ref.watch(roomDataProvider.notifier).state[0];
     _socketClient.emit('ready', {
       "roomName": roomName,
     });
   }
 
-  void startGame(String roomName) {
+  void startGame(WidgetRef ref) {
+    String roomName = ref.watch(roomDataProvider.notifier).state[0];
     _socketClient.emit("gameStartFunction", {
       'roomName': roomName,
     });
   }
 
-  void fetchQuestion(String roomName){
-    print('run fetchQuestion');
+  void fetchQuestion(WidgetRef ref){
+    String roomName = ref.watch(roomDataProvider.notifier).state[0];
+    print('run fetchQuestion $roomName');
     _socketClient.emit("question", {
       'roomName': roomName,
     });
@@ -129,12 +133,11 @@ class SocketMethods {
   void createRoomSuccessListener(BuildContext context, WidgetRef ref) {
     print('listen createRoomSuccessListener in socket_methods');
     _socketClient.on('create_room', (roomData) {
-      //[방이름, 참여인원]
-      print('$roomData in createRoomSuccessListener function | context : $context');
+      print('$roomData in createRoomSuccessListener function | context : $context'); // [테스트4, 1, 유저1, 0] -> [방이름, 현재인원, 닉네임, 0=> 방장]
       // Provider.of<RoomDataProvider>(context, listen: false).updateRoomData(room);
       // _roomData = await room;
       ref.watch(roomDataProvider.notifier).updateRoomData(roomData);
-      toggleReadyButton(roomData[0]); // 방장은 미리 준비ㅇ
+      toggleReadyButton(ref); // 방장은 미리 준비ㅇ
       Navigator.pushNamed(context, WaitingLobby.routeName);
     });
   }
@@ -153,6 +156,7 @@ class SocketMethods {
     // -> 이후 첫번째, 두번째 사람들 waiting 방으로 -> 바꾸자
     _socketClient.on('welcome', (roomData) {
       // 전역적인 배열에 넣어서 채팅방에 업데이트하기
+      print('$roomData in getJoinedUserName function | context : $context'); //
       ref.watch(roomDataProvider.notifier).updateRoomData(roomData);
       Navigator.pushNamed(context, WaitingLobby.routeName);
     });
@@ -192,7 +196,7 @@ class SocketMethods {
   void toggleTimerListener(WidgetRef ref, AnimationController controller){
     _socketClient.on('timer', (toggle){ // true
       print('$toggle in toggleTimerListener');
-      ref.read(timerProvider.notifier).state = toggle; // 바뀌어도 rebuilding이 안됨.
+      // ref.read(timerProvider.notifier).state = toggle; // 바뀌어도 rebuilding이 안됨.
       controller.forward();
     });
   }
@@ -204,9 +208,10 @@ class SocketMethods {
     });
   }
 
-  void getAnswerListener(){ // 굳이 따로 받는 것보다 위에서 부터 받는게 어떤가?
+  void getAnswerListener(WidgetRef ref){ // 굳이 따로 받는 것보다 위에서 부터 받는게 어떤가?
     _socketClient.on('answer', (data){
       print('$data in getAnswerListener');
+      ref.watch(answerProvider.notifier).updateAnswerData(data);
     });
   }
 
