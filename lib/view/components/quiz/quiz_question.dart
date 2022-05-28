@@ -29,10 +29,8 @@ class QuizQuestions extends ConsumerStatefulWidget {
 class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late AnimationController _splashController; // for 준비 | 시작 term
-  // late Animation<double> _nextPage;
   int _currentPage = 0;
   int roundIndex = 0;
-  bool isRoundFinish = false;
   final SocketMethods _socketMethods = SocketMethods();
 
   @override
@@ -41,7 +39,6 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
     _socketMethods.oxListener();
     _animationController = AnimationController(
         vsync: this, duration: Duration(seconds: 10));
-    // _nextPage = Tween(begin: 0.0, end: 1.0).animate(_animationController);
     _splashController = AnimationController(
       vsync: this, duration: Duration(seconds: 2));
     super.initState();
@@ -51,6 +48,7 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
         print('roundIndex: $roundIndex | 라운드 종료 -> 정답 공개');
         _socketMethods.answerQuestion(widget.roomName); // 왜 roundIndex를 출력해보는 block에 이를 놓으면 answer가 서버에 두번 emit되는 형태로 가지?
         await Future.delayed(Duration(seconds: 3), (){
+          print('in delayed seconds: 3');
           _socketMethods.scoreRound(roundIndex, widget.roomName);
           _socketMethods.fetchQuestion(ref);
           _animationController.reset(); //Reset the controller
@@ -63,9 +61,6 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
             // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QuizResults(state: widget.state, questions: widget.questions)));
             // _currentPage = 0;
           }
-        });
-        setState(() {
-          isRoundFinish = false;
         });
       }
     });
@@ -88,6 +83,7 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
 
   @override
   void didChangeDependencies() {
+    _splashController.forward();
     _socketMethods.createRoundListener(ref);
     _socketMethods.getAnswerListener(ref);
     _socketMethods.fetchQuestion(ref); // wating_screen의 화면전환 이전에 해당 로직을 짰지만 화면이 바뀌면서 on 과정이 먹히는 현상 발생. 따라서 처음 quiz얻기위해 여기로 이동
@@ -103,7 +99,7 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
 
   @override
   Widget build(BuildContext context) {
-    _splashController.forward();
+    print('... on quiz_question building');
     return PageView.builder(
         controller: widget.pageController,
         physics: NeverScrollableScrollPhysics(),
@@ -118,8 +114,7 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
           }
         },
         itemBuilder: (BuildContext context, int index) {
-          print('index => ${index} // ${_currentPage} in build method');
-          print('isround finish : $isRoundFinish');
+          // print('index => ${index} // ${_currentPage} in build method');
           // print('${_currentPage} in build method'); // on으로 특정 값을 받으면 이를 이용하여 정답을 보여주자
           final int idx = ((index - 2) / 2).round();
           if(index == 0) {
@@ -130,157 +125,182 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
             // _socketMethods.fetchQuestion(ref.watch(roomDataProvider)[0]); -> build에 놓으면 두 socket에서 동시에 부름 -> 이중 호출
             return QuizSplashView(title: '${idx + 1} 라운드');
           } else {
-            print('Q: ${ref.watch(roundDataProvider.notifier).state} / A : ${ref.watch(answerProvider.notifier).state}');
+            ref.watch(showAnswerProvider);
+            final isShowAnswerView = ref.watch(showAnswerProvider.notifier).state;
+            print('... Q: ${ref.watch(roundDataProvider.notifier).state} / A : ${ref.watch(answerProvider.notifier).state} / S: $isShowAnswerView on game view building ');
             // final question = widget.questions[idx.round()];
-            print('game view building...');
             return Column(
-              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 200.0,
-                  color: Colors.black.withOpacity(0.2),
-                  margin: const EdgeInsets.only(
-                    top: 80.0,
-                  ),
-                  child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 200.0,
+                      color: Colors.black.withOpacity(0.2),
+                      margin: const EdgeInsets.only(
+                        top: 10.0,
+                      ),
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Q) ${idx} / 10',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Q) ${idx} / 10',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 30.0),
+                          Container(
+                            width: MediaQuery.of(context).size.width - 2.0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0),
+                                    child: !isShowAnswerView ? Text(ref.watch(roundDataProvider)[0],
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 24.0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ) : Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.greenAccent, width: 2)),
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Text('해설: ${ref.watch(answerProvider)[1]}',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 24.0,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            Text('정답: ${ref.watch(answerProvider)[0]}',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 24.0,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            )
+                                          ]),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 30.0),
-                      Container(
-                        width: MediaQuery.of(context).size.width - 2.0,
-                        child: Row(
+                    ),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 70.0,
+                          height: 70.0,
+                          child: CustomPaint(
+                            painter: circleDrawPaint(),
+                          ),
+                        ),
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0),
-                                child: Text(ref.watch(roundDataProvider)[0],
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
+                            Container(
+                              // padding: EdgeInsets.all(0.0),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.greenAccent, width: 2)),
+                              width: 80.0,
+                              height: 80.0,
+                              child: AnimatedBuilder(
+                                  animation: _animationController,
+                                  builder: (BuildContext context, Widget? child) {
+                                    return QuizCompletionTimer(
+                                        progress: _animationController.value);
+                                  }),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: 70.0,
-                      height: 70.0,
-                      child: CustomPaint(
-                        painter: circleDrawPaint(),
-                      ),
+                      ],
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Container(
-                          // padding: EdgeInsets.all(0.0),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.greenAccent, width: 2)),
-                          width: 80.0,
-                          height: 80.0,
-                          child: AnimatedBuilder(
-                              animation: _animationController,
-                              builder: (BuildContext context, Widget? child) {
-                                return QuizCompletionTimer(
-                                    progress: _animationController.value);
-                              }),
+                        GestureDetector(
+                          onTap: () => {
+                            print('O touch'),
+                            _socketMethods.selectOX('o')
+                          },
+                          child: Container(
+                            child: Center(
+                              child: Text(
+                                'O',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 100,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 40,
+                                        color: Colors.blue,
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () => {
+                            print('X touch'),
+                            _socketMethods.selectOX('x')
+                          },
+                          child: Container(
+                            child: Center(
+                              child: Text(
+                                'X',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 100,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 40,
+                                        color: Colors.red,
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    //   children: question.answers
+                    //       .map((e) => AnswerCard(
+                    //           answer: e,
+                    //           isSelected: e == widget.state.selectedAnswer,
+                    //           isCorrect: e == question.correctAnswer,
+                    //           isDisplayingAnswer: widget.state.answered,
+                    //           onTap: () => ref
+                    //               .read(quizControllerProvider.notifier)
+                    //               .submitAnswer(question, e)))
+                    //       .toList(),
+                    // ),
                   ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GestureDetector(
-                      onTap: () => {
-                        print('O touch'),
-                        _socketMethods.selectOX('o')
-                      },
-                      child: Container(
-                        child: Center(
-                          child: Text(
-                            'O',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 100,
-                                shadows: [
-                                  Shadow(
-                                    blurRadius: 40,
-                                    color: Colors.blue,
-                                  ),
-                                ]),
-                          ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => {
-                        print('X touch'),
-                        _socketMethods.selectOX('x')
-                      },
-                      child: Container(
-                        child: Center(
-                          child: Text(
-                            'X',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 100,
-                                shadows: [
-                                  Shadow(
-                                    blurRadius: 40,
-                                    color: Colors.red,
-                                  ),
-                                ]),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //   children: question.answers
-                //       .map((e) => AnswerCard(
-                //           answer: e,
-                //           isSelected: e == widget.state.selectedAnswer,
-                //           isCorrect: e == question.correctAnswer,
-                //           isDisplayingAnswer: widget.state.answered,
-                //           onTap: () => ref
-                //               .read(quizControllerProvider.notifier)
-                //               .submitAnswer(question, e)))
-                //       .toList(),
-                // ),
-              ],
-            );
+                );
           }
         });
   }

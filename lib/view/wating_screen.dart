@@ -46,7 +46,7 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
     // animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
     _controller.addListener(() async {
       print(
-          'on controller listening... $_currentPage'); // _controller의 5 -> 4-> 3 -> 2 때문에 출력
+          '...${_controller.value} on controller listening'); // _controller의 5 -> 4-> 3 -> 2 때문에 출력
       if (_controller.status == AnimationStatus.completed) {
         // _controller.reset(); // 0초가 되면 5로 되돌아옴
           Navigator.pushNamed(

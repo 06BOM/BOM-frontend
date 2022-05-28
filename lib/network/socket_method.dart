@@ -205,6 +205,7 @@ class SocketMethods {
     _socketClient.on('round', (data){
       print('$data in createRoundListener');
       ref.watch(roundDataProvider.notifier).updateRoundData(data);
+      ref.read(showAnswerProvider.notifier).state = data[2]; // false
     });
   }
 
@@ -212,6 +213,7 @@ class SocketMethods {
     _socketClient.on('answer', (data){
       print('$data in getAnswerListener');
       ref.watch(answerProvider.notifier).updateAnswerData(data);
+      ref.read(showAnswerProvider.notifier).state = data[2]; // true
     });
   }
 
