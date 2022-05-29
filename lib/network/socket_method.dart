@@ -120,6 +120,13 @@ class SocketMethods {
     });
   }
 
+  void allRoundFinish(String roomName){
+    print('finish all round');
+    _socketClient.emit("all finish", {
+      'roomName': roomName
+    });
+  }
+
   void isCompleteReadyListener(WidgetRef ref) {
     _socketClient.on('ready', (data) {
       ref.watch(readyDataProvider.notifier).state = data; // data = true
@@ -229,7 +236,6 @@ class SocketMethods {
       ref.watch(scoreProvider.notifier).updateScore(list);
     });
   }
-
 
 // void updateRoomListener(BuildContext context) {
 //   _socketClient.on('createRoomSuccess', (room) {

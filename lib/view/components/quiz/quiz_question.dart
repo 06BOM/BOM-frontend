@@ -3,6 +3,7 @@ import 'package:bom_front/provider/quiz/quiz_provider.dart';
 import 'package:bom_front/provider/quiz/quiz_state.dart';
 import 'package:bom_front/view/components/quiz/quiz_result.dart';
 import 'package:bom_front/view/components/quiz/quiz_splash_view.dart';
+import 'package:bom_front/view/wating_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:html_character_entities/html_character_entities.dart';
@@ -46,18 +47,18 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
         roundIndex = ((_currentPage - 2) / 2).round();
         print('roundIndex: $roundIndex | 라운드 종료 -> 정답 공개');
         _socketMethods.answerQuestion(widget.roomName); // 왜 roundIndex를 출력해보는 block에 이를 놓으면 answer가 서버에 두번 emit되는 형태로 가지?
-        await Future.delayed(Duration(seconds: 3), (){
+        await Future.delayed(Duration(seconds: 3), () {
           print('in delayed seconds: 3');
           _socketMethods.scoreRound(roundIndex, widget.roomName);
           _socketMethods.fetchQuestion(ref);
           _animationController.reset(); //Reset the controller
-          if (_currentPage < 22 - 1) {
+          if (_currentPage < 23 - 1) {
             _currentPage++;
             widget.pageController.animateToPage(_currentPage,
                 duration: Duration(milliseconds: 300), curve: Curves.easeInSine);
           } else {
-            print('finish : _currentPage => ${_currentPage} in else');
-            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QuizResults(state: widget.state, questions: widget.questions)));
+            print('finish : _currentPage with _animationController=> ${_currentPage} in else');
+            _socketMethods.allRoundFinish(widget.roomName);
             // _currentPage = 0;
           }
         });
@@ -67,14 +68,15 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
     _splashController.addListener(() {
       if (_splashController.status == AnimationStatus.completed) {
         _splashController.reset();
-        if(_currentPage < 22 - 1){ // widget.questions.length - 1
+        if(_currentPage < 23 - 1){ // widget.questions.length - 1
           _currentPage++;
           widget.pageController.animateToPage(_currentPage,
               duration: Duration(milliseconds: 300), curve: Curves.easeInSine);
         }else {
           // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QuizResults(state: widget.state, questions: widget.questions)));
           // _currentPage = 0;
-          print('finish : _currentPage => ${_currentPage} in else');
+          print('finish : _currentPage with _splashController=> ${_currentPage} in else');
+          _socketMethods.allRoundFinish(widget.roomName);
         }
       }
     });
@@ -114,13 +116,15 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
           }
         },
         itemBuilder: (BuildContext context, int index) {
-          // print('index => ${index} // ${_currentPage} in build method');
+          print('index => ${index} // ${_currentPage} in build method');
           // print('${_currentPage} in build method'); // on으로 특정 값을 받으면 이를 이용하여 정답을 보여주자
           final int idx = ((index - 2) / 2).round();
           if(index == 0) {
             return QuizSplashView(title: '준비');
           } else if(index == 1) {
             return QuizSplashView(title: '시작');
+          }else if(index == 22){
+              return QuizResults();
           } else if(index > 1 && index % 2 == 0) {
             // _socketMethods.fetchQuestion(ref.watch(roomDataProvider)[0]); -> build에 놓으면 두 socket에서 동시에 부름 -> 이중 호출
             return QuizSplashView(title: '${idx + 1} 라운드');
@@ -331,8 +335,8 @@ class Scoreboard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final usersScoreInfo = ref.watch(scoreProvider.notifier).state;
-    usersScoreInfo.sort((a,b) => a[1].compareTo(b[1]));
-    for (var player in usersScoreInfo.reversed) {
+    usersScoreInfo.sort((a,b) => a[1].compareTo(b[1]) * -1);
+    for (var player in usersScoreInfo) {
       print('each player info => ${player} / ${player[1]}');
     }
     return Container(
