@@ -105,7 +105,7 @@ class SocketMethods {
     });
   }
 
-  void  selectOX(String ox){
+  void selectOX(String ox){
     _socketClient.emit("ox", {
       'userId': 1,
       'ox': ox,
@@ -122,7 +122,7 @@ class SocketMethods {
 
   void isCompleteReadyListener(WidgetRef ref) {
     _socketClient.on('ready', (data) {
-      ref.read(readyDataProvider.notifier).state = data; // data = true
+      ref.watch(readyDataProvider.notifier).state = data; // data = true
       print('all user ready!');
     });
   }
@@ -204,7 +204,7 @@ class SocketMethods {
     _socketClient.on('round', (data){
       print('$data in createRoundListener');
       ref.watch(roundDataProvider.notifier).updateRoundData(data);
-      ref.read(showAnswerProvider.notifier).state = data[2]; // false
+      ref.watch(showAnswerProvider.notifier).state = data[2]; // false
     });
   }
 
@@ -212,7 +212,7 @@ class SocketMethods {
     _socketClient.on('answer', (data){
       print('$data in getAnswerListener');
       ref.watch(answerProvider.notifier).updateAnswerData(data);
-      ref.read(showAnswerProvider.notifier).state = data[2]; // true
+      ref.watch(showAnswerProvider.notifier).state = data[2]; // true
     });
   }
 
