@@ -45,12 +45,17 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
     _animationController.addListener(() async {
       if (_animationController.status == AnimationStatus.completed) {
         roundIndex = ((_currentPage - 2) / 2).round();
-        print('roundIndex: $roundIndex | 라운드 종료 -> 정답 공개');
+        print('roundIndex: $roundIndex | 라운드 종료 -> 정답 공개 $_currentPage $roundIndex');
         _socketMethods.answerQuestion(widget.roomName); // 왜 roundIndex를 출력해보는 block에 이를 놓으면 answer가 서버에 두번 emit되는 형태로 가지?
         await Future.delayed(Duration(seconds: 3), () {
           print('in delayed seconds: 3');
-          _socketMethods.scoreRound(roundIndex, widget.roomName);
-          _socketMethods.fetchQuestion(ref);
+          if(roundIndex < 10){
+            _socketMethods.scoreRound(roundIndex, widget.roomName); // payload.index를 비교해보기
+            _socketMethods.fetchQuestion(ref);
+          }else{
+            _socketMethods.scoreRound(9, widget.roomName); // 막라 점수적용을 위해 이것도 필요한데...
+            _socketMethods.allRoundFinish(widget.roomName); // 마지막 문제의 score를 불러오지 못하는 에러
+          }
           _animationController.reset(); //Reset the controller
           if (_currentPage < 23 - 1) {
             _currentPage++;
@@ -67,16 +72,16 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
 
     _splashController.addListener(() {
       if (_splashController.status == AnimationStatus.completed) {
+        print('finish listener $_currentPage $roundIndex');
         _splashController.reset();
         if(_currentPage < 23 - 1){ // widget.questions.length - 1
           _currentPage++;
           widget.pageController.animateToPage(_currentPage,
               duration: Duration(milliseconds: 300), curve: Curves.easeInSine);
         }else {
-          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => QuizResults(state: widget.state, questions: widget.questions)));
-          // _currentPage = 0;
+          // _socketMethods.scoreRound(10, widget.roomName);
+          // _socketMethods.allRoundFinish(widget.roomName);
           print('finish : _currentPage with _splashController=> ${_currentPage} in else');
-          _socketMethods.allRoundFinish(widget.roomName);
         }
       }
     });
@@ -308,19 +313,6 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions> with TickerProvid
                       children: [Scoreboard(idx: index)],
                     )
                     )
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    //   children: question.answers
-                    //       .map((e) => AnswerCard(
-                    //           answer: e,
-                    //           isSelected: e == widget.state.selectedAnswer,
-                    //           isCorrect: e == question.correctAnswer,
-                    //           isDisplayingAnswer: widget.state.answered,
-                    //           onTap: () => ref
-                    //               .read(quizControllerProvider.notifier)
-                    //               .submitAnswer(question, e)))
-                    //       .toList(),
-                    // ),
                   ],
                 );
           }

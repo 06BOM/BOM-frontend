@@ -17,6 +17,7 @@ class QuizResults extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final usersScoreInfo = ref.watch(scoreProvider.notifier).state;
     usersScoreInfo.sort((a, b) => a[1].compareTo(b[1]) * -1);
+    print('in quizresults');
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
