@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../network/socket_method.dart';
 import 'dart:math' as math;
@@ -64,36 +62,6 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
             ],
           ),
           body: _buildBody(context, pageController)
-          // body: quizQuestions.when(
-          //   data: (questions) => _buildBody(context, pageController, questions),
-          //   error: (error, _) => QuizError(
-          //     message: error is Failure ? error.message : 'Something went wrong!',
-          //   ),
-          //   loading: () => const Center(child: CircularProgressIndicator()),
-          // ),
-          // bottomSheet: quizQuestions.maybeWhen(
-          //   data: (questions) {
-          //     final quizState = ref.watch(quizControllerProvider);
-          //     if (!quizState.answered) return const SizedBox.shrink();
-          //     return CustomButton(
-          //       title: pageController.page!.toInt() + 1 < questions.length
-          //           ? 'Next Question'
-          //           : 'See Results',
-          //       onTap: () {
-          //         ref
-          //             .read(quizControllerProvider.notifier)
-          //             .nextQuestion(questions, pageController.page!.toInt());
-          //         if (pageController.page!.toInt() + 1 < questions.length) { // 넘기감: page가 퀴즈 개수 보다 작을 경우
-          //           pageController.nextPage(
-          //             duration: const Duration(milliseconds: 250),
-          //             curve: Curves.easeInOut,
-          //           );
-          //         }
-          //       },
-          //     );
-          //   },
-          //   orElse: () => const SizedBox.shrink(),
-          // ),
           ),
     );
   }
@@ -105,15 +73,7 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
       return QuizQuestions(
         pageController: pageController,
         roomName: roomName,
-      )
-          // quizState.status == QuizStatus.complete
-          //   ? QuizResults(state: quizState, questions: questions)
-          //   : QuizQuestions(
-          // pageController: pageController,
-          // state: quizState,
-          // questions: questions,
-          // roomName: roomName,)
-          ;
+      );
     });
   }
 }

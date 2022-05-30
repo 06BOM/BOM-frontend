@@ -1,25 +1,19 @@
-// import 'package:hooks_riverpod/hooks_riverpod.dart';
-// final roomNameProvider = StateProvider<String>((ref) => "");
-import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-// final roomNameProvider = StateProvider.autoDispose<String>((ref) => "");
 
 final roomDataProvider = StateNotifierProvider.autoDispose<RoomData, List<dynamic>>((ref) {
   return RoomData(ref);
 });
 
 class RoomData extends StateNotifier<List<dynamic>> {
-  // dynamic _roomData = '';
-  // dynamic get roomData => _roomData;
   final Ref ref;
-
-  RoomData(this.ref): super([]);
+  RoomData(this.ref) : super([]);
 
   void updateRoomData(List<dynamic> data) {
-    // _roomData = GameRoomState.fromMap(data);
+    List<dynamic> list = json.decode(data[2]);
     // state = [...state, data];
     state = data;
+    ref.watch(roomUsersProvider.notifier).state = list;
     // ref.read(roomNameProvider.notifier).state = data[0];
   }
 }
@@ -71,4 +65,8 @@ final timerProvider = StateProvider<bool>((ref) {
 
 final showAnswerProvider = StateProvider<bool>((ref){
   return false;
+});
+
+final roomUsersProvider = StateProvider<List<dynamic>>((ref){
+  return [];
 });

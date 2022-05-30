@@ -1,16 +1,9 @@
-import 'package:bom_front/model/question.dart';
-import 'package:bom_front/provider/quiz/quiz_provider.dart';
-import 'package:bom_front/provider/quiz/quiz_state.dart';
 import 'package:bom_front/view/components/quiz/quiz_result.dart';
 import 'package:bom_front/view/components/quiz/quiz_splash_view.dart';
-import 'package:bom_front/view/wating_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:html_character_entities/html_character_entities.dart';
 import '../../../network/socket_method.dart';
 import '../../../provider/room_data_provider.dart';
-import '../../../utils/colors.dart';
-import 'answer_card.dart';
 import 'dart:math' as math;
 
 class QuizQuestions extends ConsumerStatefulWidget {

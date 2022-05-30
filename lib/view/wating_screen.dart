@@ -1,11 +1,9 @@
-import 'package:bom_front/provider/room_data_provider.dart';
-import 'package:bom_front/utils/colors.dart';
 import 'package:bom_front/view/quiz_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'dart:math' as math;
 import '../network/socket_method.dart';
+import '../provider/room_data_provider.dart';
 import 'components/quiz/custom_textfield.dart';
 import 'components/quiz/game_ready_button.dart';
 
@@ -24,19 +22,7 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
   late AnimationController _controller;
   final pageController = PageController(initialPage: 0);
   int watingTime = 5;
-
-  // late Animation<double> animation;
-  int _currentPage = 0;
   final SocketMethods _socketMethods = SocketMethods();
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _socketMethods.updateRoomListener(context);
-  //   _socketMethods.startGameListener(context);
-  //   _socketMethods.updatePlayersStateListener(context);
-  //   _socketMethods.endGameListener(context);
-  // }
 
   @override
   void initState() {
@@ -67,18 +53,6 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
     super.didChangeDependencies();
   }
 
-  // final SocketMethods _socketMethods = SocketMethods();
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _socketMethods.updateReadyTimer(context);
-  //   roomIdController = TextEditingController(
-  //     text:
-  //     Provider.of<RoomDataProvider>(context, listen: false).roomData['_id'],
-  //   );
-  // }
-
   @override
   void dispose() {
     super.dispose();
@@ -91,11 +65,8 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
 
   @override
   Widget build(BuildContext context) {
-    // final clientStateProvider = Provider.of<ClientDataProvider>(context);
-    // final roomName = ref.watch(roomDataProvider);
-    // bool trigger = ref.watch(timerProvider.notifier).state;
-    // print('time trigger => ${trigger}');
-
+    List<dynamic> roomUsers = ref.watch(roomUsersProvider.notifier).state;
+    print(roomUsers);
     return SafeArea(
         child: Container(
       height: MediaQuery.of(context).size.height,
@@ -129,7 +100,6 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
           ],
         ),
         body: Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               children: [
@@ -154,23 +124,44 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
               ],
             ),
             const Text('참여할 유저 대기 중...'),
-            const SizedBox(height: 20),
-            CustomTextField(
-              controller: roomIdController,
-              hintText: '',
-              isReadOnly: true,
+            // const SizedBox(height: 20),
+            // CustomTextField(
+            //   controller: roomIdController,
+            //   hintText: '',
+            //   isReadOnly: true,
+            // ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.symmetric(vertical: 10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Column(
+                  children: [
+                    for (var i = 0; i < roomUsers.length; i++)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(roomUsers[i]),
+                        ],
+                      )
+                    ,
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             GameReadyButton(
                 controller: _controller,
                 socketObj: _socketMethods),
             Expanded(
+                flex: 2,
                 child: Container(
               width: MediaQuery.of(context).size.width,
               // height: 200.0,
               color: Colors.black.withOpacity(0.2),
               margin: const EdgeInsets.only(
-                top: 80.0,
+                top: 10.0,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.max,

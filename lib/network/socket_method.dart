@@ -138,8 +138,9 @@ class SocketMethods {
     print('listen createRoomSuccessListener in socket_methods');
     _socketClient.on('create_room', (roomData) {
       print('$roomData in createRoomSuccessListener function | context : $context'); // [테스트4, 1, 유저1, 0] -> [방이름, 현재인원, 닉네임, 0=> 방장]
-      // Provider.of<RoomDataProvider>(context, listen: false).updateRoomData(room);
-      // _roomData = await room;
+      // List<dynamic> list = json.decode(roomData);
+      // print(list);
+      // ref.watch(roomDataProvider.notifier).updateRoomData(list);
       ref.watch(roomDataProvider.notifier).updateRoomData(roomData);
       toggleReadyButton(ref); // 방장은 미리 준비ㅇ
       Navigator.pushNamed(context, WaitingLobby.routeName);
@@ -161,6 +162,9 @@ class SocketMethods {
     _socketClient.on('welcome', (roomData) {
       // 전역적인 배열에 넣어서 채팅방에 업데이트하기
       print('$roomData in getJoinedUserName function | context : $context'); //
+      // List<dynamic> list = json.decode(roomData);
+      // print(list);
+      // ref.watch(roomDataProvider.notifier).updateRoomData(list);
       ref.watch(roomDataProvider.notifier).updateRoomData(roomData);
       Navigator.pushNamed(context, WaitingLobby.routeName);
     });
