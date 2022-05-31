@@ -16,7 +16,58 @@ class Home extends ConsumerWidget {
     print('buttonIndex: $buttonIndex in home');
     return Scaffold(
       appBar: const BomAppBar(),
-      body: _navigationBody(buttonIndex :buttonIndex),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            UserAccountsDrawerHeader(
+                accountName: Text('bom'),
+                accountEmail: Text("bom@gmail.com"),
+                currentAccountPicture: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  backgroundImage: AssetImage('images/pokemon.png'),
+                ),
+                otherAccountsPictures: [
+                  CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: AssetImage('images/character.png'),
+                  )
+                ],
+                onDetailsPressed: () => {print('clicked')},
+                decoration: BoxDecoration(
+                  color: Color(0xffA876DE),
+                )),
+            ListTile(
+              leading: Icon(Icons.notifications_none, color: Colors.grey[500]),
+              title: Text('알림'),
+              onTap: () => {print('알림')},
+            ),
+            ListTile(
+              leading: Icon(Icons.list, color: Colors.grey[500]),
+              title: Text('친구'),
+              onTap: () => {print('친구')},
+            ),
+            ListTile(
+              leading:
+                  Icon(Icons.emoji_events_outlined, color: Colors.grey[500]),
+              title: Text('랭킹'),
+              onTap: () => {print('랭킹')},
+            ),
+            ListTile(
+              leading:
+                  Icon(Icons.shopping_cart_outlined, color: Colors.grey[500]),
+              title: Text('상점'),
+              onTap: () => {print('상점')},
+            ),
+            ListTile(
+              leading: Icon(Icons.logout_outlined, color: Colors.grey[500]),
+              title: Text('로그아웃'),
+              onTap: () => {print('로그아웃')},
+            )
+          ],
+        ),
+      ),
+      body: _navigationBody(buttonIndex: buttonIndex),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.expand_less),
         backgroundColor: const Color(0xffffffff),
@@ -38,24 +89,35 @@ class Home extends ConsumerWidget {
   }
 
   Widget _navigationBody({required int buttonIndex}) {
-    switch(buttonIndex){
+    switch (buttonIndex) {
       case 0:
-        return Center(child: Text('커뮤니티'),);;
+        return Center(
+          child: Text('커뮤니티'),
+        );
+        ;
         break;
       case 1:
-        return Center(child: Text('게임'),);
+        return Center(
+          child: Text('게임'),
+        );
         break;
       case 2:
         return HomeScreen();
         break;
       case 3:
-        return Center(child: Text('캐릭터'),);
+        return Center(
+          child: Text('캐릭터'),
+        );
         break;
       case 4:
-        return Center(child: Text('내정보'),);
+        return Center(
+          child: Text('내정보'),
+        );
         break;
       default:
-        return Center(child: Column(children: [Text('해당 화면이 나오면 문의 주세요')]),);
+        return Center(
+          child: Column(children: [Text('해당 화면이 나오면 문의 주세요')]),
+        );
         break;
     }
   }
