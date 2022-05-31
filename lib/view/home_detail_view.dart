@@ -7,7 +7,7 @@ import '../provider/todo_provider.dart';
 import '../utils.dart';
 import 'add_view.dart';
 import 'components/plan/appbar.dart';
-import 'components/plan/bottom_navigation.dart';
+import 'components/bottom_navigation.dart';
 import 'components/plan/calendar.dart';
 import 'components/plan/plan_item_widget.dart';
 import 'components_statistics/daily_statistic.dart';
@@ -293,6 +293,6 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        bottomNavigationBar: BottomNavigationBarWidget(index: index));
+        bottomNavigationBar: BottomNavigationBarWidget());
   }
 }

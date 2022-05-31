@@ -1,3 +1,4 @@
+import 'package:bom_front/home.dart';
 import 'package:bom_front/view/hom_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Team BOM',
       theme: ThemeData(primaryColor: Color(0xffA876DE)),
-      home: const HomeScreen(),
+      home: const Home(),
       localizationsDelegates: [
         GlobalWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
