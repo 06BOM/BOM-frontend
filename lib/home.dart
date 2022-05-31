@@ -2,6 +2,7 @@ import 'package:bom_front/view/components/bottom_navigation.dart';
 import 'package:bom_front/view/components/plan/appbar.dart';
 import 'package:bom_front/view/hom_view.dart';
 import 'package:bom_front/view/home_detail_view.dart';
+import 'package:bom_front/view/store_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -57,7 +58,12 @@ class Home extends ConsumerWidget {
               leading:
                   Icon(Icons.shopping_cart_outlined, color: Colors.grey[500]),
               title: Text('상점'),
-              onTap: () => {print('상점')},
+              onTap: () => {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const StoreScreen()))
+              },
             ),
             ListTile(
               leading: Icon(Icons.logout_outlined, color: Colors.grey[500]),
