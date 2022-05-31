@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final roomDataProvider = StateNotifierProvider.autoDispose<RoomData, List<dynamic>>((ref) {
+// final roomDataProvider = StateNotifierProvider.autoDispose<RoomData, List<dynamic>>((ref) {
+//   return RoomData(ref);
+// });
+final roomDataProvider = StateNotifierProvider<RoomData, List<dynamic>>((ref) {
   return RoomData(ref);
 });
 
@@ -10,11 +13,15 @@ class RoomData extends StateNotifier<List<dynamic>> {
   RoomData(this.ref) : super([]);
 
   void updateRoomData(List<dynamic> data) {
-    List<dynamic> list = json.decode(data[2]);
+    List<dynamic> list = data.asMap().entries.map((entry) {
+      int idx = entry.key;
+      dynamic val = entry.value;
+      return idx == 2 ? json.decode(val) : val;
+    }).toList();
+
+    state = list;
     // state = [...state, data];
-    state = data;
-    ref.watch(roomUsersProvider.notifier).state = list;
-    // ref.read(roomNameProvider.notifier).state = data[0];
+    // ref.watch(roomUsersProvider.notifier).state = list;
   }
 }
 
@@ -54,8 +61,19 @@ class ScoreNotifier extends StateNotifier<List<dynamic>> {
   }
 }
 
+final roomMsgProvider = StateNotifierProvider<MsgNotifier, List<String>>((ref) {
+  return MsgNotifier();
+});
 
-final readyDataProvider = StateProvider<bool>((ref) {
+class MsgNotifier extends StateNotifier<List<String>> {
+  MsgNotifier() : super([]);
+
+  void updateMsg(String data){
+    state = [...state, data];
+  }
+}
+
+final readyDataProvider = StateProvider.autoDispose<bool>((ref) {
   return false;
 });
 

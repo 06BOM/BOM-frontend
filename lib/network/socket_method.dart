@@ -127,6 +127,15 @@ class SocketMethods {
     });
   }
 
+  void sendMsg(String msg, WidgetRef ref){
+    String room = ref.watch(roomDataProvider.notifier).state[0];
+    print('sending message...');
+    _socketClient.emit("new_message", {
+      'msg': msg,
+      'room': room
+    });
+  }
+
   void isCompleteReadyListener(WidgetRef ref) {
     _socketClient.on('ready', (data) {
       ref.watch(readyDataProvider.notifier).state = data; // data = true
@@ -141,7 +150,9 @@ class SocketMethods {
       // List<dynamic> list = json.decode(roomData);
       // print(list);
       // ref.watch(roomDataProvider.notifier).updateRoomData(list);
-      ref.watch(roomDataProvider.notifier).updateRoomData(roomData);
+      ref.read(roomDataProvider.notifier).updateRoomData(roomData);
+      ref.watch(roomUsersProvider.notifier).state = json.decode(roomData[2]);
+      print('createroom ref 이후...');
       toggleReadyButton(ref); // 방장은 미리 준비ㅇ
       Navigator.pushNamed(context, WaitingLobby.routeName);
     });
@@ -165,8 +176,14 @@ class SocketMethods {
       // List<dynamic> list = json.decode(roomData);
       // print(list);
       // ref.watch(roomDataProvider.notifier).updateRoomData(list);
-      ref.watch(roomDataProvider.notifier).updateRoomData(roomData);
+      ref.read(roomDataProvider.notifier).updateRoomData(roomData);
       Navigator.pushNamed(context, WaitingLobby.routeName);
+    });
+  }
+
+  void updatePlayersListener(WidgetRef ref){
+    _socketClient.on('update_players', (users){
+      ref.watch(roomUsersProvider.notifier).state = json.decode(users);
     });
   }
 
@@ -241,18 +258,10 @@ class SocketMethods {
     });
   }
 
-// void updateRoomListener(BuildContext context) {
-//   _socketClient.on('createRoomSuccess', (room) {
-//     // Provider.of<RoomDataProvider>(context, listen: false)
-//     //     .updateRoomData(room);
-//   });
-// }
-// 사용x
-// void joinRoomSuccessListener(BuildContext context) {
-//   _socketClient.on('joinRoomSuccess', (room) {
-//     // Provider.of<RoomDataProvider>(context, listen: false)
-//     //     .updateRoomData(room);
-//     Navigator.pushNamed(context, WaitingLobby.routeName);
-//   });
-// }
+  void updateMsgListener(WidgetRef ref){
+    _socketClient.on('new_message', (data){
+      print('$data in updateMsgListener / ${data.runtimeType}');
+      ref.read(roomMsgProvider.notifier).updateMsg(data);
+    });
+  }
 }
