@@ -11,6 +11,7 @@ class UserRepository {
     print('Fetch User\'s data...');
     var url = Uri.parse(urlApi + '/user/1');
     var response = await http.get(url);
+    print('${response.body} in loadUser');
     if (response.body == null) {
       print('error with get');
     }

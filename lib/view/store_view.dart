@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../home.dart';
+import '../provider/character_provider.dart';
 
 class StoreScreen extends ConsumerStatefulWidget {
   const StoreScreen({
@@ -31,6 +32,8 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
 
   @override
   Widget build(BuildContext context) {
+    final userCharacter = ref.watch(characterListProvider);
+    print(userCharacter);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.5,

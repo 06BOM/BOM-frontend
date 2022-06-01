@@ -11,10 +11,11 @@ class CharacterRepository{
     print('Fetch loadOwnedCharacter data...');
     var url = Uri.parse(urlApi + '/character/user/collection?userId=1');
     var response = await http.get(url);
+    print('${response.body} in loadOwnedCharacter');
     if (response.body == null) {
       print('error with get');
     }
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) { // CI/ CD이후 변경하기
       Map<String, dynamic> body = json.decode(response.body);
       print('body => $body');
       if (body['characters'] == null) {
@@ -89,7 +90,7 @@ class CharacterRepository{
     if (response.body == null) {
       print('error with get');
     }
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       Map<String, dynamic> body = json.decode(response.body);
       if (body['character'] == null) {
         print('Error! because plan is empty');
@@ -111,7 +112,7 @@ class CharacterRepository{
     if (response.body == null) {
       print('error with get');
     }
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       Map<String, dynamic> body = json.decode(response.body);
       // print('body => $body');
       if (body['character'] == null) {
