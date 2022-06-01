@@ -38,6 +38,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
         leading: IconButton(
           icon: Icon(Icons.home_outlined, color: Colors.grey[500]),
           onPressed: () {
+            ref.read(bottomNavigationBarIndex.notifier).state = 2;
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => Home()));
           },

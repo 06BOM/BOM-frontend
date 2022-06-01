@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class TimerRepository {
   static const urlApi =
-      'http://ec2-3-39-10-54.ap-northeast-2.compute.amazonaws.com';
+      'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
   /*
   시간 30분 될때마다 별 증가 API 탕탕탕!
 

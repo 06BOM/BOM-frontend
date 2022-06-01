@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class TodoRepository {
   static const urlApi =
-      'http://ec2-3-39-10-54.ap-northeast-2.compute.amazonaws.com';
+      'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
   final DateTime day;
 
   TodoRepository(this.day);

@@ -1,9 +1,13 @@
 import 'package:bom_front/view/collection_view.dart';
+import 'package:bom_front/view/community.dart';
+import 'package:bom_front/view/components/bom_menu.dart';
 import 'package:bom_front/view/components/bottom_navigation.dart';
 import 'package:bom_front/view/components/plan/appbar.dart';
+import 'package:bom_front/view/game_view.dart';
 import 'package:bom_front/view/hom_view.dart';
 import 'package:bom_front/view/home_detail_view.dart';
 import 'package:bom_front/view/store_view.dart';
+import 'package:bom_front/view/user_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,116 +20,26 @@ class Home extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final buttonIndex = ref.watch(bottomNavigationBarIndex);
     print('buttonIndex: $buttonIndex in home');
-    return Scaffold(
-      appBar: const BomAppBar(),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            UserAccountsDrawerHeader(
-                accountName: Text('bom'),
-                accountEmail: Text("bom@gmail.com"),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  backgroundImage: AssetImage('images/pokemon.png'),
-                ),
-                otherAccountsPictures: [
-                  CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    backgroundImage: AssetImage('images/character.png'),
-                  )
-                ],
-                onDetailsPressed: () => {print('clicked')},
-                decoration: BoxDecoration(
-                  color: Color(0xffA876DE),
-                )),
-            ListTile(
-              leading: Icon(Icons.notifications_none, color: Colors.grey[500]),
-              title: Text('알림'),
-              onTap: () => {print('알림')},
-            ),
-            ListTile(
-              leading: Icon(Icons.list, color: Colors.grey[500]),
-              title: Text('친구'),
-              onTap: () => {print('친구')},
-            ),
-            ListTile(
-              leading:
-                  Icon(Icons.emoji_events_outlined, color: Colors.grey[500]),
-              title: Text('랭킹'),
-              onTap: () => {print('랭킹')},
-            ),
-            ListTile(
-              leading:
-                  Icon(Icons.shopping_cart_outlined, color: Colors.grey[500]),
-              title: Text('상점'),
-              onTap: () => {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const StoreScreen()))
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout_outlined, color: Colors.grey[500]),
-              title: Text('로그아웃'),
-              onTap: () => {print('로그아웃')},
-            )
-          ],
-        ),
-      ),
-      body: _navigationBody(buttonIndex: buttonIndex),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.expand_less),
-        backgroundColor: const Color(0xffffffff),
-        foregroundColor: Colors.grey,
-        hoverColor: Colors.white,
-        hoverElevation: 0.0,
-        elevation: 0.0,
-        mini: true,
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const HomeDetailScreen()));
-        },
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      bottomNavigationBar: BottomNavigationBarWidget(),
-    );
-  }
-
-  Widget _navigationBody({required int buttonIndex}) {
     switch (buttonIndex) {
       case 0:
-        return Center(
-          child: Text('커뮤니티'),
-        );
-        ;
+        return CommunityScreen();
         break;
       case 1:
-        return Center(
-          child: Text('게임'),
-        );
+        return GameScreen();
         break;
       case 2:
         return HomeScreen();
         break;
       case 3:
-        return Center(
-          child: CollectionScreen(),
-        );
+        return CollectionScreen();
         break;
       case 4:
-        return Center(
-          child: Text('내정보'),
-        );
+        return UserScreen();
         break;
       default:
         return Center(
           child: Column(children: [Text('해당 화면이 나오면 문의 주세요')]),
         );
-        break;
     }
   }
 }

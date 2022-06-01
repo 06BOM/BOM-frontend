@@ -3,7 +3,7 @@ import 'package:bom_front/model/category.dart';
 import 'package:http/http.dart' as http;
 import '../model/user.dart';
 
-class UserRepository{
+class CharacterRepository{
   static const urlApi =
       'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
 
