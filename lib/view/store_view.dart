@@ -74,7 +74,10 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
             child: Center(child: Store(context)),
           ),
           Center(
-            child: Text('내아이템'),
+            child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: Center(child: UserItems(context)),
+            ),
           ),
         ],
       ),
@@ -104,48 +107,175 @@ Widget Store(BuildContext context) {
               style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w600))
         ],
       ),
-      Container(
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.4,
-        ),
-        child: 
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.4,
             ),
-            color: Colors.white,
-            elevation: 10,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 10.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('랜덤뽑기'),
-                  Image.asset(
-                    'images/pokemon.png',
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.fill,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {},
-                      child: Row(
-                        // mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(Icons.star_rounded,
-                              color: Colors.yellowAccent[700], size: 40.0),
-                          Text('x5', style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600, color: Colors.white))
-                        ],
+            margin: EdgeInsets.only(top: 20.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              color: Colors.white,
+              elevation: 10,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 10.0),
+                child: Column(
+                  // mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Color(0xffA876DE),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                            ),
+                          ],
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        child: Text('랜덤뽑기',
+                            style: TextStyle(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white))),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: Image.asset(
+                        'images/present.png',
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.fill,
                       ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xffA876DE)
-                    )
-                  )
-                ],
+                    ),
+                    ElevatedButton(
+                        onPressed: () {},
+                        child: Row(
+                          // mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(Icons.star_rounded,
+                                color: Colors.yellowAccent[700], size: 30.0),
+                            Text('x5',
+                                style: TextStyle(
+                                    fontSize: 19.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white))
+                          ],
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            primary: Color(0xffA876DE)))
+                  ],
+                ),
               ),
             ),
           ),
+        ],
+      )
+    ],
+  );
+}
+
+Widget UserItems(BuildContext context) {
+  return Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text('반가워요 \u{1F44B}',
+              style: TextStyle(
+                  color: Colors.grey[500], fontWeight: FontWeight.w600)),
+        ],
+      ),
+      SizedBox(height: 10.0),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text('현석님',
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w600)),
+          Icon(Icons.star_rounded, color: Colors.yellowAccent[700], size: 40.0),
+          Text('10',
+              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w600))
+        ],
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.4,
+            ),
+            margin: EdgeInsets.only(top: 20.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              color: Colors.white,
+              elevation: 10,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 10.0),
+                child: Column(
+                  // mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Color(0xffA876DE),
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                            ),
+                          ],
+                        ),
+                        width: MediaQuery.of(context).size.width,
+                        child: Text('랜덤뽑기',
+                            style: TextStyle(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white))),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: Image.asset(
+                        'images/present.png',
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    ElevatedButton(
+                        onPressed: () {},
+                        child: Row(
+                          // mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(Icons.star_rounded,
+                                color: Colors.yellowAccent[700], size: 30.0),
+                            Text('x5',
+                                style: TextStyle(
+                                    fontSize: 19.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white))
+                          ],
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            primary: Color(0xffA876DE)))
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       )
     ],
   );

@@ -1,3 +1,4 @@
+import 'package:bom_front/view/collection_view.dart';
 import 'package:bom_front/view/components/bottom_navigation.dart';
 import 'package:bom_front/view/components/plan/appbar.dart';
 import 'package:bom_front/view/hom_view.dart';
@@ -112,7 +113,7 @@ class Home extends ConsumerWidget {
         break;
       case 3:
         return Center(
-          child: Text('캐릭터'),
+          child: CollectionScreen(),
         );
         break;
       case 4:
