@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class BomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const BomAppBar({Key? key})
+  final String? title;
+
+  const BomAppBar({Key? key, this.title})
       : preferredSize = const Size.fromHeight(kToolbarHeight),
         super(key: key);
 
@@ -13,10 +15,13 @@ class BomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _BomAppBarState extends State<BomAppBar> {
+
   @override
   Widget build(BuildContext context) {
+    print('${widget.title ?? ' '} in BomAppBar');
     return AppBar(
-      title: const Text(''),
+      title: widget.title != null ? Text(widget.title!, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600)) : Text(''),
+      centerTitle: widget.title != null ? true : false,
       backgroundColor: Colors.transparent,
       elevation: 0.0,
       // // 좌측

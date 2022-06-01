@@ -18,7 +18,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const BomAppBar(),
+      appBar: const BomAppBar(title: '캐릭터 도감'),
       drawer: BomMenu(),
       body: Center(
         child: Column(

@@ -10,32 +10,37 @@ final userProvider = StateNotifierProvider<UserInfo, User>((ref) {
   return UserInfo(userData, ref);
 });
 
-class UserInfo extends StateNotifier<User>{
+class UserInfo extends StateNotifier<User> {
   late final UserRepository _repository;
   final ref;
 
-  UserInfo(this._repository, this.ref, [User? initState]) : super(User()){
+  UserInfo(this._repository, this.ref, [User? initState]) : super(User()) {
     getUser();
   }
 
-  Future<void> getUser() async{
-    final user = await _repository.loadUser(); // final todos = await _repository!.loadTodos();
-    if(mounted) { // check data
+  Future<void> getUser() async {
+    final user = await _repository
+        .loadUser(); // final todos = await _repository!.loadTodos();
+    if (mounted) {
+      // check data
       state = user;
     }
   }
 }
 
-final categoryListProvider = StateNotifierProvider<CategoryList, AsyncValue<List<Category>>>((ref) {
+final categoryListProvider =
+    StateNotifierProvider<CategoryList, AsyncValue<List<Category>>>((ref) {
   final categoryData = ref.read(userRepository);
   return CategoryList(categoryData, ref);
 });
 
-class CategoryList extends StateNotifier<AsyncValue<List<Category>>>{
+class CategoryList extends StateNotifier<AsyncValue<List<Category>>> {
   late final UserRepository _repository;
   final ref;
 
-  CategoryList(this._repository, this.ref, [AsyncValue<List<Category>>? initState]) : super(AsyncValue.data([])) {
+  CategoryList(this._repository, this.ref,
+      [AsyncValue<List<Category>>? initState])
+      : super(AsyncValue.data([])) {
     getUserCategory();
   }
 
@@ -49,9 +54,10 @@ class CategoryList extends StateNotifier<AsyncValue<List<Category>>>{
     }
   }
 
-  Future createUserCategory(int? userId, {String? categoryName, String? color}) async {
-    final category = await _repository.createCategory(userId, categoryName: categoryName, color: color);
+  Future createUserCategory(int? userId,
+      {String? categoryName, String? color}) async {
+    final category = await _repository.createCategory(userId,
+        categoryName: categoryName, color: color);
     return category;
   }
-
 }
