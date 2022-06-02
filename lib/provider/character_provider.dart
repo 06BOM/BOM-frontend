@@ -16,6 +16,7 @@ class CharacterListNotifier extends StateNotifier<List<Character>> {
     getAllCharacter();
   }
 
+  // 모든 캐릭터의 정보를 불러온다.
   Future<void> getAllCharacter() async{
     final ownCharacters = await _repository.loadOwnedCharacter();
     print('$ownCharacters in getAllcharacter');
