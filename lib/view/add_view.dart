@@ -3,7 +3,6 @@ import 'package:bom_front/view/category_view.dart';
 import 'package:bom_front/view/components/plan/show_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../model/category.dart';
 import '../provider/todo_provider.dart';
 import '../provider/user_privider.dart';
 import 'components/plan/category_selection_widget.dart';
@@ -15,7 +14,7 @@ class AddPlan extends ConsumerStatefulWidget {
   final Todo? data;
   final DateTime? dayToCreatePlan;
 
-  AddPlan({Key? key, required this.type, this.data, this.dayToCreatePlan})
+  const AddPlan({Key? key, required this.type, this.data, this.dayToCreatePlan})
       : super(key: key);
 
   @override
@@ -75,36 +74,36 @@ class _AddPlanState extends ConsumerState<AddPlan> {
                 child: Column(
                   children: [
                     widget.type == true
-                        ? Text('목표 수정하기',
+                        ? const Text('목표 수정하기',
                             style: TextStyle(
                                 fontSize: 30.0, fontWeight: FontWeight.bold))
-                        : Text('목표 만들기',
+                        : const Text('목표 만들기',
                             style: TextStyle(
                                 fontSize: 30.0, fontWeight: FontWeight.bold)),
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
                     TextField(
                       // obscureText: true,
                       controller: planName,
-                      style: TextStyle(fontWeight: FontWeight.w600),
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: '제목을 입력해주세요',
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              const BorderSide(color: Colors.grey, width: 1.0),
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
-                        focusedBorder: const OutlineInputBorder(
+                        focusedBorder: OutlineInputBorder(
                           borderSide:
-                              const BorderSide(color: Colors.grey, width: 1.0),
+                              BorderSide(color: Colors.grey, width: 1.0),
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 5.0),
+                      margin: const EdgeInsets.symmetric(vertical: 5.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
+                        children: const [
                           Text('카테고리',
                               style: TextStyle(fontWeight: FontWeight.w600)),
                         ],
@@ -126,7 +125,7 @@ class _AddPlanState extends ConsumerState<AddPlan> {
                                       builder: (context) =>
                                           const CategoryPage()));
                             },
-                            child: Text('+추가',
+                            child: const Text('+추가',
                                 style: TextStyle(
                                     color: Color(0xffA876DE),
                                     fontSize: 15.0,
@@ -134,10 +133,10 @@ class _AddPlanState extends ConsumerState<AddPlan> {
                       ],
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 5.0),
+                      margin: const EdgeInsets.symmetric(vertical: 5.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
+                        children: const [
                           Text('반복',
                               style: TextStyle(fontWeight: FontWeight.w600)),
                         ],
@@ -225,10 +224,10 @@ class _AddPlanState extends ConsumerState<AddPlan> {
                                       fontSize: 17.0,
                                       fontWeight: FontWeight.w600)),
                               style: ElevatedButton.styleFrom(
-                                  primary: Color(0xffA876DE),
+                                  primary: const Color(0xffA876DE),
                                   onPrimary: Colors.white,
                                   padding:
-                                      EdgeInsets.symmetric(vertical: 15.0)),
+                                      const EdgeInsets.symmetric(vertical: 15.0)),
                             ),
                           )
                         //-------------------------------------------------------------------------------추가하기---------------------------------------------------------------------
@@ -300,10 +299,10 @@ class _AddPlanState extends ConsumerState<AddPlan> {
                                       fontSize: 17.0,
                                       fontWeight: FontWeight.w600)),
                               style: ElevatedButton.styleFrom(
-                                  primary: Color(0xffA876DE),
+                                  primary: const Color(0xffA876DE),
                                   onPrimary: Colors.white,
                                   padding:
-                                      EdgeInsets.symmetric(vertical: 15.0)),
+                                      const EdgeInsets.symmetric(vertical: 15.0)),
                             ),
                           ),
                   ],

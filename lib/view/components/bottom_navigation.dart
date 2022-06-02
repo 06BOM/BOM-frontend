@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BottomNavigationBarWidget extends StatefulWidget {
-  BottomNavigationBarWidget({Key? key}) : super(key: key);
+  const BottomNavigationBarWidget({Key? key}) : super(key: key);
 
   @override
   State<BottomNavigationBarWidget> createState() =>

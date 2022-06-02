@@ -24,21 +24,21 @@ class DailyChart extends StatelessWidget {
               chartType: ChartType.ring,
               ringStrokeWidth: 10,
               dataMap: dataMap,
-              centerText: "${getSecToMinAnotherFormat(todos.fold(
+              centerText: getSecToMinAnotherFormat(todos.fold(
                   0,
                       (previous, current) =>
                   previous +
-                      current.time!))}",
-              centerTextStyle: TextStyle(
+                      current.time!)),
+              centerTextStyle: const TextStyle(
                 fontSize: 30,
                 color: Colors.black,
               ),
               chartRadius: MediaQuery.of(context).size.width / 1.7,
-              legendOptions: LegendOptions(
+              legendOptions: const LegendOptions(
                   legendPosition: LegendPosition.bottom,
                   legendShape: BoxShape.circle,
                   legendTextStyle: TextStyle()),
-              chartValuesOptions: ChartValuesOptions(
+              chartValuesOptions: const ChartValuesOptions(
                 showChartValuesInPercentage: true,
                 showChartValueBackground: false,
                 showChartValues: false, // 값안보이게 하기

@@ -53,7 +53,7 @@ class Character {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['characterId'] = characterId;
     data['characterName'] = characterName;
     data['star'] = star;

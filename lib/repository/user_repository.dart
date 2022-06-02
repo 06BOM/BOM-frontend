@@ -57,8 +57,9 @@ class UserRepository {
     var url = Uri.parse(urlApi + '/category');
     var paramObject = {};
     paramObject.addAll({"userId": userId});
-    if (categoryName != null)
+    if (categoryName != null) {
       paramObject.addAll({"categoryName": categoryName});
+    }
     if (color != null) paramObject.addAll({"color": color});
     var response = await http.post(url,
         body: json.encode(paramObject),

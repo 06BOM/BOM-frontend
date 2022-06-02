@@ -8,8 +8,8 @@ class UserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const BomAppBar(),
+    return const Scaffold(
+      appBar: BomAppBar(),
       drawer: BomMenu(),
       body: Center(child: Text('내정보')),
       bottomNavigationBar: BottomNavigationBarWidget(),

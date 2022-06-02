@@ -6,7 +6,7 @@ import '../../../provider/todo_provider.dart';
 
 class BomRepetition extends ConsumerStatefulWidget {
   final Todo? data;
-  BomRepetition({this.data});
+  const BomRepetition({this.data});
 
   @override
   _BomRepetitionState createState() => _BomRepetitionState();
@@ -38,12 +38,12 @@ class _BomRepetitionState extends ConsumerState<BomRepetition> {
             children: <Widget>[
               !isSelected[0]
                   ? Container(
-                      margin: EdgeInsets.only(right: 3.0),
-                      padding: EdgeInsets.symmetric(
+                      margin: const EdgeInsets.only(right: 3.0),
+                      padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xffdddddd), width: 1.8),
-                        borderRadius: BorderRadius.all(Radius.circular(18.0)),
+                        border: Border.all(color: const Color(0xffdddddd), width: 1.8),
+                        borderRadius: const BorderRadius.all(Radius.circular(18.0)),
                       ),
                       child: Text(
                         '안함',
@@ -54,12 +54,12 @@ class _BomRepetitionState extends ConsumerState<BomRepetition> {
                       ),
                     )
                   : Container(
-                      margin: EdgeInsets.only(right: 3.0),
-                      padding: EdgeInsets.symmetric(
+                      margin: const EdgeInsets.only(right: 3.0),
+                      padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black, width: 1.8),
-                        borderRadius: BorderRadius.all(Radius.circular(18.0)),
+                        borderRadius: const BorderRadius.all(Radius.circular(18.0)),
                       ),
                       child: Text(
                         '안함',
@@ -71,12 +71,12 @@ class _BomRepetitionState extends ConsumerState<BomRepetition> {
                     ),
               !isSelected[1]
                   ? Container(
-                      margin: EdgeInsets.only(right: 3.0),
-                      padding: EdgeInsets.symmetric(
+                      margin: const EdgeInsets.only(right: 3.0),
+                      padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xffdddddd), width: 1.8),
-                        borderRadius: BorderRadius.all(Radius.circular(18.0)),
+                        border: Border.all(color: const Color(0xffdddddd), width: 1.8),
+                        borderRadius: const BorderRadius.all(Radius.circular(18.0)),
                       ),
                       child: Text(
                         '매일',
@@ -87,12 +87,12 @@ class _BomRepetitionState extends ConsumerState<BomRepetition> {
                       ),
                     )
                   : Container(
-                      margin: EdgeInsets.only(right: 3.0),
-                      padding: EdgeInsets.symmetric(
+                      margin: const EdgeInsets.only(right: 3.0),
+                      padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black, width: 1.8),
-                        borderRadius: BorderRadius.all(Radius.circular(18.0)),
+                        borderRadius: const BorderRadius.all(Radius.circular(18.0)),
                       ),
                       child: Text(
                         '매일',
@@ -104,12 +104,12 @@ class _BomRepetitionState extends ConsumerState<BomRepetition> {
                     ),
               !isSelected[2]
                   ? Container(
-                      margin: EdgeInsets.only(right: 3.0),
-                      padding: EdgeInsets.symmetric(
+                      margin: const EdgeInsets.only(right: 3.0),
+                      padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xffdddddd), width: 1.8),
-                        borderRadius: BorderRadius.all(Radius.circular(18.0)),
+                        border: Border.all(color: const Color(0xffdddddd), width: 1.8),
+                        borderRadius: const BorderRadius.all(Radius.circular(18.0)),
                       ),
                       child: Text(
                         '매주',
@@ -120,12 +120,12 @@ class _BomRepetitionState extends ConsumerState<BomRepetition> {
                       ),
                     )
                   : Container(
-                      margin: EdgeInsets.only(right: 3.0),
-                      padding: EdgeInsets.symmetric(
+                      margin: const EdgeInsets.only(right: 3.0),
+                      padding: const EdgeInsets.symmetric(
                           vertical: 10.0, horizontal: 20.0),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black, width: 1.8),
-                        borderRadius: BorderRadius.all(Radius.circular(18.0)),
+                        borderRadius: const BorderRadius.all(Radius.circular(18.0)),
                       ),
                       child: Text(
                         '매주',

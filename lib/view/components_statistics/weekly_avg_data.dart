@@ -1,16 +1,13 @@
 import 'package:bom_front/provider/statistic_provider.dart';
-import 'package:bom_front/view/components_statistics/toggle_button_plan.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../model/statistic_model.dart';
 
 class dailyAvgData extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    AsyncValue<int> week_times = ref.watch(userWeekTimeProvider);
-    AsyncValue<int> week_stars = ref.watch(userWeekStarProvider);
+    AsyncValue<int> weekTimes = ref.watch(userWeekTimeProvider);
+    AsyncValue<int> weekStars = ref.watch(userWeekStarProvider);
 
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
@@ -23,16 +20,16 @@ class dailyAvgData extends ConsumerWidget {
               Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
+                    const Text(
                       "평균 공부 시간",
                       style: TextStyle(
                         fontSize: 15,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
-                    week_times.when(
+                    weekTimes.when(
                         data: ((data) => data ~/ 60 > 59
                             ? Column(
                           children: [
@@ -56,17 +53,17 @@ class dailyAvgData extends ConsumerWidget {
               Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
+                    const Text(
                       "별 획득 개수",
                       style: TextStyle(
                         fontSize: 15,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
-                    week_stars.when(
-                        data: ((data) => Text("${data.toString()}",
+                    weekStars.when(
+                        data: ((data) => Text(data.toString(),
                             style: const TextStyle(
                               fontSize: 25,
                             ))),

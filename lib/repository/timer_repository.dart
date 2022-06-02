@@ -1,5 +1,4 @@
 import 'dart:convert';
-import '../model/todo.dart';
 import 'package:http/http.dart' as http;
 
 class TimerRepository {

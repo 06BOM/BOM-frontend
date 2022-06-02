@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'package:bom_front/model/statistic_model.dart';
 import 'package:bom_front/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../model/todo.dart';
 import 'package:http/http.dart' as http;
 
 class StatisticRepository {

@@ -53,9 +53,9 @@ class _WeekDaySelectionState extends State<WeekDaySelection> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           WeekdaySelector(
-            shortWeekdays: ['일', '월', '화', '수', '목', '금', '토'],
+            shortWeekdays: const ['일', '월', '화', '수', '목', '금', '토'],
             selectedColor: Colors.white,
-            selectedFillColor: Color(0xffA876DE),
+            selectedFillColor: const Color(0xffA876DE),
             shape: CircleBorder(
               side: BorderSide(color: Colors.grey.withOpacity(0.5)),
             ),

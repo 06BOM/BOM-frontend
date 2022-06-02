@@ -1,10 +1,5 @@
 import 'package:bom_front/provider/todo_provider.dart';
-import 'package:bom_front/view/timer_view.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:bom_front/model/todo.dart';
-import '../repository/timer_repository.dart';
-import 'general_provider.dart';
 import 'dart:async';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -16,7 +11,7 @@ class TimerNotifier extends StateNotifier<TimerModel> {
   late final int initialTime;
   late final initialState;
 
-  TimerNotifier(this.ref, this.id, [TimerModel? initState]) : super(TimerModel()){
+  TimerNotifier(this.ref, this.id, [TimerModel? initState]) : super(const TimerModel()){
     initTimer(); // 플랜을 한번씩 누를 때만 호출 됨. 이후는 x
   }
 
@@ -95,7 +90,7 @@ class Ticker {
   static const int _initialDuration = 85999;
   Stream<int> tick({required int ticks}) {
     return Stream.periodic(
-      Duration(seconds: 1),
+      const Duration(seconds: 1),
       (x) => ticks + x + 1,
     ).take(_initialDuration);
   }

@@ -4,7 +4,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart'; // useFocus , useTextEditingController, useState, useEffect
 import 'package:bom_front/provider/todo_provider.dart';
-import '../../../model/todo.dart';
 import '../../../utils.dart';
 import '../../timer_view.dart';
 
@@ -97,7 +96,7 @@ class _PlanItemState extends ConsumerState<PlanItem> {
                                     title: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
-                                        children: [Text('삭제')]),
+                                        children: const [Text('삭제')]),
                                     content: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -200,17 +199,17 @@ class _PlanItemState extends ConsumerState<PlanItem> {
                         },
                         // 추후 카테고리 넣기 (daily)
                         leading: Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 12.0),
                           decoration: BoxDecoration(
                             color: Color(int.parse('0xcc' + todo.color!)),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(8.0)),
+                                const BorderRadius.all(Radius.circular(8.0)),
                           ),
                           child: Text(
                             todo.categoryName as String,
                             // plan의 category ID를 가지고 서버에서 category api 로직 만들면 적용
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.bold),
@@ -225,7 +224,7 @@ class _PlanItemState extends ConsumerState<PlanItem> {
                             : Text(todo.planName!,
                                 style: const TextStyle(fontSize: 18.0)),
                         trailing:
-                            Text('${secToMin(todo.time!)}'), // plan의 time을 가져오기
+                            Text(secToMin(todo.time!)), // plan의 time을 가져오기
                       ),
                     ),
                   ),

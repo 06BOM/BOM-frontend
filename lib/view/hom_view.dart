@@ -46,7 +46,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       appBar: const BomAppBar(),
-      drawer: BomMenu(),
+      drawer: const BomMenu(),
       body: Center(
         child: Column(
           children: [
@@ -101,7 +101,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       top: 16.0, bottom: 16.0),
-                                  child: todos.length != 0
+                                  child: todos.isNotEmpty
                                       ? ListView(
                                     // ListView.builder 또한 ok -> Listview: home에는 필요 detail에는 필요 x
                                     children: [
@@ -127,7 +127,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     MainAxisAlignment.center,
                                     crossAxisAlignment:
                                     CrossAxisAlignment.center,
-                                    children: [
+                                    children: const [
                                       Text('작성한 플랜이 없습니다.',
                                           style: TextStyle(
                                             color: Color(0xff838383),
@@ -165,7 +165,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      bottomNavigationBar: BottomNavigationBarWidget(),
+      bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 }

@@ -50,7 +50,7 @@ class TimerPage extends ConsumerWidget {
         return willLeave;
       },
       child: Scaffold(
-        backgroundColor: Color(0xffC9A0F5),
+        backgroundColor: const Color(0xffC9A0F5),
         appBar: AppBar(
             title: Text('${todo.planName}'),
             centerTitle: true,
@@ -66,7 +66,7 @@ class TimerPage extends ConsumerWidget {
                 width: 360,
                 height: 360,
                 decoration: BoxDecoration(
-                  color: Color(0xffA876DE),
+                  color: const Color(0xffA876DE),
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: Colors.white60,
@@ -106,7 +106,7 @@ class TimerTextWidget extends HookConsumerWidget {
     print('building TimerTextWidget $timeLeft');
     return Text(
       timeLeft ?? 'Error',
-      style: TextStyle(fontSize: 80, color: Colors.white),
+      style: const TextStyle(fontSize: 80, color: Colors.white),
       textAlign: TextAlign.center,
     );
   }
@@ -148,7 +148,7 @@ class StartButton extends ConsumerWidget {
         ref.read(timerProvider(planId).notifier).start();
         print("start pressed");
       },
-      icon: Icon(
+      icon: const Icon(
         Icons.play_arrow,
         color: Color(0xff9747FF),
       ),
@@ -167,7 +167,7 @@ class PauseButton extends ConsumerWidget {
         ref.read(timerProvider(planId).notifier).pause();
         print("stop pressed");
       },
-      icon: Icon(Icons.pause, color: Color(0xff9747FF)),
+      icon: const Icon(Icons.pause, color: Color(0xff9747FF)),
       iconSize: 400,
     );
   }

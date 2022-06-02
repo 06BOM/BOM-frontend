@@ -20,14 +20,14 @@ class _BomAppBarState extends State<BomAppBar> {
   Widget build(BuildContext context) {
     print('${widget.title ?? ' '} in BomAppBar');
     return AppBar(
-      title: widget.title != null ? Text(widget.title!, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600)) : Text(''),
+      title: widget.title != null ? Text(widget.title!, style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w600)) : const Text(''),
       centerTitle: widget.title != null ? true : false,
       backgroundColor: Colors.transparent,
       elevation: 0.0,
       // // 좌측
       leading: Builder(
         builder: (context) => IconButton(
-          icon: Icon(Icons.menu, color: Colors.grey),
+          icon: const Icon(Icons.menu, color: Colors.grey),
           onPressed: () {
             Scaffold.of(context).openDrawer();
           },

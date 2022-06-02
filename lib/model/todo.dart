@@ -45,7 +45,7 @@ class Todo {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['planId'] = planId;
     data['planName'] = planName;
     data['time'] = time;
@@ -66,7 +66,7 @@ class MonthlyStars{
   final int? obtainedStar;
   final String? date;
 
-  MonthlyStars({this.obtainedStar, this.date});
+  const MonthlyStars({this.obtainedStar, this.date});
 
   factory MonthlyStars.fromJson(Map<String, dynamic> json) {
     return MonthlyStars(
@@ -76,7 +76,7 @@ class MonthlyStars{
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['obtainedStar'] = obtainedStar;
     data['date'] = date;
     return data;

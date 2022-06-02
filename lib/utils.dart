@@ -20,10 +20,8 @@ final kEvents = LinkedHashMap<DateTime, List<Event>>(
   hashCode: getHashCode,
 )..addAll(_kEventSource);
 
-final _kEventSource = Map.fromIterable(List.generate(50, (index) => index),
-    key: (item) => DateTime.utc(kFirstDay.year, kFirstDay.month, item * 5),
-    value: (item) => List.generate(
-        item % 4 + 1, (index) => Event('Event $item | ${index + 1}')))
+final _kEventSource = { for (var item in List.generate(50, (index) => index)) DateTime.utc(kFirstDay.year, kFirstDay.month, item * 5) : List.generate(
+        item % 4 + 1, (index) => Event('Event $item | ${index + 1}')) }
   ..addAll({
     kToday: [
       const Event('Today\'s Event 1'),
@@ -76,7 +74,7 @@ String secToMin(int num) {
   var hour = (hours % 60).toString().padLeft(2, '0');
   var min = (minutes % 60).toString().padLeft(2, '0');
   var sec = (seconds % 60).toString().padLeft(2, '0');
-  return "${hour}:${min}:${sec}";
+  return "$hour:$min:$sec";
 }
 
 bool isToday(DateTime other) {
@@ -93,5 +91,5 @@ String getSecToMinAnotherFormat(int num){
   int minute = (num ~/ 60).truncate();
   int second = (num).truncate();
 
-  return "${hour}시간 ${minute}분";
+  return "$hour시간 $minute분";
 }

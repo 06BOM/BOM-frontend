@@ -1,8 +1,6 @@
 import 'package:bom_front/home.dart';
-import 'package:bom_front/view/hom_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 final addTodoKey = UniqueKey();
@@ -24,14 +22,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Team BOM',
-      theme: ThemeData(primaryColor: Color(0xffA876DE)),
+      theme: ThemeData(primaryColor: const Color(0xffA876DE)),
       home: const Home(),
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalWidgetsLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [Locale('ko', 'KR')],
+      supportedLocales: const [Locale('ko', 'KR')],
     );
   }
 }

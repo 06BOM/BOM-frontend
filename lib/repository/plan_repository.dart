@@ -54,7 +54,7 @@ class TodoRepository {
           "planName": todos.planName,
           "categoryId": todos.categoryId,
           "userId": todos.userId, // 추후 변경 하기
-          "date": '${getBasicDateFormat(day)}',
+          "date": getBasicDateFormat(day),
           "repetitionType": todos.repetitionType,
           "year": year,
           "moth": month,
@@ -85,8 +85,9 @@ class TodoRepository {
     var paramObject = {};
     if (check != null) paramObject.addAll({"check": check});
     if (planName != null) paramObject.addAll({"planName": planName});
-    if (repetitionType != null)
+    if (repetitionType != null) {
       paramObject.addAll({"repetitionType": repetitionType});
+    }
     if (categoryId != null) paramObject.addAll({"categoryId": categoryId});
     if (userSelectedDate != null) {
       var dateResult = userSelectedDate.split('/');
@@ -96,8 +97,9 @@ class TodoRepository {
         "day": int.parse(dateResult[2])
       });
     }
-    if (userSelectedWeek != null)
+    if (userSelectedWeek != null) {
       paramObject.addAll({"userSelectedWeek": userSelectedWeek});
+    }
 
     print('paramObject => $paramObject');
     var response = await http.patch(url,

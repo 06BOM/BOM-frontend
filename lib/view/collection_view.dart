@@ -19,7 +19,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const BomAppBar(title: '캐릭터 도감'),
-      drawer: BomMenu(),
+      drawer: const BomMenu(),
       body: Center(
         child: Column(
           children: [
@@ -29,7 +29,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
               onChanged: (text) {
                 // _streamSearch.add(text);
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   hintText: '검색',
                   border: InputBorder.none,
                   icon: Padding(
@@ -39,7 +39,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBarWidget(),
+      bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 }

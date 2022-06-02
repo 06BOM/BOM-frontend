@@ -9,8 +9,8 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: const BomAppBar(),
+    return const Scaffold(
+        appBar: BomAppBar(),
         drawer: BomMenu(),
         body: Center(child: Text('게임')),
         bottomNavigationBar: BottomNavigationBarWidget(),

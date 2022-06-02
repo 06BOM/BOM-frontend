@@ -1,4 +1,3 @@
-import 'package:bom_front/view/hom_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -43,7 +42,7 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
           onPressed: () {
             ref.read(bottomNavigationBarIndex.notifier).state = 2;
             Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Home()));
+                context, MaterialPageRoute(builder: (context) => const Home()));
           },
           iconSize: 30.0,
         ),
@@ -59,10 +58,10 @@ class _StoreScreenState extends ConsumerState<StoreScreen>
           indicatorSize: TabBarIndicatorSize.label,
           labelColor: const Color(0xff525c6e),
           unselectedLabelColor: const Color(0xffacb3bf),
-          padding: EdgeInsets.only(bottom: 13.0),
+          padding: const EdgeInsets.only(bottom: 13.0),
           indicatorColor: const Color(0xffA876DE),
           controller: _tabController,
-          tabs: [
+          tabs: const [
             Text(
               '상점',
             ),
@@ -100,14 +99,14 @@ Widget Store(BuildContext context) {
                   color: Colors.grey[500], fontWeight: FontWeight.w600)),
         ],
       ),
-      SizedBox(height: 10.0),
+      const SizedBox(height: 10.0),
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text('현석님',
+          const Text('현석님',
               style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w600)),
           Icon(Icons.star_rounded, color: Colors.yellowAccent[700], size: 40.0),
-          Text('10',
+          const Text('10',
               style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w600))
         ],
       ),
@@ -118,7 +117,7 @@ Widget Store(BuildContext context) {
             constraints: BoxConstraints(
               maxWidth: MediaQuery.of(context).size.width * 0.4,
             ),
-            margin: EdgeInsets.only(top: 20.0),
+            margin: const EdgeInsets.only(top: 20.0),
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
@@ -134,7 +133,7 @@ Widget Store(BuildContext context) {
                     Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: Color(0xffA876DE),
+                          color: const Color(0xffA876DE),
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
@@ -145,13 +144,13 @@ Widget Store(BuildContext context) {
                           ],
                         ),
                         width: MediaQuery.of(context).size.width,
-                        child: Text('랜덤뽑기',
+                        child: const Text('랜덤뽑기',
                             style: TextStyle(
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white))),
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Image.asset(
                         'images/present.png',
                         width: 80,
@@ -167,7 +166,7 @@ Widget Store(BuildContext context) {
                           children: [
                             Icon(Icons.star_rounded,
                                 color: Colors.yellowAccent[700], size: 30.0),
-                            Text('x5',
+                            const Text('x5',
                                 style: TextStyle(
                                     fontSize: 19.0,
                                     fontWeight: FontWeight.w600,
@@ -175,7 +174,7 @@ Widget Store(BuildContext context) {
                           ],
                         ),
                         style: ElevatedButton.styleFrom(
-                            primary: Color(0xffA876DE)))
+                            primary: const Color(0xffA876DE)))
                   ],
                 ),
               ),
@@ -198,14 +197,14 @@ Widget UserItems(BuildContext context) {
                   color: Colors.grey[500], fontWeight: FontWeight.w600)),
         ],
       ),
-      SizedBox(height: 10.0),
+      const SizedBox(height: 10.0),
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text('현석님',
+          const Text('현석님',
               style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w600)),
           Icon(Icons.star_rounded, color: Colors.yellowAccent[700], size: 40.0),
-          Text('10',
+          const Text('10',
               style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w600))
         ],
       ),
@@ -216,7 +215,7 @@ Widget UserItems(BuildContext context) {
             constraints: BoxConstraints(
               maxWidth: MediaQuery.of(context).size.width * 0.4,
             ),
-            margin: EdgeInsets.only(top: 20.0),
+            margin: const EdgeInsets.only(top: 20.0),
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
@@ -232,7 +231,7 @@ Widget UserItems(BuildContext context) {
                     Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: Color(0xffA876DE),
+                          color: const Color(0xffA876DE),
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
@@ -243,13 +242,13 @@ Widget UserItems(BuildContext context) {
                           ],
                         ),
                         width: MediaQuery.of(context).size.width,
-                        child: Text('랜덤뽑기',
+                        child: const Text('랜덤뽑기',
                             style: TextStyle(
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white))),
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Image.asset(
                         'images/present.png',
                         width: 80,
@@ -265,7 +264,7 @@ Widget UserItems(BuildContext context) {
                           children: [
                             Icon(Icons.star_rounded,
                                 color: Colors.yellowAccent[700], size: 30.0),
-                            Text('x5',
+                            const Text('x5',
                                 style: TextStyle(
                                     fontSize: 19.0,
                                     fontWeight: FontWeight.w600,
@@ -273,7 +272,7 @@ Widget UserItems(BuildContext context) {
                           ],
                         ),
                         style: ElevatedButton.styleFrom(
-                            primary: Color(0xffA876DE)))
+                            primary: const Color(0xffA876DE)))
                   ],
                 ),
               ),

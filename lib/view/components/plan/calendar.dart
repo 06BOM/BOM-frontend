@@ -49,7 +49,7 @@ class _BomCalendarState extends ConsumerState<BomCalendar>
                 CalendarFormat.week: ''
               },
               eventLoader: (day) {
-                if (userMonthlyStars.length == 0) {
+                if (userMonthlyStars.isEmpty) {
                   // list의 인덱스 접근 불허
                   return [];
                 }
@@ -92,8 +92,8 @@ class _BomCalendarState extends ConsumerState<BomCalendar>
                     ? const TextStyle(fontSize: 17.0)
                     : const TextStyle(fontSize: 15.0),
                 headerPadding: deviceHeight > 2000.0
-                    ? EdgeInsets.symmetric(vertical: 8.0)
-                    : EdgeInsets.symmetric(vertical: 0.0),
+                    ? const EdgeInsets.symmetric(vertical: 8.0)
+                    : const EdgeInsets.symmetric(vertical: 0.0),
                 titleCentered: true,
                 formatButtonVisible: false,
               ),
@@ -120,13 +120,13 @@ class _BomCalendarState extends ConsumerState<BomCalendar>
                     // print(date);
                 return Container(
                   margin: const EdgeInsets.all(4.0),
-                  padding: EdgeInsets.all(0),
+                  padding: const EdgeInsets.all(0),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,
                       borderRadius: BorderRadius.circular(50.0)),
                   child: Text(date.day.toString(),
-                      style: TextStyle(color: Colors.white)),
+                      style: const TextStyle(color: Colors.white)),
                 );
               }),
               // 아래를 풀면 날짜 선택시 고정

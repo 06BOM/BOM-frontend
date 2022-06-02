@@ -26,7 +26,7 @@ class _BomColorState extends ConsumerState<BomColor> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Container(
+        SizedBox(
           height: 50.0,
         width: 200, // Expanded로 잘 안된다.
           child: ListView(scrollDirection: Axis.horizontal, children: [
@@ -40,7 +40,7 @@ class _BomColorState extends ConsumerState<BomColor> {
               children: <Widget>[
                 !isSelected[0]
                     ? Container(
-                        margin: EdgeInsets.only(right: 3.0),
+                        margin: const EdgeInsets.only(right: 3.0),
                         child: const Icon(
                           Icons.circle,
                           color: Color(0xffA876DE),
@@ -48,7 +48,7 @@ class _BomColorState extends ConsumerState<BomColor> {
                         ),
                       )
                     : Container(
-                        margin: EdgeInsets.only(right: 3.0),
+                        margin: const EdgeInsets.only(right: 3.0),
                         child: const Icon(
                           Icons.check_circle,
                           color: Color(0xffA876DE),
@@ -57,7 +57,7 @@ class _BomColorState extends ConsumerState<BomColor> {
                       ),
                 !isSelected[1]
                     ? Container(
-                        margin: EdgeInsets.only(right: 3.0),
+                        margin: const EdgeInsets.only(right: 3.0),
                         child: const Icon(
                           Icons.circle,
                           color: Color(0xffff6666),
@@ -65,7 +65,7 @@ class _BomColorState extends ConsumerState<BomColor> {
                         ),
                       )
                     : Container(
-                        margin: EdgeInsets.only(right: 3.0),
+                        margin: const EdgeInsets.only(right: 3.0),
                         child: const Icon(
                           Icons.check_circle,
                           color: Color(0xffff6666),
@@ -74,7 +74,7 @@ class _BomColorState extends ConsumerState<BomColor> {
                       ),
                 !isSelected[2]
                     ? Container(
-                        margin: EdgeInsets.only(right: 3.0),
+                        margin: const EdgeInsets.only(right: 3.0),
                         child: const Icon(
                           Icons.circle,
                           color: Color(0xff6699ff),
@@ -82,7 +82,7 @@ class _BomColorState extends ConsumerState<BomColor> {
                         ),
                       )
                     : Container(
-                        margin: EdgeInsets.only(right: 3.0),
+                        margin: const EdgeInsets.only(right: 3.0),
                         child: const Icon(
                           Icons.check_circle,
                           color: Color(0xff6699ff),
@@ -91,7 +91,7 @@ class _BomColorState extends ConsumerState<BomColor> {
                       ),
                 !isSelected[3]
                     ? Container(
-                        margin: EdgeInsets.only(right: 3.0),
+                        margin: const EdgeInsets.only(right: 3.0),
                         child: const Icon(
                           Icons.circle,
                           color: Color(0xffBDECB6),
@@ -99,7 +99,7 @@ class _BomColorState extends ConsumerState<BomColor> {
                         ),
                       )
                     : Container(
-                        margin: EdgeInsets.only(right: 3.0),
+                        margin: const EdgeInsets.only(right: 3.0),
                         child: const Icon(
                           Icons.check_circle,
                           color: Color(0xffBDECB6),
@@ -141,7 +141,7 @@ class _BomColorState extends ConsumerState<BomColor> {
       context: context,
       builder: (Context) => AlertDialog(
           alignment: Alignment.center,
-          title: Text('원하는 색상을 선택해주세요'),
+          title: const Text('원하는 색상을 선택해주세요'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -150,7 +150,7 @@ class _BomColorState extends ConsumerState<BomColor> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    child: Text(
+                    child: const Text(
                       '선택',
                       style: TextStyle(fontSize: 20),
                     ),

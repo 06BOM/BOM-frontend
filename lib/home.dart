@@ -1,12 +1,7 @@
 import 'package:bom_front/view/collection_view.dart';
 import 'package:bom_front/view/community.dart';
-import 'package:bom_front/view/components/bom_menu.dart';
-import 'package:bom_front/view/components/bottom_navigation.dart';
-import 'package:bom_front/view/components/plan/appbar.dart';
 import 'package:bom_front/view/game_view.dart';
 import 'package:bom_front/view/hom_view.dart';
-import 'package:bom_front/view/home_detail_view.dart';
-import 'package:bom_front/view/store_view.dart';
 import 'package:bom_front/view/user_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,23 +17,23 @@ class Home extends ConsumerWidget {
     print('buttonIndex: $buttonIndex in home');
     switch (buttonIndex) {
       case 0:
-        return CommunityScreen();
+        return const CommunityScreen();
         break;
       case 1:
-        return GameScreen();
+        return const GameScreen();
         break;
       case 2:
-        return HomeScreen();
+        return const HomeScreen();
         break;
       case 3:
-        return CollectionScreen();
+        return const CollectionScreen();
         break;
       case 4:
-        return UserScreen();
+        return const UserScreen();
         break;
       default:
         return Center(
-          child: Column(children: [Text('해당 화면이 나오면 문의 주세요')]),
+          child: Column(children: const [Text('해당 화면이 나오면 문의 주세요')]),
         );
     }
   }

@@ -65,7 +65,7 @@ class _ShowDateState extends State<ShowDate> {
                   surface: Color(0xffA876DE),
                   onSurface: Colors.black,
                 ),
-                dialogTheme: DialogTheme(),
+                dialogTheme: const DialogTheme(),
               ),
               child: child!,
             ));

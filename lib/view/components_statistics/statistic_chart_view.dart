@@ -1,7 +1,4 @@
-import 'dart:async';
-import 'dart:math';
 import 'package:bom_front/model/statistic_model.dart';
-import 'package:bom_front/repository/statistic_repo.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -14,10 +11,11 @@ class BarChartWeek extends StatefulWidget {
 
 class BarChartWeekState extends State<BarChartWeek> {
   final Color barBackgroundColor = const Color.fromRGBO(40, 35, 75, 0.1);
-  Statistic statistic_data = new Statistic();
+  Statistic statistic_data = const Statistic();
 
   int touchedIndex = -1;
 
+  @override
   void initState() {
     super.initState();
   }
@@ -82,7 +80,7 @@ class BarChartWeekState extends State<BarChartWeek> {
           color: isTouched ? Colors.yellow : barColor,
           width: width,
           borderSide: isTouched
-              ? BorderSide(color: Colors.yellow, width: 1)
+              ? const BorderSide(color: Colors.yellow, width: 1)
               : const BorderSide(color: Colors.white, width: 0),
           backDrawRodData: BackgroundBarChartRodData(
             show: true,

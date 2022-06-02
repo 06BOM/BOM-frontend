@@ -40,12 +40,12 @@ class CategoryList extends StateNotifier<AsyncValue<List<Category>>> {
 
   CategoryList(this._repository, this.ref,
       [AsyncValue<List<Category>>? initState])
-      : super(AsyncValue.data([])) {
+      : super(const AsyncValue.data([])) {
     getUserCategory();
   }
 
   Future<void> getUserCategory() async {
-    state = AsyncValue.loading();
+    state = const AsyncValue.loading();
     final category = await _repository
         .loadUserCategory(); // final todos = await _repository!.loadTodos();
     if (mounted) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../model/todo.dart';
 
 class TimerAppBar extends StatefulWidget implements PreferredSizeWidget {
   const TimerAppBar({Key? key})
@@ -18,8 +17,8 @@ class _TimerAppBarState extends State<TimerAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Color(0xffC9A0F5),
-      title: Text(
+      backgroundColor: const Color(0xffC9A0F5),
+      title: const Text(
         "plan",
         style: TextStyle(color: Colors.white, fontSize: 20),
       ), // 나중에 과목api 받아오기

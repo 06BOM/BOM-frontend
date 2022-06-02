@@ -1,5 +1,4 @@
 import 'package:bom_front/view/components/plan/color_selection_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -62,7 +61,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                       ),
                     ),
                     const SizedBox(height: 10.0),
-                    Container(
+                    SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -79,13 +78,13 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text('카테고리 분류:',
+                        const Text('카테고리 분류:',
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 17)),
-                        SizedBox(width: 30.0),
+                        const SizedBox(width: 30.0),
                         Row(
-                          children: [
-                            const Icon(
+                          children: const [
+                            Icon(
                               Icons.trip_origin,
                               color: Color(0xffA876DE),
                               size: 18.0,
@@ -98,10 +97,10 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 30.0),
+                        const SizedBox(width: 30.0),
                         Row(
-                          children: [
-                            const Icon(
+                          children: const [
+                            Icon(
                               Icons.radio_button_unchecked,
                               color: Color(0xffA876DE),
                               size: 18.0,
@@ -176,17 +175,17 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                                 });
                               },
                               style: ElevatedButton.styleFrom(
-                                  primary: Color(0xffA876DE),
+                                  primary: const Color(0xffA876DE),
                                   //background color of button
                                   // side: BorderSide(width:3, color:Colors.brown), //border width and color
                                   // elevation: 3, //elevation of button
                                   shape: RoundedRectangleBorder(
                                       //to set border radius to button
                                       borderRadius: BorderRadius.circular(30)),
-                                  padding: EdgeInsets.all(
+                                  padding: const EdgeInsets.all(
                                       20) //content padding inside button
                                   ),
-                              child: Text('저장',
+                              child: const Text('저장',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       color: Colors.white))),
@@ -199,17 +198,17 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                                 Navigator.pop(context);
                               },
                               style: ElevatedButton.styleFrom(
-                                  primary: Color(0xffececec),
+                                  primary: const Color(0xffececec),
                                   //background color of button
                                   // side: BorderSide(width:3, color:Colors.brown), //border width and color
                                   // elevation: 3, //elevation of button
                                   shape: RoundedRectangleBorder(
                                       //to set border radius to button
                                       borderRadius: BorderRadius.circular(30)),
-                                  padding: EdgeInsets.all(
+                                  padding: const EdgeInsets.all(
                                       20) //content padding inside button
                                   ),
-                              child: Text('취소',
+                              child: const Text('취소',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black))),

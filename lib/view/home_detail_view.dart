@@ -1,8 +1,6 @@
-import 'package:bom_front/view/store_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../provider/todo_provider.dart';
 import '../utils.dart';
@@ -38,13 +36,13 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
     AsyncValue<int> dailyTimes = ref.watch(loadDailyTotalTimes);
     print('Home detail rebuilding...');
 
-    todos.forEach((element) {
+    for (var element in todos) {
       print(element.time!);
-    });
+    }
 
     return Scaffold(
         appBar: const BomAppBar(),
-        drawer: BomMenu(),
+        drawer: const BomMenu(),
         body: Center(
           child: Column(
             children: [
@@ -70,7 +68,7 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
                                     (previous, current) =>
                                         previous +
                                         current.time!)), // 1800 = 30min
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.white, fontSize: 60.0)),
                           ],
                         ),
@@ -116,11 +114,11 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
                                       ),
                                     ),
                                     const SizedBox(height: 20.0),
-                                    if (todos.length == 0)
+                                    if (todos.isEmpty)
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
-                                        children: [
+                                        children: const [
                                           Text('작성한 플랜이 없습니다.',
                                               style: TextStyle(
                                                 color: Color(0xff838383),
@@ -170,15 +168,15 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('통계',
+                                          const Text('통계',
                                               style: TextStyle(
                                                 color: Color(0xff838383),
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 16.0,
                                               )),
                                           Text(
-                                              '${getTodayKoreanFormat(userSelectedDay)}',
-                                              style: TextStyle(
+                                              getTodayKoreanFormat(userSelectedDay),
+                                              style: const TextStyle(
                                                 color: Color(0xff838383),
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 16.0,
@@ -190,7 +188,7 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.star,
+                                        const Icon(Icons.star,
                                             color: Colors.amberAccent,
                                             size: 40.0),
                                         userStar.when(
@@ -201,18 +199,18 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
                                                     fontSize: 18.0))),
                                             // error: (err, stack) =>
                                             //     Text('Error: $err'), // throw한 error를 알려주기 때문에 유저경험을 위해 0개로 default
-                                            error: (err, stack) => Text('0개 획득',
-                                                style: const TextStyle(
+                                            error: (err, stack) => const Text('0개 획득',
+                                                style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize:
                                                         18.0)), // 우는 캐릭터로 대체하기
                                             loading: () => Container()),
                                       ],
                                     ),
-                                    SizedBox(height: 20.0),
+                                    const SizedBox(height: 20.0),
                                     DailyChart(),
-                                    SizedBox(height: 40.0),
-                                    Divider(
+                                    const SizedBox(height: 40.0),
+                                    const Divider(
                                       color: Colors.grey,
                                       thickness: 2.0,
                                     ),
@@ -221,8 +219,8 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
                                         ? dailyAvgData()
                                         : monthAvgData(),
                                     filter == SegmentType.week
-                                        ? BarChartWeek()
-                                        : BarChartWeek(),
+                                        ? const BarChartWeek()
+                                        : const BarChartWeek(),
                                   ],
                                 ),
                               ),
@@ -261,8 +259,8 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
                           DateTime.now().add(const Duration(hours: 9))) <
                       0 &&
                   !isToday(userSelectedDay))
-                FloatingActionButton(
-                  child: const Icon(Icons.close),
+                const FloatingActionButton(
+                  child: Icon(Icons.close),
                   backgroundColor: Colors.grey,
                   onPressed: null,
                 )
@@ -296,6 +294,6 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        bottomNavigationBar: BottomNavigationBarWidget());
+        bottomNavigationBar: const BottomNavigationBarWidget());
   }
 }

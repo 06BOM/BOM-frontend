@@ -8,7 +8,7 @@ class BomCategory extends ConsumerStatefulWidget {
   final Todo? data;
   final List<Category> userCategory;
 
-  BomCategory({this.data, required this.userCategory});
+  const BomCategory({this.data, required this.userCategory});
 
   @override
   _BomCategoryState createState() => _BomCategoryState();
@@ -32,7 +32,7 @@ class _BomCategoryState extends ConsumerState<BomCategory> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Expanded(
-          child: Container(
+          child: SizedBox(
             width: MediaQuery
                 .of(context)
                 .size
@@ -54,14 +54,14 @@ class _BomCategoryState extends ConsumerState<BomCategory> {
                       for (var i = 0; i < widget.userCategory.length; i++) ...[
                         !isSelected[i]
                             ? Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 12.0),
-                                margin: EdgeInsets.only(right: 3.0),
+                                margin: const EdgeInsets.only(right: 3.0),
                                 decoration: BoxDecoration(
                                   color: Color(int.parse(
                                       '0x12' + widget.userCategory[i].color!)),
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(8.0)),
+                                      const BorderRadius.all(Radius.circular(8.0)),
                                 ),
                                 child: Row(
                                   children: [
@@ -70,7 +70,7 @@ class _BomCategoryState extends ConsumerState<BomCategory> {
                                       color: Colors.grey,
                                       size: 12.0,
                                     ),
-                                    SizedBox(width: 1.0),
+                                    const SizedBox(width: 1.0),
                                     Text(
                                       '${widget.userCategory[i].categoryName}',
                                       style: TextStyle(
@@ -82,14 +82,14 @@ class _BomCategoryState extends ConsumerState<BomCategory> {
                                 ),
                               )
                             : Container(
-                                margin: EdgeInsets.only(right: 3.0),
-                                padding: EdgeInsets.symmetric(
+                                margin: const EdgeInsets.only(right: 3.0),
+                                padding: const EdgeInsets.symmetric(
                                     vertical: 10.0, horizontal: 12.0),
                                 decoration: BoxDecoration(
                                   color: Color(int.parse(
                                       '0x26' + widget.userCategory[i].color!)),
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(8.0)),
+                                      const BorderRadius.all(Radius.circular(8.0)),
                                 ),
                                 child: Row(
                                   children: [
@@ -99,7 +99,7 @@ class _BomCategoryState extends ConsumerState<BomCategory> {
                                           widget.userCategory[i].color!)),
                                       size: 12.0,
                                     ),
-                                    SizedBox(width: 1.0),
+                                    const SizedBox(width: 1.0),
                                     Text(
                                       '${widget.userCategory[i].categoryName}',
                                       style: TextStyle(
