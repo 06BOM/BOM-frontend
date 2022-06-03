@@ -20,16 +20,18 @@ class Room {
         this.userId,
         this.grade});
 
-  Room.fromJson(Map<String, dynamic> json) {
-    roomId = json['roomId'];
-    roomName = json['roomName'];
-    kind = json['kind'];
-    participantsNum = json['participantsNum'];
-    secretMode = json['secretMode'];
-    password = json['password'];
-    subject = json['subject'];
-    userId = json['userId'];
-    grade = json['grade'];
+  factory Room.fromJson(Map<String, dynamic> json) {
+    return Room(
+        roomId: json['roomId'],
+        roomName: json['roomName'],
+        kind: json['kind'],
+        participantsNum: json['participantsNum'],
+        secretMode: json['secretMode'],
+        password: json['password'],
+        subject: json['subject'],
+        userId: json['userId'],
+        grade: json['grade']
+    );
   }
 
   Map<String, dynamic> toJson() {
