@@ -1,4 +1,5 @@
 import 'package:bom_front/view/components/bom_menu.dart';
+import 'package:bom_front/view/components/character/character_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -450,7 +451,11 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
                   GestureDetector(
                     onTap: (){
                       print('clicked');
-                      _showDialog(context);
+                      // _showDialog(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CharacterDetails(character: bomCharacter)),
+                      );
                     },
                     child: Container(
                       constraints: BoxConstraints(
