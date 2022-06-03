@@ -404,7 +404,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
         .size
         .height;
     return Scaffold(
-      appBar: const BomAppBar(title: '캐릭터 도감'),
+      appBar: const BomAppBar(title: '캐릭터 도감', screenName: 'collection',),
       drawer: BomMenu(),
       body: Center(
         child: Column(

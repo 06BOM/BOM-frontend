@@ -22,7 +22,14 @@ class BomMenu extends StatelessWidget {
                 CircleAvatar(
                   backgroundColor: Colors.transparent,
                   backgroundImage: AssetImage('images/character.png'),
-                )
+                ),
+                Icon(Icons.star_rounded,
+                    color: Colors.yellowAccent,
+                    size: 15.0),
+                const Text('10',
+                    style: TextStyle(fontSize: 15.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white))
               ],
               onDetailsPressed: () => {print('clicked')},
               decoration: const BoxDecoration(

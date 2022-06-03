@@ -37,8 +37,6 @@ class CharacterDetails extends StatelessWidget {
           child: Container(
             width: widthSize,
             height: heightSize,
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.blueAccent)),
             padding: EdgeInsets.only(left: 20.0, bottom: 20.0, right: 20.0),
             child: Column(
               children: [
