@@ -2,6 +2,7 @@ import 'package:bom_front/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 final addTodoKey = UniqueKey();
 final activeFilterKey = UniqueKey();
@@ -9,6 +10,8 @@ final completedFilterKey = UniqueKey();
 final allFilterKey = UniqueKey();
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   // initializeDateFormatting('ko_KR', null)
   //     .then((_) => runApp(const ProviderScope(child: MyApp()))); // flutter_localizations와 충돌
   runApp(const ProviderScope(child: MyApp()));
