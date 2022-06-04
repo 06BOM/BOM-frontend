@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:bom_front/view/components/bom_menu.dart';
 import 'package:bom_front/view/components/character/character_details.dart';
 import 'package:flutter/material.dart';
@@ -268,20 +270,27 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                           borderRadius: BorderRadius.circular(30.0),
                           side: BorderSide(width: 4, color: Colors.orange),
                         ),
-                        color: Colors.white,
+                        // color: Colors.white,
                         elevation: 10,
                         child: Column(
                           // mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 10.0),
-                              child: Image.network(
-                                '${bomCharacter.imageUrl}',
-                                width: 60,
-                                height: 60,
-                                fit: BoxFit.fitHeight,
+                            BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+                              child: Container(
+                                // decoration: BoxDecoration(
+                                //     borderRadius: BorderRadius.all(
+                                //         Radius.circular(30.0))),
+                                color: Colors.black.withOpacity(0),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 10.0),
+                                child: Image.network(
+                                  '${bomCharacter.imageUrl}',
+                                  width: 60,
+                                  height: 60,
+                                  fit: BoxFit.fitHeight,
+                                ),
                               ),
                             ),
                             Expanded(
