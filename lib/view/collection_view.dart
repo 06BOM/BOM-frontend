@@ -3,6 +3,7 @@ import 'package:bom_front/view/components/character/character_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../model/character.dart';
+import '../provider/character_provider.dart';
 import 'components/bottom_navigation.dart';
 import 'components/plan/appbar.dart';
 import 'package:flutter/foundation.dart';
@@ -90,278 +91,6 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
         height: 0,
         weight: 0,
         mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "e",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/rabbit.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "f",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "g",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/rabbit.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "h",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "i",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/rabbit.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "j",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "k",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/rabbit.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "l",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "m",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/rabbit.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "n",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "h",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/rabbit.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "i",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "j",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/rabbit.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "k",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "o",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/rabbit.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "p",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 55,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
   ];
 
   Map<String, String> UNIT_ID = kReleaseMode
@@ -407,16 +136,16 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
   //   );
   // }
 
-  List<Character> display_list = List.from(bomCharacters);
+  // List<Character> display_list = List.from(bomCharacters);
 
-  void updateList(String value) {
-    setState(() {
-      display_list = bomCharacters
-          .where((el) =>
-              el.characterName!.toLowerCase().contains(value.toLowerCase()))
-          .toList();
-    });
-  }
+  // void updateList(String value) {
+  //   setState(() {
+  //     display_list = bomCharacters
+  //         .where((el) =>
+  //             el.characterName!.toLowerCase().contains(value.toLowerCase()))
+  //         .toList();
+  //   });
+  // }
 
   @override
   void initState() {
@@ -433,7 +162,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
         onAdFailedToLoad: (Ad ad, LoadAdError error) {},
         onAdLoaded: (_) {},
       ),
-      size: AdSize.fullBanner,
+      size: AdSize.banner,
       adUnitId: UNIT_ID[os == TargetPlatform.iOS ? 'ios' : 'android']!,
       request: AdRequest(),
     )..load();
@@ -448,9 +177,8 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('$kReleaseMode in collection_view');
+    final userCharacter = ref.watch(characterListProvider);
     final widthSize = MediaQuery.of(context).size.width;
-    final heightSize = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: const BomAppBar(
         title: '캐릭터 도감',
@@ -468,8 +196,10 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
               // focusNode: _focus,
               keyboardType: TextInputType.text,
               onChanged: (text) {
-                updateList(text);
+                // updateList(text);
+                ref.read(characterListProvider.notifier).searchCharacter(text);
               },
+
               decoration: InputDecoration(
                 // filled: true,
                 //   fillColor: Color(0x),
@@ -483,118 +213,114 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
             ),
           ),
           Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.blueAccent)
-            ),
             height: 50,
             width: MediaQuery.of(context).size.width,
             child: AdWidget(
               ad: _banner,
             ),
           ),
-          display_list.length == 0
-              ? Center(
-                  child: Text(
-                  "Now result found",
-                ))
-              : Expanded(
-                  // 없었을 때, verticalviewport error 해결
-                  child: GridView(
-                    padding: EdgeInsets.all(20),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                    ),
-                    children: display_list
-                        .map(
-                          (bomCharacter) => GestureDetector(
-                            onTap: () {
-                              print('clicked');
-                              // _showDialog(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CharacterDetails(
-                                        character: bomCharacter)),
-                              );
-                            },
-                            child: Container(
-                              constraints: BoxConstraints(
-                                maxWidth:
-                                    MediaQuery.of(context).size.width * 0.4,
-                              ),
-                              margin: EdgeInsets.only(top: 10.0),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  side: BorderSide(
-                                      width: 4, color: Colors.orange),
-                                ),
-                                color: Colors.white,
-                                elevation: 10,
-                                child: Column(
-                                  // mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 8.0, horizontal: 10.0),
-                                      child: Image.network(
-                                        '${bomCharacter.imageUrl}',
-                                        width: 60,
-                                        height: 60,
-                                        fit: BoxFit.fitHeight,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                            color: Colors.orange,
-                                            borderRadius: BorderRadius.only(
-                                                bottomLeft:
-                                                    Radius.circular(30.0),
-                                                bottomRight:
-                                                    Radius.circular(30.0))),
-                                        child: bomCharacter.teq == 55
-                                            ? Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(Icons.star_rounded,
-                                                      color: Colors
-                                                          .yellowAccent[700],
-                                                      size: 15.0),
-                                                  const Text('10',
-                                                      style: TextStyle(
-                                                          fontSize: 15.0,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color:
-                                                              Colors.white))
-                                                ],
-                                              )
-                                            : Text(
-                                                '${bomCharacter.characterName}',
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
-                                                    fontWeight:
-                                                        FontWeight.w600,
-                                                    color: Colors.white)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
+          userCharacter.when(
+              data: (data) {
+                return gridBody(data, context);
+              },
+              error: (e, st) => Container(),
+              loading: () => Container())
         ],
       ),
       bottomNavigationBar: BottomNavigationBarWidget(),
     );
   }
+}
+
+Widget gridBody(List<Character> display_list, BuildContext context) {
+  return display_list.length == 0
+      ? Center(
+          child: Text(
+          "결과가 없습니다.",
+        ))
+      : Expanded(
+          // 없었을 때, verticalviewport error 해결
+          child: GridView(
+            padding: EdgeInsets.all(20),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+            ),
+            children: display_list
+                .map(
+                  (bomCharacter) => GestureDetector(
+                    onTap: () {
+                      print('clicked');
+                      // _showDialog(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                CharacterDetails(character: bomCharacter)),
+                      );
+                    },
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.4,
+                      ),
+                      margin: EdgeInsets.only(top: 10.0),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          side: BorderSide(width: 4, color: Colors.orange),
+                        ),
+                        color: Colors.white,
+                        elevation: 10,
+                        child: Column(
+                          // mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 10.0),
+                              child: Image.network(
+                                '${bomCharacter.imageUrl}',
+                                width: 60,
+                                height: 60,
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                    color: Colors.orange,
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(30.0),
+                                        bottomRight: Radius.circular(30.0))),
+                                child: bomCharacter.teq == 55
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.star_rounded,
+                                              color: Colors.yellowAccent[700],
+                                              size: 15.0),
+                                          const Text('10',
+                                              style: TextStyle(
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white))
+                                        ],
+                                      )
+                                    : Text('${bomCharacter.characterName}',
+                                        style: TextStyle(
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+        );
 }

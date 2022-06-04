@@ -32,14 +32,15 @@ class CharacterRepository{
   //해당 user id가 가지고 있지 않은 모든 character들을 획득
   Future<List<Character>> loadNotOwnedCharacter() async {
     print('Fetch loadNotOwnedCharacter data...');
-    var url = Uri.parse(urlApi + 'character/user/want?userId=1');
+    var url = Uri.parse(urlApi + '/character/user/want?userId=1');
     var response = await http.get(url);
     if (response.body == null) {
       print('error with get');
     }
+    print('loadNotOwnedCharacter statusCode => ${response.statusCode}');
     if (response.statusCode == 200) {
       Map<String, dynamic> body = json.decode(response.body);
-      print('category.len => ${body['category'].length}');
+      print('Character.len => ${body['notHavingCharacterData'].length}');
       if (body['notHavingCharacterData'] == null) {
         print('error because user\'s not owned character is empty');
       }
@@ -127,9 +128,9 @@ class CharacterRepository{
   }
 
   // 해당 user의 캐릭터 콜렉션 중 검색 결과에 해당하는 캐릭터를 반환할 때 사용한다
-  Future<List<Character>> fetchSearchResult() async {
+  Future<List<Character>> fetchSearchResult(String text) async {
     print('Fetch fetchSearchResult data...');
-    var url = Uri.parse(urlApi + '/character/search?search=turtle&userId=1');
+    var url = Uri.parse(urlApi + '/character/search?search=${text}&userId=1');
     var response = await http.get(url);
     if (response.body == null) {
       print('error with get');
