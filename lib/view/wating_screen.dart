@@ -152,7 +152,48 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(roomUsers[i]),
+                            Column(
+                              children: [
+                                 Image.network('https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png', height: 70, fit: BoxFit.fill),
+                                Stack(
+                                  children: <Widget>[
+                                    Text(
+                                      roomUsers[i],
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          foreground: Paint()
+                                            ..style = PaintingStyle.stroke
+                                            ..strokeWidth = 3
+                                            ..color = Colors.grey[300]!,
+                                          shadows: [
+                                            Shadow(
+                                              blurRadius: 30.0,
+                                              color: Colors.blue,
+                                              offset: Offset(2.0, 2.0),
+                                            ),
+                                          ]
+                                      ),
+                                    ),
+                                    Text(
+                                      roomUsers[i],
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.yellow,
+                                          shadows: [
+                                            Shadow(
+                                              blurRadius: 30.0,
+                                              color: Colors.blue,
+                                              offset: Offset(2.0, 2.0),
+                                            ),
+                                          ]
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                     ],
