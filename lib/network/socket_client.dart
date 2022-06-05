@@ -7,7 +7,7 @@ class SocketClient{ // single tone pattern
   SocketClient._internal(){ // initializeSocket
     //무선 LAN 어댑터 Wi-Fi: IPv4
 
-    socket = IO.io('http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com', <String, dynamic>{
+    socket = IO.io('http://3.38.43.48', <String, dynamic>{
     // socket = IO.io('http://192.168.0.15:3000', <String, dynamic>{ // http://localhost:3000 (X)
     // socket = IO.io('localhost:3000', <String, dynamic>{ // http://localhost:3000 (X)
       'transports': ['websocket'],

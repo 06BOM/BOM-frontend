@@ -200,12 +200,12 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions>
                             SizedBox(height: 20.0),
                             Flexible(
                               child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 1,
-                                    color: Colors.orange,
-                                  ),
-                                ),
+                                // decoration: BoxDecoration(
+                                //   border: Border.all(
+                                //     width: 1,
+                                //     color: Colors.orange,
+                                //   ),
+                                // ),
                                 margin: const EdgeInsets.symmetric(
                                   horizontal: 5.0,
                                 ),
@@ -279,9 +279,9 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions>
                             children: [
                               Container(
                                 // padding: EdgeInsets.all(0.0),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.greenAccent, width: 2)),
+                                // decoration: BoxDecoration(
+                                //     border: Border.all(
+                                //         color: Colors.greenAccent, width: 2)),
                                 width: 80.0,
                                 height: 80.0,
                                 child: AnimatedBuilder(
@@ -357,6 +357,7 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions>
                                 child: Container(
                                   padding: EdgeInsets.symmetric(horizontal: 10),
                                   height: 90,
+                                  width: 90,
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       width: 1,
@@ -435,12 +436,12 @@ class Scoreboard extends ConsumerWidget {
       print('each player info => ${player} / ${player[1]}');
     }
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 1,
-          color: Colors.red,
-        ),
-      ),
+      // decoration: BoxDecoration(
+      //   border: Border.all(
+      //     width: 1,
+      //     color: Colors.red,
+      //   ),
+      // ),
       padding: EdgeInsets.only(bottom: 50.0, right: 10.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
