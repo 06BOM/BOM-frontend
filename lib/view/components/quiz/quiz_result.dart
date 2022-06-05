@@ -1,12 +1,5 @@
-import 'package:bom_front/main.dart';
-import 'package:bom_front/provider/quiz/quiz_provider.dart';
-import 'package:bom_front/repository/quiz/quiz_repository.dart';
-import 'package:bom_front/view/main_menu_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import '../../../model/question.dart';
-import '../../../provider/quiz/quiz_state.dart';
 import '../../../provider/room_data_provider.dart';
 import '../../../utils/colors.dart';
 import '../../wating_screen.dart';
