@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 
 class StatisticRepository {
   static const urlApi =
-      'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
-
+      // 'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
+      'http://192.168.0.14:3000';
   /*한주의 별개수 가져오는 코드 */
   Future<int> getWeekStar() async {
     print("this is for get week star data");

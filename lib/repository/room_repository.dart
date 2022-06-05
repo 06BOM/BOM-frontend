@@ -7,7 +7,8 @@ import '../model/room.dart';
 
 class RoomRepository{
   static const urlApi =
-      'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
+      // 'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
+  'http://192.168.0.14:3000';
 
   Future<List<Room>> loadAllRooms() async {
     print('Fetch loadAllRoom data...');
