@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/room.dart';
+import '../network/socket_method.dart';
 import 'components/bom_menu.dart';
 import 'components/bottom_navigation.dart';
 import 'components/plan/appbar.dart';
+import 'create_room_screen.dart';
 
 class GameScreen extends ConsumerStatefulWidget {
   const GameScreen({Key? key}) : super(key: key);
@@ -15,6 +17,18 @@ class GameScreen extends ConsumerStatefulWidget {
 }
 
 class _GameScreenState extends ConsumerState<GameScreen> {
+  final SocketMethods _socketMethods = SocketMethods();
+
+  @override
+  void initState() {
+    // _socketMethods.getJoinedUserName(context); // createRoomSuccessListener로 가야하나? 방정보를 얻기위해?
+    _socketMethods.getJoinedUserName(context, ref);
+    _socketMethods.joinRoomFailListener(context);
+    // _socketMethods.updateRoomListener(context); // 사용할지 고려
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final rooms = ref.watch(roomListProvider);
@@ -30,7 +44,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           Container(
               child: rooms.when(
                   data: (data) {
-                    return gridBody(data, context);
+                    return gridBody(data, context, _socketMethods);
                   },
                   error: (e, st) => Container(),
                   loading: () => Container()))
@@ -59,6 +73,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           //         builder: (context) =>
           //             AddPlan()));
           print('click');
+          Navigator.pushNamed(context, CreateRoomScreen.routeName);
         },
       ),
       bottomNavigationBar: BottomNavigationBarWidget(),
@@ -66,7 +81,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   }
 }
 
-Widget gridBody(List<Room> display_list, BuildContext context) {
+Widget gridBody(List<Room> display_list, BuildContext context, SocketMethods _socketMethods) {
   return display_list.length == 0
       ? Center(
           child: Text(
@@ -91,6 +106,8 @@ Widget gridBody(List<Room> display_list, BuildContext context) {
                       //       builder: (context) =>
                       //           CharacterDetails(character: bomCharacter)),
                       // );
+                      _socketMethods.joinRoom(
+                          'BOM', bomRoom.roomName!);
                     },
                     child: Container(
                       constraints: BoxConstraints(
