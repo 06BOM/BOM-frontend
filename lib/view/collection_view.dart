@@ -24,76 +24,6 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
   late TextEditingController _textController;
   late TargetPlatform os;
   late BannerAd _banner;
-  static List<Character> bomCharacters = [
-    Character(
-        characterId: 1,
-        characterName: "a",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/rabbit.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "b",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "c",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/rabbit.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "d",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "a",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-  ];
 
   Map<String, String> UNIT_ID = kReleaseMode
       ? {
@@ -104,39 +34,6 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
           'ios': 'ca-app-pub-3940256099942544/2934735716',
           'android': 'ca-app-pub-3940256099942544/6300978111',
         };
-
-  // void _showDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       // return object of type Dialog
-  //       return Dialog(
-  //         shape:
-  //             RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-  //         child: Container(
-  //           height: 300,
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //             children: [
-  //               FlutterLogo(
-  //                 size: 150,
-  //               ),
-  //               Text(
-  //                 "This is a Custom Dialog",
-  //                 style: TextStyle(fontSize: 20),
-  //               ),
-  //               ElevatedButton(
-  //                   onPressed: () {
-  //                     Navigator.of(context).pop();
-  //                   },
-  //                   child: Text("닫기"))
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   // List<Character> display_list = List.from(bomCharacters);
 
@@ -201,7 +98,6 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
                 // updateList(text);
                 ref.read(characterListProvider.notifier).searchCharacter(text);
               },
-
               decoration: InputDecoration(
                 // filled: true,
                 //   fillColor: Color(0x),
@@ -215,6 +111,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
             ),
           ),
           Container(
+            margin: EdgeInsets.symmetric(vertical: 5.0),
             height: 50,
             width: MediaQuery.of(context).size.width,
             child: AdWidget(
@@ -252,8 +149,8 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                   (bomCharacter) => GestureDetector(
                     onTap: () {
                       print('clicked');
-                      // _showDialog(context);
-                      Navigator.push(
+                      bomCharacter.teq == 99 ? myShowDialog(context, bomCharacter)
+                          : Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
@@ -277,7 +174,7 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
+                              filter: ImageFilter.blur(sigmaX: 1.1, sigmaY: 1.1),
                               child: Container(
                                 // decoration: BoxDecoration(
                                 //     borderRadius: BorderRadius.all(
@@ -301,7 +198,7 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                                     borderRadius: BorderRadius.only(
                                         bottomLeft: Radius.circular(30.0),
                                         bottomRight: Radius.circular(30.0))),
-                                child: bomCharacter.teq == 55
+                                child: bomCharacter.teq == 99 // 99일 경우, 유저가 가지고 있찌 않은 코드
                                     ? Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -332,4 +229,50 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                 .toList(),
           ),
         );
+}
+
+void myShowDialog(BuildContext context, Character bomCharacter) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return Dialog(
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+        child: Container(
+          height: 200,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // FlutterLogo(
+              //   size: 150,
+              // ),
+              Text(
+                "해당 캐릭터는 별 ${bomCharacter.star}를 소모합니다.\n 계속 진행하시겠습니까?",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(primary: Color(0xffA876DE)),
+                      child: Text("계속", style:TextStyle(color: Colors.white))),
+                  SizedBox(width: 10,),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(primary: Color(0xffA876DE)),
+                      child: Text("닫기", style:TextStyle(color: Colors.white)))
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
