@@ -176,6 +176,7 @@ class SocketMethods {
       // List<dynamic> list = json.decode(roomData);
       // print(list);
       // ref.watch(roomDataProvider.notifier).updateRoomData(list);
+      ref.watch(roomUsersProvider.notifier).state = json.decode(roomData[2]);
       ref.read(roomDataProvider.notifier).updateRoomData(roomData);
       Navigator.pushNamed(context, WaitingLobby.routeName);
     });
@@ -261,7 +262,7 @@ class SocketMethods {
   void updateMsgListener(WidgetRef ref){
     _socketClient.on('new_message', (data){
       print('$data in updateMsgListener / ${data.runtimeType}');
-      ref.read(roomMsgProvider.notifier).updateMsg(data);
+      // ref.read(roomMsgProvider.notifier).updateMsg(data);
     });
   }
 }

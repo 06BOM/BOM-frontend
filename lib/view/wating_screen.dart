@@ -146,51 +146,47 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
                   width: MediaQuery.of(context).size.width,
                   margin: const EdgeInsets.symmetric(vertical: 10.0),
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Column(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       for (var i = 0; i < roomUsers.length; i++)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Column(
                           children: [
-                            Column(
-                              children: [
-                                 Image.network('https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png', height: 70, fit: BoxFit.fill),
-                                Stack(
-                                  children: <Widget>[
-                                    Text(
-                                      roomUsers[i],
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          foreground: Paint()
-                                            ..style = PaintingStyle.stroke
-                                            ..strokeWidth = 3
-                                            ..color = Colors.grey[300]!,
-                                          shadows: [
-                                            Shadow(
-                                              blurRadius: 30.0,
-                                              color: Colors.blue,
-                                              offset: Offset(2.0, 2.0),
-                                            ),
-                                          ]
-                                      ),
-                                    ),
-                                    Text(
-                                      roomUsers[i],
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.yellow,
-                                          shadows: [
-                                            Shadow(
-                                              blurRadius: 30.0,
-                                              color: Colors.blue,
-                                              offset: Offset(2.0, 2.0),
-                                            ),
-                                          ]
-                                      ),
-                                    ),
-                                  ],
+                             Image.network('https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png', height: 60, fit: BoxFit.fill),
+                            Stack(
+                              children: <Widget>[
+                                Text(
+                                  roomUsers[i],
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      foreground: Paint()
+                                        ..style = PaintingStyle.stroke
+                                        ..strokeWidth = 3
+                                        ..color = Colors.grey[300]!,
+                                      shadows: [
+                                        Shadow(
+                                          blurRadius: 30.0,
+                                          color: Colors.blue,
+                                          offset: Offset(2.0, 2.0),
+                                        ),
+                                      ]
+                                  ),
+                                ),
+                                Text(
+                                  roomUsers[i],
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.yellow,
+                                      shadows: [
+                                        Shadow(
+                                          blurRadius: 30.0,
+                                          color: Colors.blue,
+                                          offset: Offset(2.0, 2.0),
+                                        ),
+                                      ]
+                                  ),
                                 ),
                               ],
                             ),
