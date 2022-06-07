@@ -24,13 +24,13 @@ class SocketMethods {
   }
 
   // EMITS
-  void createRoom(String nickname, String roomName) {
+  void createRoom(String nickname, String roomName, String grade, String subject) {
     Map<String, dynamic> data = {
       "roomName": roomName,
       "kind": 0,
       "userId": 1, // 추후 변경하기
-      "grade": 3,
-      "subject": "과학",
+      "grade": int.parse(grade),
+      "subject": subject,
       "secretMode": false,
       "password": null,
       "participantsNum": 0
@@ -112,10 +112,10 @@ class SocketMethods {
     });
   }
 
-  void scoreRound(int index, String roomName){
-    print('run scoreRound $index');
+  void scoreRound(String roomName, WidgetRef ref){
+    print('run scoreRound ${ref.watch(roundDataProvider.notifier).state[1]}........ㅇㅋㅇㅋ.............ㅇㅋㅇㅋ..............ㅇㅋㅇㅋ..........................dzdzㅇㅋㅇㅋ');
     _socketClient.emit("score", {
-      'index': index,
+      'index': ref.watch(roundDataProvider.notifier).state[1],
       'roomName': roomName
     });
   }
@@ -254,7 +254,7 @@ class SocketMethods {
   void changeScoreListener(WidgetRef ref){
     _socketClient.on('score change', (data){
       List<dynamic> list = json.decode(data);
-      print('$list in changeScoreListener');
+      print('................................$list in changeScoreListener...................................');
       ref.watch(scoreProvider.notifier).updateScore(list);
     });
   }
