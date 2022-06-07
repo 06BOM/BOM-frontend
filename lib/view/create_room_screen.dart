@@ -19,6 +19,8 @@ class CreateRoomScreen extends ConsumerStatefulWidget {
 class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
   final TextEditingController _nickNameController = TextEditingController();
   final TextEditingController _roomNameController = TextEditingController();
+  final TextEditingController _gradeController = TextEditingController();
+  final TextEditingController _subjectController = TextEditingController();
   final SocketMethods _socketMethods = SocketMethods();
 
   @override
@@ -35,6 +37,8 @@ class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
     print(context);
     _nickNameController.dispose();
     _roomNameController.dispose();
+    _gradeController.dispose();
+    _subjectController.dispose();
   }
 
   @override
@@ -67,8 +71,14 @@ class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
                 SizedBox(height: size.height * 0.02),
                 CustomTextField(controller: _roomNameController,
                   hintText: '방 이름을 입력해주세요',),
+                SizedBox(height: size.height * 0.02),
+                CustomTextField(controller: _gradeController,
+                  hintText: '학년을 입력해주세요',),
+                SizedBox(height: size.height * 0.02),
+                CustomTextField(controller: _subjectController,
+                  hintText: '과목 명을 입력해주세요',),
                 SizedBox(height: size.height * 0.03),
-                CustomButton(onTap: () => _socketMethods.createRoom(_nickNameController.text, _roomNameController.text), title: '생성'),
+                CustomButton(onTap: () => _socketMethods.createRoom(_nickNameController.text, _roomNameController.text, _gradeController.text, _subjectController.text), title: '생성'),
               ],
             ),
           ),

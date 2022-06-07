@@ -58,12 +58,10 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions>
         await Future.delayed(Duration(seconds: 3), () {
           print('in delayed seconds: 3');
           if (roundIndex < 10) {
-            _socketMethods.scoreRound(
-                roundIndex, widget.roomName); // payload.index를 비교해보기
+            _socketMethods.scoreRound(widget.roomName, ref); // payload.index를 비교해보기 💚
             _socketMethods.fetchQuestion(ref);
           } else {
-            _socketMethods.scoreRound(
-                9, widget.roomName); // 막라 점수적용을 위해 이것도 필요한데...
+            _socketMethods.scoreRound(widget.roomName, ref); // 막라 점수적용을 위해 이것도 필요한데...
             _socketMethods
                 .allRoundFinish(widget.roomName); // 마지막 문제의 score를 불러오지 못하는 에러
           }
@@ -101,10 +99,6 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions>
       }
     });
 
-    Future.microtask((){
-      _cdx = MediaQuery.of(context).size.width/2-(this.boxWidth/2);
-      _cdy = MediaQuery.of(context).size.height/2-(this.boxHeight/2);
-    }).then((_) => setState((){}));
   }
 
   @override
@@ -163,259 +157,240 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions>
             print(
                 '... Q: ${ref.watch(roundDataProvider.notifier).state} / A : ${ref.watch(answerProvider.notifier).state} / S: $isShowAnswerView on game view building ');
             // final question = widget.questions[idx.round()];
-            return GestureDetector(
-              onTapDown: (TapDownDetails td){
-                setState(() {
-                  this.cdx = td.globalPosition.dx-(this.boxWidth/2);
-                  this.cdy = td.globalPosition.dy-(this.boxHeight/2);
-                });
-              },
-              child: Stack(
-                children: [
-                  Column(
-                    // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 150.0,
-                        color: Colors.black.withOpacity(0.2),
-                        margin: const EdgeInsets.only(
-                          top: 10.0,
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Q) ${idx} / 10',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 20.0),
-                            Flexible(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 1,
-                                    color: Colors.orange,
-                                  ),
-                                ),
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 5.0,
-                                ),
-                                width: MediaQuery.of(context).size.width - 2.0,
-                                height: 100.0,
-                                child: !isShowAnswerView
-                                    ? Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              ref.watch(roundDataProvider)[0],
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              softWrap:
-                                                  true, // 텍스트가 영역을 넘어갈 경우 줄바꿈 여부
-                                              textAlign: TextAlign.center, // 정렬
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    : Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(
-                                            '정답: ${ref.watch(answerProvider)[0]}',
-                                            style: const TextStyle(
-                                              color: Colors.lightGreenAccent,
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          SizedBox(height: 15),
-                                          Flexible(
-                                            child: Text(
-                                              '해설: ${ref.watch(answerProvider)[1]}',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              softWrap:
-                                                  true, // 텍스트가 영역을 넘어갈 경우 줄바꿈 여부
-                                              textAlign: TextAlign.center, // 정렬
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                              ),
-                            ),
-                          ],
-                        ),
+            return
+                Column(
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 150.0,
+                      color: Colors.black.withOpacity(0.2),
+                      margin: const EdgeInsets.only(
+                        top: 10.0,
                       ),
-                      Stack(
-                        alignment: Alignment.center,
+                      child: Column(
                         children: [
-                          Container(
-                            width: 70.0,
-                            height: 70.0,
-                            child: CustomPaint(
-                              painter: circleDrawPaint(),
-                            ),
-                          ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Container(
-                                // padding: EdgeInsets.all(0.0),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.greenAccent, width: 2)),
-                                width: 80.0,
-                                height: 80.0,
-                                child: AnimatedBuilder(
-                                    animation: _animationController,
-                                    builder: (BuildContext context, Widget? child) {
-                                      return QuizCompletionTimer(
-                                          progress: _animationController.value);
-                                    }),
+                              Text(
+                                'Q) ${idx} / 10',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          GestureDetector(
-                            onTap: () =>
-                                {print('O touch'), _socketMethods.selectOX('o')},
+                          SizedBox(height: 20.0),
+                          Flexible(
                             child: Container(
-                              child: Center(
-                                child: Text(
-                                  'O',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 100,
-                                      shadows: [
-                                        Shadow(
-                                          blurRadius: 40,
-                                          color: Colors.blue,
-                                        ),
-                                      ]),
-                                ),
+                              // decoration: BoxDecoration(
+                              //   border: Border.all(
+                              //     width: 1,
+                              //     color: Colors.orange,
+                              //   ),
+                              // ),
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 5.0,
                               ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () =>
-                                {print('X touch'), _socketMethods.selectOX('x')},
-                            child: Container(
-                              child: Center(
-                                child: Text(
-                                  'X',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 100,
-                                      shadows: [
-                                        Shadow(
-                                          blurRadius: 40,
-                                          color: Colors.red,
+                              width: MediaQuery.of(context).size.width - 2.0,
+                              height: 100.0,
+                              child: !isShowAnswerView
+                                  ? Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            ref.watch(roundDataProvider)[0],
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            softWrap:
+                                                true, // 텍스트가 영역을 넘어갈 경우 줄바꿈 여부
+                                            textAlign: TextAlign.center, // 정렬
+                                          ),
                                         ),
-                                      ]),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Row(
-                              // mainAxisAlignment: MainAxisAlignment.start,
-                              // crossAxisAlignment: CrossAxisAlignment.end,
-                              // mainAxisSize: MainAxisSize.max,
-                              children: [
-                            Scoreboard(idx: index),
-                            for (var i = 0; i < roomUsers.length; i++)
-                              Transform.translate(
-                                offset: Offset(cdx, cdy),
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  height: 90,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 1,
-                                      color: Colors.orange,
+                                      ],
+                                    )
+                                  : Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          '정답: ${ref.watch(answerProvider)[0]}',
+                                          style: const TextStyle(
+                                            color: Colors.lightGreenAccent,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(height: 15),
+                                        Flexible(
+                                          child: Text(
+                                            '해설: ${ref.watch(answerProvider)[1]}',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            softWrap:
+                                                true, // 텍스트가 영역을 넘어갈 경우 줄바꿈 여부
+                                            textAlign: TextAlign.center, // 정렬
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Image.network(
-                                          'https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png',
-                                          height: 70,
-                                          fit: BoxFit.fill),
-                                      Stack(
-                                        children: <Widget>[
-                                          Text(
-                                            roomUsers[i],
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                foreground: Paint()
-                                                  ..style = PaintingStyle.stroke
-                                                  ..strokeWidth = 3
-                                                  ..color = Colors.grey[300]!,
-                                                shadows: [
-                                                  Shadow(
-                                                    blurRadius: 30.0,
-                                                    color: Colors.blue,
-                                                    offset: Offset(2.0, 2.0),
-                                                  ),
-                                                ]),
-                                          ),
-                                          Text(
-                                            roomUsers[i],
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.yellow,
-                                                shadows: [
-                                                  Shadow(
-                                                    blurRadius: 30.0,
-                                                    color: Colors.blue,
-                                                    offset: Offset(2.0, 2.0),
-                                                  ),
-                                                ]),
-                                          ),
-                                        ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 70.0,
+                          height: 70.0,
+                          child: CustomPaint(
+                            painter: circleDrawPaint(),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              // padding: EdgeInsets.all(0.0),
+                              // decoration: BoxDecoration(
+                              //     border: Border.all(
+                              //         color: Colors.greenAccent, width: 2)),
+                              width: 80.0,
+                              height: 80.0,
+                              child: AnimatedBuilder(
+                                  animation: _animationController,
+                                  builder: (BuildContext context, Widget? child) {
+                                    return QuizCompletionTimer(
+                                        progress: _animationController.value);
+                                  }),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        GestureDetector(
+                          onTap: () =>
+                              {print('O touch'), _socketMethods.selectOX('o')},
+                          child: Container(
+                            child: Center(
+                              child: Text(
+                                'O',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 100,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 40,
+                                        color: Colors.blue,
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () =>
+                              {print('X touch'), _socketMethods.selectOX('x')},
+                          child: Container(
+                            child: Center(
+                              child: Text(
+                                'X',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 100,
+                                    shadows: [
+                                      Shadow(
+                                        blurRadius: 40,
+                                        color: Colors.red,
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            // crossAxisAlignment: CrossAxisAlignment.end,
+                            // mainAxisSize: MainAxisSize.max,
+                            children: [
+                          Scoreboard(idx: index),
+                          for (var i = 0; i < roomUsers.length; i++)
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              height: 90,
+                              width: 90,
+                              child: Column(
+                                children: [
+                                  Image.network(
+                                      'https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png',
+                                      height: 70,
+                                      fit: BoxFit.fill),
+                                  Stack(
+                                    children: <Widget>[
+                                      Text(
+                                        roomUsers[i],
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            foreground: Paint()
+                                              ..style = PaintingStyle.stroke
+                                              ..strokeWidth = 3
+                                              ..color = Colors.grey[300]!,
+                                            shadows: [
+                                              Shadow(
+                                                blurRadius: 30.0,
+                                                color: Colors.blue,
+                                                offset: Offset(2.0, 2.0),
+                                              ),
+                                            ]),
+                                      ),
+                                      Text(
+                                        roomUsers[i],
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.yellow,
+                                            shadows: [
+                                              Shadow(
+                                                blurRadius: 30.0,
+                                                color: Colors.blue,
+                                                offset: Offset(2.0, 2.0),
+                                              ),
+                                            ]),
                                       ),
                                     ],
                                   ),
-                                  ),
+                                ],
                               ),
-                              ],
-                            ),
-                        ),
+                              ),
+                            ],
+                          ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
             );
           }
         });
@@ -430,17 +405,18 @@ class Scoreboard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final usersScoreInfo = ref.watch(scoreProvider.notifier).state;
+    print('................................ $usersScoreInfo ....................................');
     usersScoreInfo.sort((a, b) => a[1].compareTo(b[1]) * -1);
     for (var player in usersScoreInfo) {
       print('each player info => ${player} / ${player[1]}');
     }
     return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 1,
-          color: Colors.red,
-        ),
-      ),
+      // decoration: BoxDecoration(
+      //   border: Border.all(
+      //     width: 1,
+      //     color: Colors.red,
+      //   ),
+      // ),
       padding: EdgeInsets.only(bottom: 50.0, right: 10.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
