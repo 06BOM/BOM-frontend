@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:bom_front/model/category.dart';
 import 'package:http/http.dart' as http;
+import '../address/test_address.dart';
 import '../model/user.dart';
 
 class UserRepository {
-  static const urlApi =
-      // 'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
-      'http://192.168.0.14:3000';
+  static const urlApi ='http://$conntectIp';
 
   Future<User> loadUser() async {
     print('Fetch User\'s data...');
