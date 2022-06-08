@@ -76,7 +76,9 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userCharacter = ref.watch(characterListProvider);
+    final characters = ref.watch(characterListProvider);
+    final userCharacters = ref.watch(userCharacterProvider.notifier).state;
+    print('userCharacters : ${userCharacters}');
     final widthSize = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: const BomAppBar(
@@ -118,9 +120,9 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
               ad: _banner,
             ),
           ),
-          userCharacter.when(
+          characters.when(
               data: (data) {
-                return gridBody(data, context);
+                return gridBody(data, context, userCharacters);
               },
               error: (e, st) => Container(),
               loading: () => Container())
@@ -131,7 +133,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
   }
 }
 
-Widget gridBody(List<Character> display_list, BuildContext context) {
+Widget gridBody(List<Character> display_list, BuildContext context, List<int> userCharacters) {
   return display_list.length == 0
       ? Center(
           child: Text(
@@ -149,7 +151,7 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                   (bomCharacter) => GestureDetector(
                     onTap: () {
                       print('clicked');
-                      bomCharacter.teq == 99 ? myShowDialog(context, bomCharacter)
+                      !userCharacters.contains(bomCharacter.characterId) ? myShowDialog(context, bomCharacter)
                           : Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -173,21 +175,34 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                           // mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 1.1, sigmaY: 1.1),
-                              child: Container(
-                                // decoration: BoxDecoration(
-                                //     borderRadius: BorderRadius.all(
-                                //         Radius.circular(30.0))),
-                                color: Colors.black.withOpacity(0),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 10.0),
-                                child: Image.network(
-                                  '${bomCharacter.imageUrl}',
-                                  width: 60,
-                                  height: 60,
-                                  fit: BoxFit.fitHeight,
-                                ),
+                            // Container(
+                            // color: Colors.black.withOpacity(0),
+                            //   // decoration: BoxDecoration(
+                            //   //     borderRadius: BorderRadius.all(
+                            //   //         Radius.circular(30.0))),
+                            //   padding: EdgeInsets.symmetric(
+                            //       vertical: 8.0, horizontal: 10.0),
+                            //   child: BackdropFilter(
+                            //     filter: ImageFilter.blur(sigmaX: 1.1, sigmaY: 1.1),
+                            //     child: Image.network(
+                            //       '${bomCharacter.imageUrl}',
+                            //       width: 60,
+                            //       height: 60,
+                            //       fit: BoxFit.fitHeight,
+                            //     ),
+                            //   ),
+                            // ),
+                            Container(
+                              // decoration: BoxDecoration(
+                              //     borderRadius: BorderRadius.all(
+                              //         Radius.circular(30.0))),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 10.0),
+                              child: Image.network(
+                                '${bomCharacter.imageUrl}',
+                                width: 60,
+                                height: 60,
+                                fit: BoxFit.fitHeight,
                               ),
                             ),
                             Expanded(
@@ -198,7 +213,7 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                                     borderRadius: BorderRadius.only(
                                         bottomLeft: Radius.circular(30.0),
                                         bottomRight: Radius.circular(30.0))),
-                                child: bomCharacter.teq == 99 // 99일 경우, 유저가 가지고 있찌 않은 코드
+                                child: !userCharacters.contains(bomCharacter.characterId) // 99일 경우, 유저가 가지고 있찌 않은 코드
                                     ? Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -206,7 +221,7 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                                           Icon(Icons.star_rounded,
                                               color: Colors.yellowAccent[700],
                                               size: 15.0),
-                                          const Text('10',
+                                          Text('${bomCharacter.star}',
                                               style: TextStyle(
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w600,
