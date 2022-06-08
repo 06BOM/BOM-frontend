@@ -271,7 +271,21 @@ void myShowDialog(BuildContext context, Character bomCharacter) {
                 children: [
                   ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.teal[400],
+                            duration: Duration(milliseconds: 1000),
+                            behavior: SnackBarBehavior.floating,
+                            content: Text('구매가 완료되었습니다!'),
+                          ),
+                        );
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CharacterDetails(character: bomCharacter)),
+                        );
                       },
                       style: ElevatedButton.styleFrom(primary: Color(0xffA876DE)),
                       child: Text("계속", style:TextStyle(color: Colors.white))),

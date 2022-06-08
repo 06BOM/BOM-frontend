@@ -3,6 +3,8 @@ import 'package:flutter_radar_chart/flutter_radar_chart.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import '../../collection_view.dart';
+
 class CharacterDetails extends StatelessWidget {
   final Character character;
 
@@ -27,7 +29,9 @@ class CharacterDetails extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    CollectionScreen()), (route) => false);
           },
         ),
       ),
