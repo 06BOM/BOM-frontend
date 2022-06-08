@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bom_front/provider/user_privider.dart';
 import 'package:bom_front/view/components/bom_menu.dart';
 import 'package:bom_front/view/components/character/character_details.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +123,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
           ),
           characters.when(
               data: (data) {
-                return gridBody(data, context, userCharacters);
+                return gridBody(data, context, userCharacters, ref);
               },
               error: (e, st) => Container(),
               loading: () => Container())
@@ -133,7 +134,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
   }
 }
 
-Widget gridBody(List<Character> display_list, BuildContext context, List<int> userCharacters) {
+Widget gridBody(List<Character> display_list, BuildContext context, List<int> userCharacters, WidgetRef ref) {
   return display_list.length == 0
       ? Center(
           child: Text(
@@ -151,7 +152,7 @@ Widget gridBody(List<Character> display_list, BuildContext context, List<int> us
                   (bomCharacter) => GestureDetector(
                     onTap: () {
                       print('clicked');
-                      !userCharacters.contains(bomCharacter.characterId) ? myShowDialog(context, bomCharacter)
+                      !userCharacters.contains(bomCharacter.characterId) ? myShowDialog(context, bomCharacter, ref)
                           : Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -246,7 +247,7 @@ Widget gridBody(List<Character> display_list, BuildContext context, List<int> us
         );
 }
 
-void myShowDialog(BuildContext context, Character bomCharacter) {
+void myShowDialog(BuildContext context, Character bomCharacter, WidgetRef ref) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -271,6 +272,9 @@ void myShowDialog(BuildContext context, Character bomCharacter) {
                 children: [
                   ElevatedButton(
                       onPressed: () {
+                        final currentUserStar = ref.watch(userProvider.notifier).state.star;
+                        ref.read(userProvider.notifier).editUserStar(currentUserStar! - bomCharacter.star!);
+                        ref.refresh(userProvider);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Colors.teal[400],

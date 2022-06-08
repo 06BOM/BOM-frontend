@@ -26,6 +26,12 @@ class UserInfo extends StateNotifier<User> {
       state = user;
     }
   }
+
+  Future editUserStar(int star) async {
+    print('in editUserSTar');
+    final plans = await _repository.editStar(star);
+    return plans;
+  }
 }
 
 final categoryListProvider =
