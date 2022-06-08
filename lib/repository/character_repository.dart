@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../address/local_address.dart';
 import '../model/character.dart';
 
 class CharacterRepository{
-  static const urlApi = 'http://192.168.0.14:3000';
-      // 'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
+  static const urlApi = 'http://$localAddress:3000';
   //해당 userid가 가지고 있는 모든 character들을 가져온다.
   Future<List<Character>> loadOwnedCharacter() async {
     print('Fetch loadOwnedCharacter data...');

@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../address/local_address.dart';
 import '../model/room.dart';
 
 // http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com/room/search?search=피그
 // http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com/room/all
 
 class RoomRepository{
-  static const urlApi = 'http://192.168.0.14:3000';
+  static const urlApi = 'http://$localAddress:3000';
       // 'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
   Future<List<Room>> loadAllRooms() async {
     print('Fetch loadAllRoom data...');
