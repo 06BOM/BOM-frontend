@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bom_front/provider/user_privider.dart';
 import 'package:bom_front/view/components/bom_menu.dart';
 import 'package:bom_front/view/components/character/character_details.dart';
 import 'package:flutter/material.dart';
@@ -24,76 +25,6 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
   late TextEditingController _textController;
   late TargetPlatform os;
   late BannerAd _banner;
-  static List<Character> bomCharacters = [
-    Character(
-        characterId: 1,
-        characterName: "a",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/rabbit.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "b",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "c",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/rabbit.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "turtle",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-    Character(
-        characterId: 1,
-        characterName: "d",
-        star: 1,
-        imageUrl:
-            "https://bom-mocktest.s3.ap-northeast-2.amazonaws.com/dog.png",
-        silhouetteUrl: "salkdfjs;lajdflajsd",
-        introduction: "a",
-        explanation: "it's practice",
-        brain: 0,
-        speed: 0,
-        power: 0,
-        teq: 0,
-        strength: 0,
-        height: 0,
-        weight: 0,
-        mbti: ""),
-  ];
 
   Map<String, String> UNIT_ID = kReleaseMode
       ? {
@@ -104,39 +35,6 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
           'ios': 'ca-app-pub-3940256099942544/2934735716',
           'android': 'ca-app-pub-3940256099942544/6300978111',
         };
-
-  // void _showDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       // return object of type Dialog
-  //       return Dialog(
-  //         shape:
-  //             RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-  //         child: Container(
-  //           height: 300,
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //             children: [
-  //               FlutterLogo(
-  //                 size: 150,
-  //               ),
-  //               Text(
-  //                 "This is a Custom Dialog",
-  //                 style: TextStyle(fontSize: 20),
-  //               ),
-  //               ElevatedButton(
-  //                   onPressed: () {
-  //                     Navigator.of(context).pop();
-  //                   },
-  //                   child: Text("닫기"))
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 
   // List<Character> display_list = List.from(bomCharacters);
 
@@ -179,7 +77,9 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userCharacter = ref.watch(characterListProvider);
+    final characters = ref.watch(characterListProvider);
+    final userCharacters = ref.watch(userCharacterProvider.notifier).state;
+    print('userCharacters : ${userCharacters}');
     final widthSize = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: const BomAppBar(
@@ -201,7 +101,6 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
                 // updateList(text);
                 ref.read(characterListProvider.notifier).searchCharacter(text);
               },
-
               decoration: InputDecoration(
                 // filled: true,
                 //   fillColor: Color(0x),
@@ -215,15 +114,16 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
             ),
           ),
           Container(
+            margin: EdgeInsets.symmetric(vertical: 5.0),
             height: 50,
             width: MediaQuery.of(context).size.width,
             child: AdWidget(
               ad: _banner,
             ),
           ),
-          userCharacter.when(
+          characters.when(
               data: (data) {
-                return gridBody(data, context);
+                return gridBody(data, context, userCharacters, ref);
               },
               error: (e, st) => Container(),
               loading: () => Container())
@@ -234,7 +134,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
   }
 }
 
-Widget gridBody(List<Character> display_list, BuildContext context) {
+Widget gridBody(List<Character> display_list, BuildContext context, List<int> userCharacters, WidgetRef ref) {
   return display_list.length == 0
       ? Center(
           child: Text(
@@ -252,8 +152,8 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                   (bomCharacter) => GestureDetector(
                     onTap: () {
                       print('clicked');
-                      // _showDialog(context);
-                      Navigator.push(
+                      !userCharacters.contains(bomCharacter.characterId) ? myShowDialog(context, bomCharacter, ref)
+                          : Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
@@ -276,21 +176,34 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                           // mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 1.5, sigmaY: 1.5),
-                              child: Container(
-                                // decoration: BoxDecoration(
-                                //     borderRadius: BorderRadius.all(
-                                //         Radius.circular(30.0))),
-                                color: Colors.black.withOpacity(0),
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 10.0),
-                                child: Image.network(
-                                  '${bomCharacter.imageUrl}',
-                                  width: 60,
-                                  height: 60,
-                                  fit: BoxFit.fitHeight,
-                                ),
+                            // Container(
+                            // color: Colors.black.withOpacity(0),
+                            //   // decoration: BoxDecoration(
+                            //   //     borderRadius: BorderRadius.all(
+                            //   //         Radius.circular(30.0))),
+                            //   padding: EdgeInsets.symmetric(
+                            //       vertical: 8.0, horizontal: 10.0),
+                            //   child: BackdropFilter(
+                            //     filter: ImageFilter.blur(sigmaX: 1.1, sigmaY: 1.1),
+                            //     child: Image.network(
+                            //       '${bomCharacter.imageUrl}',
+                            //       width: 60,
+                            //       height: 60,
+                            //       fit: BoxFit.fitHeight,
+                            //     ),
+                            //   ),
+                            // ),
+                            Container(
+                              // decoration: BoxDecoration(
+                              //     borderRadius: BorderRadius.all(
+                              //         Radius.circular(30.0))),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 10.0),
+                              child: Image.network(
+                                '${bomCharacter.imageUrl}',
+                                width: 60,
+                                height: 60,
+                                fit: BoxFit.fitHeight,
                               ),
                             ),
                             Expanded(
@@ -301,7 +214,7 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                                     borderRadius: BorderRadius.only(
                                         bottomLeft: Radius.circular(30.0),
                                         bottomRight: Radius.circular(30.0))),
-                                child: bomCharacter.teq == 55
+                                child: !userCharacters.contains(bomCharacter.characterId) // 99일 경우, 유저가 가지고 있찌 않은 코드
                                     ? Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -309,7 +222,7 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                                           Icon(Icons.star_rounded,
                                               color: Colors.yellowAccent[700],
                                               size: 15.0),
-                                          const Text('10',
+                                          Text('${bomCharacter.star}',
                                               style: TextStyle(
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w600,
@@ -332,4 +245,70 @@ Widget gridBody(List<Character> display_list, BuildContext context) {
                 .toList(),
           ),
         );
+}
+
+void myShowDialog(BuildContext context, Character bomCharacter, WidgetRef ref) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return Dialog(
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+        child: Container(
+          height: 200,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // FlutterLogo(
+              //   size: 150,
+              // ),
+              Text(
+                "해당 캐릭터는 별 ${bomCharacter.star}를 소모합니다.\n 계속 진행하시겠습니까?",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        final currentUserStar = ref.watch(userProvider.notifier).state.star;
+                        final remainStars = currentUserStar! - bomCharacter.star!;
+                        print('$remainStars : remainStars');
+                        ref.read(userProvider.notifier).editUserStar(remainStars);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.teal[400],
+                            duration: Duration(milliseconds: 1000),
+                            behavior: SnackBarBehavior.floating,
+                            content: Text('구매가 완료되었습니다!'),
+                          ),
+                        );
+                        ref.refresh(userProvider.notifier).getUser(); // 바로 적용이 안되는 경우가 있어서 위치 변경
+                        // 아래 캐릭터 refresh 이전에 "해당 user의 캐릭터 콜랙션에 해당하는 character id 캐릭터를 추가한다"api 추가하기
+                        ref.refresh(characterListProvider.notifier).getAllCharacter();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CharacterDetails(character: bomCharacter)),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(primary: Color(0xffA876DE)),
+                      child: Text("계속", style:TextStyle(color: Colors.white))),
+                  SizedBox(width: 10,),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(primary: Color(0xffA876DE)),
+                      child: Text("닫기", style:TextStyle(color: Colors.white)))
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }

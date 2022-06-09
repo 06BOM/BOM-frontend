@@ -1,14 +1,15 @@
 import 'dart:convert';
 import 'package:bom_front/model/category.dart';
 import 'package:http/http.dart' as http;
-import '../address/test_address.dart';
+import '../address/local_address.dart';
 import '../model/user.dart';
 
 class UserRepository {
-  static const urlApi ='http://$conntectIp';
+  static const urlApi = 'http://$localAddress:3000';
+      // 'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
 
   Future<User> loadUser() async {
-    print('Fetch User\'s data...');
+    print('Fetch User\'s data....................................................................');
     var url = Uri.parse(urlApi + '/user/1');
     var response = await http.get(url);
     print('${response.body} in loadUser');
@@ -74,4 +75,25 @@ class UserRepository {
       return false;
     }
   }
+
+  Future editStar(int star) async {
+    var url = Uri.parse(urlApi + '/user/1');
+    var response = await http.patch(url,
+        body: json.encode({"star": star}),
+        headers: <String, String>{'Content-type': 'application/json'});
+    print(response.body);
+    // print(response.headers);
+    // print(response.statusCode);
+    if (response.body == null) {
+      print('error with get');
+    }
+    if (response.statusCode == 404) {
+      print('Request failed with status: ${response.statusCode}.');
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+
 }

@@ -1,12 +1,14 @@
 import 'dart:convert';
-import 'package:bom_front/address/test_address.dart';
 import 'package:bom_front/utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:http/http.dart' as http;
 
+import '../address/local_address.dart';
+
 class StatisticRepository {
-  static const urlApi = 'http://$conntectIp';
+  static const urlApi = 'http://$localAddress:3000';
+      // 'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
   /*한주의 별개수 가져오는 코드 */
   Future<int> getWeekStar() async {
     print("this is for get week star data");

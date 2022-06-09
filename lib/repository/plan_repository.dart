@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:bom_front/utils.dart';
-import '../address/test_address.dart';
+import '../address/local_address.dart';
 import '../model/todo.dart';
 import 'package:http/http.dart' as http;
 
 class TodoRepository {
-  static const urlApi =
+  static const urlApi = 'http://$localAddress:3000';
       // 'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
-      'http://$conntectIp';
   final DateTime day;
 
   TodoRepository(this.day);

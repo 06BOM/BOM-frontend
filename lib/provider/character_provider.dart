@@ -19,14 +19,15 @@ class CharacterListNotifier extends StateNotifier<AsyncValue<List<Character>>> {
   // 모든 캐릭터의 정보를 불러온다.
   Future<void> getAllCharacter() async{
     state = const AsyncValue.loading();
-    // final ownCharacters = await _repository.loadOwnedCharacter(); // 인가 허용 될 때 풀기
-    // print('$ownCharacters in getAllcharacter');
+    final ownCharacters = await _repository.loadOwnedCharacter();
+    print('$ownCharacters in getAllcharacter');
+    final Arr = ownCharacters.map<int>((character) => character.characterId!).toList();
+    print('${Arr.runtimeType} / $Arr');
+    ref.read(userCharacterProvider.notifier).state = Arr;
     final notOwnedcharacters = await _repository.loadNotOwnedCharacter();
     print('$notOwnedcharacters in getAllcharacter');
     if (mounted) {
-      // state = [...ownCharacters, ...notOwnedcharacters];
-      // state = [...notOwnedcharacters];
-      state = AsyncValue.data([...notOwnedcharacters]);
+      state = AsyncValue.data([...ownCharacters, ...notOwnedcharacters]);
       print('state: $state in getAllCharacter');
     }
   }
@@ -37,3 +38,7 @@ class CharacterListNotifier extends StateNotifier<AsyncValue<List<Character>>> {
   }
 
 }
+
+final userCharacterProvider = StateProvider<List<int>>((ref) {
+  return [];
+});
