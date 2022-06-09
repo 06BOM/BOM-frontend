@@ -29,9 +29,10 @@ class CharacterDetails extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    CollectionScreen()), (route) => false);
+            // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+            //     builder: (BuildContext context) =>
+            //         CollectionScreen()), (route) => false);
+            Navigator.popUntil(context, (route) => route.isFirst);
           },
         ),
       ),

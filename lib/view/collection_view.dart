@@ -274,7 +274,7 @@ void myShowDialog(BuildContext context, Character bomCharacter, WidgetRef ref) {
                       onPressed: () {
                         final currentUserStar = ref.watch(userProvider.notifier).state.star;
                         ref.read(userProvider.notifier).editUserStar(currentUserStar! - bomCharacter.star!);
-                        ref.refresh(userProvider);
+                        ref.refresh(userProvider.notifier).getUser();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Colors.teal[400],

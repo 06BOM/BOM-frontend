@@ -9,7 +9,7 @@ class UserRepository {
       // 'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
 
   Future<User> loadUser() async {
-    print('Fetch User\'s data...');
+    print('Fetch User\'s data....................................................................');
     var url = Uri.parse(urlApi + '/user/1');
     var response = await http.get(url);
     print('${response.body} in loadUser');
