@@ -23,7 +23,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    print('Home rebuilding...');
     final deviceHeight = ref
         .watch(userDeviceHeight.notifier)
         .state =
@@ -36,9 +35,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 .devicePixelRatio;
     // AsyncValue<List<Todo>> asyncTodos = ref.watch(planStateFuture); -> error 처리와 많은 양을 불러올 때 로딩필요시
     // final todos = ref.watch(todoListProvider);
+
     final todos = ref.watch(filteredTodos);
     final user = ref.watch(userProvider);
     // print('current todos length = ${todos.length}');
+    print('Home rebuilding...deviceHeight : ${deviceHeight}');
     print('current user id = ${user.userId}');
     // for (var i = 0; i < todos.length; i++) {
     //   print('Each plan\'s userId = ${todos[i].userId}');
@@ -53,7 +54,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Expanded(
                 child: BomCalendar(pageCalendarFormat: CalendarFormat.month)),
             const SizedBox(height: 4), // to protect appBar block
-            deviceHeight > 2000.0
+            deviceHeight > 1500.0
                 ? Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(children: const <Widget>[

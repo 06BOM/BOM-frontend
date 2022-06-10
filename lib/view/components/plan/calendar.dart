@@ -74,8 +74,8 @@ class _BomCalendarState extends ConsumerState<BomCalendar>
               // headerVisible:false,
               // daysOfWeekVisible: false,
               // rangeSelectionMode: RangeSelectionMode.disabled,
-              rowHeight: deviceHeight > 2000.0 ? 42.0 : 28.0,
-              daysOfWeekHeight: deviceHeight > 2000.0 ? 20.0 : 19.0,
+              rowHeight: deviceHeight > 1500.0 ? 42.0 : 28.0,
+              daysOfWeekHeight: deviceHeight > 1500.0 ? 20.0 : 19.0,
               calendarStyle: CalendarStyle(
                 // outsideDaysVisible: false,
                 weekendTextStyle: const TextStyle()
@@ -88,10 +88,10 @@ class _BomCalendarState extends ConsumerState<BomCalendar>
                     const TextStyle().copyWith(color: Colors.red[600]),
               ),
               headerStyle: HeaderStyle(
-                titleTextStyle: deviceHeight > 2000.0
+                titleTextStyle: deviceHeight > 1500.0
                     ? const TextStyle(fontSize: 17.0)
                     : const TextStyle(fontSize: 15.0),
-                headerPadding: deviceHeight > 2000.0
+                headerPadding: deviceHeight > 1500.0
                     ? const EdgeInsets.symmetric(vertical: 8.0)
                     : const EdgeInsets.symmetric(vertical: 0.0),
                 titleCentered: true,

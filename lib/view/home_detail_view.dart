@@ -294,6 +294,7 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        bottomNavigationBar: const BottomNavigationBarWidget());
+        // bottomNavigationBar: const BottomNavigationBarWidget()
+    );
   }
 }
