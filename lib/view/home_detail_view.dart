@@ -250,13 +250,13 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
                 hoverElevation: 0.0,
                 onPressed: () {
                   ref.read(selectedDate.notifier).state =
-                      DateTime.now().add(const Duration(hours: 9));
+                      DateTime.now();
                   Navigator.pop(context);
                 },
               ),
               const SizedBox(width: 105.0),
               if (userSelectedDay.compareTo(
-                          DateTime.now().add(const Duration(hours: 9))) <
+                          DateTime.now()) <
                       0 &&
                   !isToday(userSelectedDay))
                 const FloatingActionButton(

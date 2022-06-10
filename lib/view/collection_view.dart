@@ -276,6 +276,7 @@ void myShowDialog(BuildContext context, Character bomCharacter, WidgetRef ref) {
                         final remainStars = currentUserStar! - bomCharacter.star!;
                         print('$remainStars : remainStars');
                         ref.read(userProvider.notifier).editUserStar(remainStars);
+                        ref.read(characterListProvider.notifier).addCharacter(bomCharacter.characterId!);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Colors.teal[400],
@@ -284,8 +285,8 @@ void myShowDialog(BuildContext context, Character bomCharacter, WidgetRef ref) {
                             content: Text('구매가 완료되었습니다!'),
                           ),
                         );
-                        ref.refresh(userProvider.notifier).getUser(); // 바로 적용이 안되는 경우가 있어서 위치 변경
-                        // 아래 캐릭터 refresh 이전에 "해당 user의 캐릭터 콜랙션에 해당하는 character id 캐릭터를 추가한다"api 추가하기
+                        // 바로 적용이 안되는 경우가 있어서 위치 변경
+                        ref.refresh(userProvider.notifier).getUser();
                         ref.refresh(characterListProvider.notifier).getAllCharacter();
                         Navigator.push(
                           context,

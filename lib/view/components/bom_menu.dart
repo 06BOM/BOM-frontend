@@ -16,6 +16,7 @@ class BomMenu extends StatelessWidget {
           Consumer(
             builder: (context, ref, child) {
               final user = ref.watch(userProvider.notifier).state;
+              print('$user in bom menu.............................');
               return UserAccountsDrawerHeader(
                   accountName: const Text('bom'),
                   accountEmail: const Text("bom@gmail.com"),

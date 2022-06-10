@@ -41,7 +41,7 @@ class _BomCalendarState extends ConsumerState<BomCalendar>
               locale: 'ko-KR',
               firstDay: kFirstDay,
               lastDay: kLastDay,
-              currentDay: DateTime.now().add(const Duration(hours: 9)),
+              currentDay: DateTime.now(),
               focusedDay: _focusedDay,
               calendarFormat: widget.pageCalendarFormat,
               availableCalendarFormats: const {

@@ -149,7 +149,7 @@ final repetitionTypeToCreate = StateProvider((ref) => 0);
 final limitedDate = StateProvider((ref) => '');
 final selectedWeek = StateProvider<List<int>>((ref) => [0, 0, 0, 0, 0, 0, 0]);
 final selectedDate = StateProvider<DateTime>(
-    (ref) => DateTime.now().add(const Duration(hours: 9)));
+    (ref) => DateTime.now());
 
 final montlyStarsProvider = FutureProvider.autoDispose<List<MonthlyStars>>(
     (ref) =>

@@ -20,21 +20,30 @@ class CharacterListNotifier extends StateNotifier<AsyncValue<List<Character>>> {
   Future<void> getAllCharacter() async{
     state = const AsyncValue.loading();
     final ownCharacters = await _repository.loadOwnedCharacter();
-    print('$ownCharacters in getAllcharacter');
+    // print('$ownCharacters in getAllcharacter');
     final Arr = ownCharacters.map<int>((character) => character.characterId!).toList();
-    print('${Arr.runtimeType} / $Arr');
+    // print('${Arr.runtimeType} / $Arr');
     ref.read(userCharacterProvider.notifier).state = Arr;
     final notOwnedcharacters = await _repository.loadNotOwnedCharacter();
-    print('$notOwnedcharacters in getAllcharacter');
+    // print('$notOwnedcharacters in getAllcharacter');
     if (mounted) {
       state = AsyncValue.data([...ownCharacters, ...notOwnedcharacters]);
-      print('state: $state in getAllCharacter');
+      // print('state: $state in getAllCharacter');
     }
   }
 
   Future searchCharacter(String text) async{
     final searchedCharacter = await _repository.fetchSearchResult(text);
     // 좀 생각해봐야함
+  }
+
+  Future addCharacter(int id) async{
+    final response = await _repository.addCharacterInCollection(id);
+    return response;
+  }
+  Future deleteCharacter(int id) async{
+    final response = await _repository.deleteCharacterInCollection(id);
+    return response;
   }
 
 }

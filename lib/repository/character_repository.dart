@@ -52,8 +52,8 @@ class CharacterRepository{
   }
 
 // 해당 user의 캐릭터 콜랙션에 해당하는 character id 캐릭터를 추가한다 (POST)
-  Future addCharacterInCollection(/*int? userId, {String? categoryName, String? color}*/) async {
-    var url = Uri.parse(urlApi + '/character/user/collection?userId=1&characterId=4');
+  Future addCharacterInCollection(int id) async {
+    var url = Uri.parse(urlApi + '/character/user/collection?userId=1&characterId=$id');
     var response = await http.post(url,
         headers: <String, String>{'Content-type': 'application/json'});
     if (response.body == null) {
@@ -68,8 +68,8 @@ class CharacterRepository{
   }
 
 // 해당 user의 캐릭터 콜랙션에서 해당하는 character id 캐릭터를 삭제한다
-  Future deleteCharacterInCollection(id) async {
-    var url = Uri.parse(urlApi + '/character/user/collection?userId=1&characterId=4');
+  Future deleteCharacterInCollection(int id) async {
+    var url = Uri.parse(urlApi + '/character/user/collection?userId=1&characterId=$id');
     var response = await http.delete(url);
     print('delete success!');
     if (response.statusCode >= 404) {
