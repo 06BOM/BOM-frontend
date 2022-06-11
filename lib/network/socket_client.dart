@@ -8,7 +8,7 @@ class SocketClient{ // single tone pattern
   SocketClient._internal(){ // initializeSocket
     //무선 LAN 어댑터 Wi-Fi: IPv4
 
-    socket = IO.io('http://$localAddress:3000', <String, dynamic>{ // http://localhost:3000 (X)
+    socket = IO.io('http://$localAddress', <String, dynamic>{ // http://localhost:3000 (X)
       'transports': ['websocket'],
       'autoConnect': false,
     });

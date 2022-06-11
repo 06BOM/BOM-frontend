@@ -7,7 +7,7 @@ import '../model/room.dart';
 // http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com/room/all
 
 class RoomRepository{
-  static const urlApi = 'http://$localAddress:3000';
+  static const urlApi = 'http://$localAddress';
       // 'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
   Future<List<Room>> loadAllRooms() async {
     print('Fetch loadAllRoom data...');

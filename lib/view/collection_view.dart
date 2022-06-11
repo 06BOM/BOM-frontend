@@ -25,16 +25,27 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
   late TextEditingController _textController;
   late TargetPlatform os;
   late BannerAd _banner;
+  late RewardedAd? _rewardedAd;
 
   Map<String, String> UNIT_ID = kReleaseMode
       ? {
-          'ios': 'ca-app-pub-9699588533861084~6583378542',
-          'android': 'ca-app-pub-9699588533861084~3365655435',
-        }
+    'ios': 'ca-app-pub-9699588533861084~6583378542',
+    'android': 'ca-app-pub-9699588533861084~3365655435',
+  }
       : {
-          'ios': 'ca-app-pub-3940256099942544/2934735716',
-          'android': 'ca-app-pub-3940256099942544/6300978111',
-        };
+    'ios': 'ca-app-pub-3940256099942544/2934735716',
+    'android': 'ca-app-pub-3940256099942544/6300978111',
+  };
+
+  Map<String, String> UNIT_ID2 = kReleaseMode
+      ? {
+    'ios': 'ca-app-pub-9699588533861084~6583378542',
+    'android': 'ca-app-pub-9699588533861084~3365655435',
+  }
+      : {
+    'ios': 'ca-app-pub-3940256099942544/1712485313',
+    'android': 'ca-app-pub-3940256099942544/5224354917',
+  };
 
   // List<Character> display_list = List.from(bomCharacters);
 
@@ -47,6 +58,20 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
   //   });
   // }
 
+  void loadRewardedAd() {
+    RewardedAd.load(
+        adUnitId: UNIT_ID2[os == TargetPlatform.iOS ? 'ios' : 'android']!,
+        request: AdRequest(),
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+            onAdLoaded: (RewardedAd ad) {
+              _rewardedAd = ad;
+            },
+            onAdFailedToLoad: (LoadAdError error) {
+          _rewardedAd = null;
+        })
+    );
+  }
+
   @override
   void initState() {
     _textController = TextEditingController(text: 'initial text');
@@ -55,7 +80,9 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
 
   @override
   void didChangeDependencies() {
-    os = Theme.of(context).platform;
+    os = Theme
+        .of(context)
+        .platform;
 
     _banner = BannerAd(
       listener: BannerAdListener(
@@ -65,22 +92,31 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
       size: AdSize.banner,
       adUnitId: UNIT_ID[os == TargetPlatform.iOS ? 'ios' : 'android']!,
       request: AdRequest(),
-    )..load();
+    )
+      ..load();
+
+    loadRewardedAd();
   }
 
   @override
   void dispose() {
     _textController.dispose();
     _banner.dispose();
+    _rewardedAd?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final characters = ref.watch(characterListProvider);
-    final userCharacters = ref.watch(userCharacterProvider.notifier).state;
+    final userCharacters = ref
+        .watch(userCharacterProvider.notifier)
+        .state;
     print('userCharacters : ${userCharacters}');
-    final widthSize = MediaQuery.of(context).size.width;
+    final widthSize = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Scaffold(
       appBar: const BomAppBar(
         title: '캐릭터 도감',
@@ -115,8 +151,11 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
           ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 5.0),
-            height: 50,
-            width: MediaQuery.of(context).size.width,
+            height: 60,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             child: AdWidget(
               ad: _banner,
             ),
@@ -129,122 +168,160 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
               loading: () => Container())
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'add',
+        child: const Icon(Icons.ondemand_video),
+        backgroundColor: const Color(0xffA876DE),
+        onPressed: () {
+          print('click');
+          if (_rewardedAd != null) {
+            _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+                onAdShowedFullScreenContent: (RewardedAd ad) {
+                  print("Ad onAdShowedFullScreenContent");
+                },
+                onAdDismissedFullScreenContent: (RewardedAd ad) {
+                  ad.dispose();
+                  loadRewardedAd();
+                },
+                onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
+                  ad.dispose();
+                  loadRewardedAd();
+                }
+            );
+
+            _rewardedAd!.setImmersiveMode(true);
+            _rewardedAd!.show(onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
+              print("${reward.amount} ${reward.type}");
+            });
+          }
+        },
+      ),
       bottomNavigationBar: BottomNavigationBarWidget(),
     );
   }
 }
 
-Widget gridBody(List<Character> display_list, BuildContext context, List<int> userCharacters, WidgetRef ref) {
+Widget gridBody(List<Character> display_list, BuildContext context,
+    List<int> userCharacters, WidgetRef ref) {
   return display_list.length == 0
       ? Center(
-          child: Text(
-          "결과가 없습니다.",
-        ))
+      child: Text(
+        "결과가 없습니다.",
+      ))
       : Expanded(
-          // 없었을 때, verticalviewport error 해결
-          child: GridView(
-            padding: EdgeInsets.all(20),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-            ),
-            children: display_list
-                .map(
-                  (bomCharacter) => GestureDetector(
-                    onTap: () {
-                      print('clicked');
-                      !userCharacters.contains(bomCharacter.characterId) ? myShowDialog(context, bomCharacter, ref)
-                          : Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                CharacterDetails(character: bomCharacter)),
-                      );
-                    },
-                    child: Container(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.4,
-                      ),
-                      margin: EdgeInsets.only(top: 10.0),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                          side: BorderSide(width: 4, color: Colors.orange),
-                        ),
-                        // color: Colors.white,
-                        elevation: 10,
-                        child: Column(
-                          // mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            // Container(
-                            // color: Colors.black.withOpacity(0),
-                            //   // decoration: BoxDecoration(
-                            //   //     borderRadius: BorderRadius.all(
-                            //   //         Radius.circular(30.0))),
-                            //   padding: EdgeInsets.symmetric(
-                            //       vertical: 8.0, horizontal: 10.0),
-                            //   child: BackdropFilter(
-                            //     filter: ImageFilter.blur(sigmaX: 1.1, sigmaY: 1.1),
-                            //     child: Image.network(
-                            //       '${bomCharacter.imageUrl}',
-                            //       width: 60,
-                            //       height: 60,
-                            //       fit: BoxFit.fitHeight,
-                            //     ),
-                            //   ),
-                            // ),
-                            Container(
-                              // decoration: BoxDecoration(
-                              //     borderRadius: BorderRadius.all(
-                              //         Radius.circular(30.0))),
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 10.0),
-                              child: Image.network(
-                                '${bomCharacter.imageUrl}',
-                                width: 60,
-                                height: 60,
-                                fit: BoxFit.fitHeight,
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                    color: Colors.orange,
-                                    borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(30.0),
-                                        bottomRight: Radius.circular(30.0))),
-                                child: !userCharacters.contains(bomCharacter.characterId) // 99일 경우, 유저가 가지고 있찌 않은 코드
-                                    ? Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.star_rounded,
-                                              color: Colors.yellowAccent[700],
-                                              size: 15.0),
-                                          Text('${bomCharacter.star}',
-                                              style: TextStyle(
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white))
-                                        ],
-                                      )
-                                    : Text('${bomCharacter.characterName}',
-                                        style: TextStyle(
-                                            fontSize: 15.0,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white)),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+    // 없었을 때, verticalviewport error 해결
+    child: GridView(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+      ),
+      children: display_list
+          .map(
+            (bomCharacter) =>
+            GestureDetector(
+              onTap: () {
+                print('clicked');
+                !userCharacters.contains(bomCharacter.characterId)
+                    ? myShowDialog(context, bomCharacter, ref)
+                    : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CharacterDetails(character: bomCharacter)),
+                );
+              },
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.4,
+                  maxHeight: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.4,
+                ),
+                // margin: EdgeInsets.only(top: 10.0),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    side: BorderSide(width: 4, color: Colors.orange),
                   ),
-                )
-                .toList(),
-          ),
-        );
+                  // color: Colors.white,
+                  elevation: 10,
+                  child: Column(
+                    // mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Container(
+                      // color: Colors.black.withOpacity(0),
+                      //   // decoration: BoxDecoration(
+                      //   //     borderRadius: BorderRadius.all(
+                      //   //         Radius.circular(30.0))),
+                      //   padding: EdgeInsets.symmetric(
+                      //       vertical: 8.0, horizontal: 10.0),
+                      //   child: BackdropFilter(
+                      //     filter: ImageFilter.blur(sigmaX: 1.1, sigmaY: 1.1),
+                      //     child: Image.network(
+                      //       '${bomCharacter.imageUrl}',
+                      //       width: 60,
+                      //       height: 60,
+                      //       fit: BoxFit.fitHeight,
+                      //     ),
+                      //   ),
+                      // ),
+                      Container(
+                        // decoration: BoxDecoration(
+                        //     borderRadius: BorderRadius.all(
+                        //         Radius.circular(30.0))),
+                        padding: EdgeInsets.only(top: 13.0, bottom: 4.0,),
+                        child: Image.network(
+                          '${bomCharacter.imageUrl}',
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(30.0),
+                                  bottomRight: Radius.circular(30.0))),
+                          child: !userCharacters.contains(bomCharacter
+                              .characterId) // 99일 경우, 유저가 가지고 있찌 않은 코드
+                              ? Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.star_rounded,
+                                  color: Colors.yellowAccent[700],
+                                  size: 15.0),
+                              Text('${bomCharacter.star}',
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white))
+                            ],
+                          )
+                              : Text('${bomCharacter.characterName}',
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+      )
+          .toList(),
+    ),
+  );
 }
 
 void myShowDialog(BuildContext context, Character bomCharacter, WidgetRef ref) {
@@ -272,11 +349,17 @@ void myShowDialog(BuildContext context, Character bomCharacter, WidgetRef ref) {
                 children: [
                   ElevatedButton(
                       onPressed: () {
-                        final currentUserStar = ref.watch(userProvider.notifier).state.star;
-                        final remainStars = currentUserStar! - bomCharacter.star!;
+                        final currentUserStar = ref
+                            .watch(userProvider.notifier)
+                            .state
+                            .star;
+                        final remainStars = currentUserStar! -
+                            bomCharacter.star!;
                         print('$remainStars : remainStars');
-                        ref.read(userProvider.notifier).editUserStar(remainStars);
-                        ref.read(characterListProvider.notifier).addCharacter(bomCharacter.characterId!);
+                        ref.read(userProvider.notifier).editUserStar(
+                            remainStars);
+                        ref.read(characterListProvider.notifier).addCharacter(
+                            bomCharacter.characterId!);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: Colors.teal[400],
@@ -287,7 +370,8 @@ void myShowDialog(BuildContext context, Character bomCharacter, WidgetRef ref) {
                         );
                         // 바로 적용이 안되는 경우가 있어서 위치 변경
                         ref.refresh(userProvider.notifier).getUser();
-                        ref.refresh(characterListProvider.notifier).getAllCharacter();
+                        ref.refresh(characterListProvider.notifier)
+                            .getAllCharacter();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -295,15 +379,17 @@ void myShowDialog(BuildContext context, Character bomCharacter, WidgetRef ref) {
                                   CharacterDetails(character: bomCharacter)),
                         );
                       },
-                      style: ElevatedButton.styleFrom(primary: Color(0xffA876DE)),
-                      child: Text("계속", style:TextStyle(color: Colors.white))),
+                      style: ElevatedButton.styleFrom(
+                          primary: Color(0xffA876DE)),
+                      child: Text("계속", style: TextStyle(color: Colors.white))),
                   SizedBox(width: 10,),
                   ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      style: ElevatedButton.styleFrom(primary: Color(0xffA876DE)),
-                      child: Text("닫기", style:TextStyle(color: Colors.white)))
+                      style: ElevatedButton.styleFrom(
+                          primary: Color(0xffA876DE)),
+                      child: Text("닫기", style: TextStyle(color: Colors.white)))
                 ],
               ),
             ],

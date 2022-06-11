@@ -5,7 +5,7 @@ import '../address/local_address.dart';
 import '../model/user.dart';
 
 class UserRepository {
-  static const urlApi = 'http://$localAddress:3000';
+  static const urlApi = 'http://$localAddress';
       // 'http://ec2-3-37-166-70.ap-northeast-2.compute.amazonaws.com';
 
   Future<User> loadUser() async {
