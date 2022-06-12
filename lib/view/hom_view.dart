@@ -4,6 +4,7 @@ import 'package:bom_front/view/components/plan/calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:table_calendar/table_calendar.dart';
+import '../provider/character_provider.dart';
 import '../provider/todo_provider.dart';
 import 'components/bom_menu.dart';
 import 'components/bottom_navigation.dart';
@@ -38,6 +39,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final todos = ref.watch(filteredTodos);
     final user = ref.watch(userProvider);
+    ref.watch(characterListProvider.notifier).state; // collection_view -> didChangeDependencies 내부에서 처음 불러오지 않기 때문에 여기서 먼저 호출
     // print('current todos length = ${todos.length}');
     print('Home rebuilding...deviceHeight : ${deviceHeight}');
     print('current user id = ${user.userId}');

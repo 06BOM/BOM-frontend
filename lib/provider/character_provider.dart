@@ -4,21 +4,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../model/character.dart';
 import 'general_provider.dart';
 
-final characterListProvider = StateNotifierProvider<CharacterListNotifier, AsyncValue<List<Character>>>((ref) {
+final characterListProvider = StateNotifierProvider<CharacterListNotifier, List<Character>>((ref) {
   final characterData = ref.read(characterRepository);
   return CharacterListNotifier(characterData, ref);
 });
 
-class CharacterListNotifier extends StateNotifier<AsyncValue<List<Character>>> {
+class CharacterListNotifier extends StateNotifier<List<Character>> {
   late final CharacterRepository _repository;
   final ref;
-  CharacterListNotifier(this._repository, this.ref, [AsyncValue<List<Character>>? initState]) : super(const AsyncValue.data([])){
+  CharacterListNotifier(this._repository, this.ref, [List<Character>? initState]) : super(const []){
     getAllCharacter();
   }
 
   // 모든 캐릭터의 정보를 불러온다.
   Future<void> getAllCharacter() async{
-    state = const AsyncValue.loading();
     final ownCharacters = await _repository.loadOwnedCharacter();
     // print('$ownCharacters in getAllcharacter');
     final Arr = ownCharacters.map<int>((character) => character.characterId!).toList();
@@ -27,7 +26,7 @@ class CharacterListNotifier extends StateNotifier<AsyncValue<List<Character>>> {
     final notOwnedcharacters = await _repository.loadNotOwnedCharacter();
     // print('$notOwnedcharacters in getAllcharacter');
     if (mounted) {
-      state = AsyncValue.data([...ownCharacters, ...notOwnedcharacters]);
+      state = [...ownCharacters, ...notOwnedcharacters];
       // print('state: $state in getAllCharacter');
     }
   }

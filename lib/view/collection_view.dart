@@ -26,6 +26,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
   late TargetPlatform os;
   late BannerAd _banner;
   late RewardedAd? _rewardedAd;
+  late List<Character> displayList;
 
   Map<String, String> UNIT_ID = kReleaseMode
       ? {
@@ -47,16 +48,15 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
     'android': 'ca-app-pub-3940256099942544/5224354917',
   };
 
-  // List<Character> display_list = List.from(bomCharacters);
-
-  // void updateList(String value) {
-  //   setState(() {
-  //     display_list = bomCharacters
-  //         .where((el) =>
-  //             el.characterName!.toLowerCase().contains(value.toLowerCase()))
-  //         .toList();
-  //   });
-  // }
+  void updateList(String value) {
+    setState(() {
+      displayList = ref.watch(characterListProvider)
+          .where((el) =>
+              el.characterName!.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+      print('updateList -> $displayList');
+    });
+  }
 
   void loadRewardedAd() {
     RewardedAd.load(
@@ -79,7 +79,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     os = Theme
         .of(context)
         .platform;
@@ -94,7 +94,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
       request: AdRequest(),
     )
       ..load();
-
+    displayList = ref.watch(characterListProvider.notifier).state;
     loadRewardedAd();
   }
 
@@ -108,7 +108,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final characters = ref.watch(characterListProvider);
+
     final userCharacters = ref
         .watch(userCharacterProvider.notifier)
         .state;
@@ -134,8 +134,8 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
               // focusNode: _focus,
               keyboardType: TextInputType.text,
               onChanged: (text) {
-                // updateList(text);
-                ref.read(characterListProvider.notifier).searchCharacter(text);
+                updateList(text);
+                // ref.read(characterListProvider.notifier).searchCharacter(text);
               },
               decoration: InputDecoration(
                 // filled: true,
@@ -160,12 +160,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
               ad: _banner,
             ),
           ),
-          characters.when(
-              data: (data) {
-                return gridBody(data, context, userCharacters, ref);
-              },
-              error: (e, st) => Container(),
-              loading: () => Container())
+          gridBody(displayList, context, userCharacters, ref)
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -201,9 +196,9 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
   }
 }
 
-Widget gridBody(List<Character> display_list, BuildContext context,
+Widget gridBody(List<Character> displayList, BuildContext context,
     List<int> userCharacters, WidgetRef ref) {
-  return display_list.length == 0
+  return displayList.length == 0
       ? Center(
       child: Text(
         "결과가 없습니다.",
@@ -215,7 +210,7 @@ Widget gridBody(List<Character> display_list, BuildContext context,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
       ),
-      children: display_list
+      children: displayList
           .map(
             (bomCharacter) =>
             GestureDetector(
