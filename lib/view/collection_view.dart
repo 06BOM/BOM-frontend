@@ -135,7 +135,6 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
               keyboardType: TextInputType.text,
               onChanged: (text) {
                 updateList(text);
-                // ref.read(characterListProvider.notifier).searchCharacter(text);
               },
               decoration: InputDecoration(
                 // filled: true,
@@ -175,6 +174,8 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
                   print("Ad onAdShowedFullScreenContent");
                 },
                 onAdDismissedFullScreenContent: (RewardedAd ad) {
+                  print('bye rewarded screen!');
+                  ref.refresh(userProvider.notifier).getUser(); // _rewardedAd!.show( -> read이후 바로 적용시 가져오지 못하는 에러때문에 위치 변경
                   ad.dispose();
                   loadRewardedAd();
                 },
@@ -187,6 +188,9 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
             _rewardedAd!.setImmersiveMode(true);
             _rewardedAd!.show(onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
               print("${reward.amount} ${reward.type}");
+              final int remainStars = ref.watch(userProvider.notifier).state.star! + 5;
+              print('$remainStars : remainStars');
+              ref.read(userProvider.notifier).editUserStar(remainStars);
             });
           }
         },
