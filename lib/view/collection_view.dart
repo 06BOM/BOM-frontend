@@ -108,7 +108,6 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final userCharacters = ref
         .watch(userCharacterProvider.notifier)
         .state;
@@ -159,7 +158,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
               ad: _banner,
             ),
           ),
-          gridBody(displayList, context, userCharacters, ref)
+          gridBody(context, userCharacters)
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -198,216 +197,215 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
       bottomNavigationBar: BottomNavigationBarWidget(),
     );
   }
-}
 
-Widget gridBody(List<Character> displayList, BuildContext context,
-    List<int> userCharacters, WidgetRef ref) {
-  return displayList.length == 0
-      ? Center(
-      child: Text(
-        "결과가 없습니다.",
-      ))
-      : Expanded(
-    // 없었을 때, verticalviewport error 해결
-    child: GridView(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-      ),
-      children: displayList
-          .map(
-            (bomCharacter) =>
-            GestureDetector(
-              onTap: () {
-                print('clicked');
-                !userCharacters.contains(bomCharacter.characterId)
-                    ? myShowDialog(context, bomCharacter, ref)
-                    : Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          CharacterDetails(character: bomCharacter)),
-                );
-              },
-              child: Container(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.4,
-                  maxHeight: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.4,
-                ),
-                // margin: EdgeInsets.only(top: 10.0),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                    side: BorderSide(width: 4, color: Colors.orange),
-                  ),
-                  // color: Colors.white,
-                  elevation: 10,
-                  child: Column(
-                    // mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(top: 13.0, bottom: 4.0,),
-                        child: !userCharacters.contains(bomCharacter
-                            .characterId) ? Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Image.network(
-                              '${bomCharacter.imageUrl}',
-                              height: 60,
-                              fit: BoxFit.fitHeight,
-                            ),
-                            Container(
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey[600]!,
-                                        blurRadius: 13.0,
-                                      ),
-                                    ]
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                      left: 1.0,
-                                      top: 2.0,
-                                      child: Icon(Icons.lock, color: Colors.black54, size:36),
-                                    ),
-                                    Icon(
-                                    Icons.lock,
-                                    color: Colors.yellow,
-                                    size:36,
-                                  )],
-                                )
-                            ),
-                          ],
-                        ) : Image.network(
-                          '${bomCharacter.imageUrl}',
-                          height: 60,
-                          fit: BoxFit.fitHeight,
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: Colors.orange,
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(30.0),
-                                  bottomRight: Radius.circular(30.0))),
-                          child: !userCharacters.contains(bomCharacter
-                              .characterId) // 99일 경우, 유저가 가지고 있찌 않은 코드
-                              ? Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.star_rounded,
-                                  color: Colors.yellowAccent[700],
-                                  size: 15.0),
-                              Text('${bomCharacter.star}',
-                                  style: TextStyle(
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white))
-                            ],
-                          )
-                              : Text('${bomCharacter.characterName}',
-                              style: TextStyle(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-      )
-          .toList(),
-    ),
-  );
-}
-
-void myShowDialog(BuildContext context, Character bomCharacter, WidgetRef ref) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      // return object of type Dialog
-      return Dialog(
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-        child: Container(
-          height: 200,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // FlutterLogo(
-              //   size: 150,
-              // ),
-              Text(
-                "해당 캐릭터는 별 ${bomCharacter.star}를 소모합니다.\n 계속 진행하시겠습니까?",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        final currentUserStar = ref
-                            .watch(userProvider.notifier)
-                            .state
-                            .star;
-                        final remainStars = currentUserStar! -
-                            bomCharacter.star!;
-                        print('$remainStars : remainStars');
-                        ref.read(userProvider.notifier).editUserStar(
-                            remainStars);
-                        ref.read(characterListProvider.notifier).addCharacter(
-                            bomCharacter.characterId!);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: Colors.teal[400],
-                            duration: Duration(milliseconds: 1000),
-                            behavior: SnackBarBehavior.floating,
-                            content: Text('구매가 완료되었습니다!'),
-                          ),
-                        );
-                        // 바로 적용이 안되는 경우가 있어서 위치 변경
-                        ref.refresh(userProvider.notifier).getUser();
-                        ref.refresh(characterListProvider.notifier)
-                            .getAllCharacter();
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  CharacterDetails(character: bomCharacter)),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                          primary: Color(0xffA876DE)),
-                      child: Text("계속", style: TextStyle(color: Colors.white))),
-                  SizedBox(width: 10,),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                          primary: Color(0xffA876DE)),
-                      child: Text("닫기", style: TextStyle(color: Colors.white)))
-                ],
-              ),
-            ],
-          ),
+  Widget gridBody(BuildContext context,
+      List<int> userCharacters) {
+    return displayList.length == 0
+        ? Center(
+        child: Text(
+          "결과가 없습니다.",
+        ))
+        : Expanded(
+      // 없었을 때, verticalviewport error 해결
+      child: GridView(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
         ),
-      );
-    },
-  );
+        children: displayList
+            .map(
+              (bomCharacter) =>
+              GestureDetector(
+                onTap: () {
+                  print('clicked');
+                  !userCharacters.contains(bomCharacter.characterId)
+                      ? myShowDialog(context, bomCharacter)
+                      : Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            CharacterDetails(character: bomCharacter)),
+                  );
+                },
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.4,
+                    maxHeight: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.4,
+                  ),
+                  // margin: EdgeInsets.only(top: 10.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      side: BorderSide(width: 4, color: Colors.orange),
+                    ),
+                    // color: Colors.white,
+                    elevation: 10,
+                    child: Column(
+                      // mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(top: 13.0, bottom: 4.0,),
+                          child: !userCharacters.contains(bomCharacter
+                              .characterId) ? Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.network(
+                                '${bomCharacter.imageUrl}',
+                                height: 60,
+                                fit: BoxFit.fitHeight,
+                              ),
+                              Container(
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey[600]!,
+                                          blurRadius: 13.0,
+                                        ),
+                                      ]
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Positioned(
+                                        left: 1.0,
+                                        top: 2.0,
+                                        child: Icon(Icons.lock, color: Colors.black54, size:36),
+                                      ),
+                                      Icon(
+                                        Icons.lock,
+                                        color: Colors.yellow,
+                                        size:36,
+                                      )],
+                                  )
+                              ),
+                            ],
+                          ) : Image.network(
+                            '${bomCharacter.imageUrl}',
+                            height: 60,
+                            fit: BoxFit.fitHeight,
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: Colors.orange,
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(30.0),
+                                    bottomRight: Radius.circular(30.0))),
+                            child: !userCharacters.contains(bomCharacter
+                                .characterId) // 99일 경우, 유저가 가지고 있찌 않은 코드
+                                ? Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.star_rounded,
+                                    color: Colors.yellowAccent[700],
+                                    size: 15.0),
+                                Text('${bomCharacter.star}',
+                                    style: TextStyle(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white))
+                              ],
+                            )
+                                : Text('${bomCharacter.characterName}',
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+        )
+            .toList(),
+      ),
+    );
+  }
+
+  void myShowDialog(BuildContext context, Character bomCharacter) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return Dialog(
+          shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+          child: Container(
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // FlutterLogo(
+                //   size: 150,
+                // ),
+                Text(
+                  "해당 캐릭터는 별 ${bomCharacter.star}를 소모합니다.\n 계속 진행하시겠습니까?",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () async {
+                          final currentUserStar = ref
+                              .watch(userProvider.notifier)
+                              .state
+                              .star;
+                          final remainStars = currentUserStar! -
+                              bomCharacter.star!;
+                          print('$remainStars : remainStars');
+                          ref.read(userProvider.notifier).editUserStar(
+                              remainStars);
+                          ref.read(characterListProvider.notifier).addCharacter(
+                              bomCharacter.characterId!);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.teal[400],
+                              duration: Duration(milliseconds: 2000),
+                              behavior: SnackBarBehavior.floating,
+                              content: Text('구매가 완료되었습니다!'),
+                            ),
+                          );
+                          ref.refresh(characterListProvider.notifier)
+                              .getAllCharacter();
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CharacterDetails(character: bomCharacter)),
+                          );
+                          displayList = result;
+                        },
+                        style: ElevatedButton.styleFrom(
+                            primary: Color(0xffA876DE)),
+                        child: Text("계속", style: TextStyle(color: Colors.white))),
+                    SizedBox(width: 10,),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                            primary: Color(0xffA876DE)),
+                        child: Text("닫기", style: TextStyle(color: Colors.white)))
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

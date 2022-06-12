@@ -18,7 +18,7 @@ class CharacterListNotifier extends StateNotifier<List<Character>> {
 
   // 모든 캐릭터의 정보를 불러온다.
   Future<void> getAllCharacter() async{
-    final ownCharacters = await _repository.loadOwnedCharacter();
+    final ownCharacters = await _repository.loadOwnedCharacter(); // 캐릭터 구매시 프로파이더 따로 만들어서 엮기 (근데 또 캐릭터 구매시 업데이트가 잘 되네????)
     // print('$ownCharacters in getAllcharacter');
     final Arr = ownCharacters.map<int>((character) => character.characterId!).toList();
     // print('${Arr.runtimeType} / $Arr');

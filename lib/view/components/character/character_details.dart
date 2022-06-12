@@ -1,17 +1,20 @@
 import 'package:bom_front/model/character.dart';
+import 'package:bom_front/provider/character_provider.dart';
 import 'package:flutter_radar_chart/flutter_radar_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math' as math;
 
+import '../../../provider/user_privider.dart';
 import '../../collection_view.dart';
 
-class CharacterDetails extends StatelessWidget {
+class CharacterDetails extends ConsumerWidget {
   final Character character;
 
   const CharacterDetails({Key? key, required this.character}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final widthSize = MediaQuery.of(context).size.width;
     final heightSize = MediaQuery.of(context).size.height;
 
@@ -29,10 +32,19 @@ class CharacterDetails extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
+            // 바로 적용이 안되는 경우가 있어서 위치 변경
+            ref.refresh(userProvider.notifier).getUser();
             // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
             //     builder: (BuildContext context) =>
             //         CollectionScreen()), (route) => false);
-            Navigator.popUntil(context, (route) => route.isFirst);
+            // Navigator.popUntil(context, (route) => route.isFirst);
+            final theCharacters = ref.watch(characterListProvider);
+            Navigator.pop(context, theCharacters);
+            Navigator.pop(context);
+            // Navigator.push(context,
+            //   MaterialPageRoute<void>(
+            //     builder: (BuildContext context) => const CollectionScreen(),
+            //   ),);
           },
         ),
       ),
