@@ -11,7 +11,7 @@ class CommunityScreen extends StatelessWidget {
     return const Scaffold(
       appBar: BomAppBar(),
       drawer: BomMenu(),
-      body: Center(child: Text('커뮤니티')),
+      body: Center(child: Text('준비 중입니다...')),
       bottomNavigationBar: BottomNavigationBarWidget(),
     );
   }

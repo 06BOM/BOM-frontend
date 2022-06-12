@@ -253,31 +253,44 @@ Widget gridBody(List<Character> display_list, BuildContext context,
                     // mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Container(
-                      // color: Colors.black.withOpacity(0),
-                      //   // decoration: BoxDecoration(
-                      //   //     borderRadius: BorderRadius.all(
-                      //   //         Radius.circular(30.0))),
-                      //   padding: EdgeInsets.symmetric(
-                      //       vertical: 8.0, horizontal: 10.0),
-                      //   child: BackdropFilter(
-                      //     filter: ImageFilter.blur(sigmaX: 1.1, sigmaY: 1.1),
-                      //     child: Image.network(
-                      //       '${bomCharacter.imageUrl}',
-                      //       width: 60,
-                      //       height: 60,
-                      //       fit: BoxFit.fitHeight,
-                      //     ),
-                      //   ),
-                      // ),
                       Container(
-                        // decoration: BoxDecoration(
-                        //     borderRadius: BorderRadius.all(
-                        //         Radius.circular(30.0))),
                         padding: EdgeInsets.only(top: 13.0, bottom: 4.0,),
-                        child: Image.network(
+                        child: !userCharacters.contains(bomCharacter
+                            .characterId) ? Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Image.network(
+                              '${bomCharacter.imageUrl}',
+                              height: 60,
+                              fit: BoxFit.fitHeight,
+                            ),
+                            Container(
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey[600]!,
+                                        blurRadius: 13.0,
+                                      ),
+                                    ]
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      left: 1.0,
+                                      top: 2.0,
+                                      child: Icon(Icons.lock, color: Colors.black54, size:36),
+                                    ),
+                                    Icon(
+                                    Icons.lock,
+                                    color: Colors.yellow,
+                                    size:36,
+                                  )],
+                                )
+                            ),
+                          ],
+                        ) : Image.network(
                           '${bomCharacter.imageUrl}',
-                          width: 60,
                           height: 60,
                           fit: BoxFit.fitHeight,
                         ),
