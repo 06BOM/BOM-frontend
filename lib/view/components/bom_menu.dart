@@ -1,47 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../provider/character_provider.dart';
 import '../../provider/user_privider.dart';
 import '../store_view.dart';
 
-class BomMenu extends StatelessWidget {
+class BomMenu extends ConsumerStatefulWidget {
   const BomMenu({Key? key}) : super(key: key);
 
   @override
+  ConsumerState<BomMenu> createState() => _BomMenuState();
+}
+
+class _BomMenuState extends ConsumerState<BomMenu> {
+  late final user;
+  @override
+  void didChangeDependencies() async {
+    user = ref
+        .watch(userProvider.notifier)
+        .state;
+    ref.watch(characterListProvider.notifier).getCharacterUrl(user.characterId!);
+    // ref.watch(userCharacterUrlProvider.notifier).state;
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // print('user character uri = > ${}');
+    final charUri = ref.watch(userCharacterUrlProvider);
+    print('$user in bom menu.............................');
+    print('$charUri in bom menu.............................');
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          Consumer(
-            builder: (context, ref, child) {
-              final user = ref.watch(userProvider.notifier).state;
-              print('$user in bom menu.............................');
-              return UserAccountsDrawerHeader(
-                  accountName: const Text('bom'),
-                  accountEmail: const Text("bom@gmail.com"),
-                  currentAccountPicture: const CircleAvatar(
-                    backgroundColor: Colors.white,
-                    backgroundImage: AssetImage('images/pokemon.png'),
-                  ),
-                  otherAccountsPictures: [
-                    CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      backgroundImage: AssetImage('images/character.png'),
-                    ),
-                    Icon(Icons.star_rounded,
-                        color: Colors.yellowAccent,
-                        size: 15.0),
-                    Text('${user.star ?? 0}',
-                        style: TextStyle(fontSize: 15.0,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white))
-                  ],
-                  onDetailsPressed: () => {print('clicked')},
-                  decoration: const BoxDecoration(
-                    color: Color(0xffA876DE),
-                  ));
-            },
+          UserAccountsDrawerHeader(
+            accountName: const Text('bom'),
+            accountEmail: const Text("bom@gmail.com"),
+            currentAccountPicture: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              child: charUri == '' ? Container() : Container( //  Invalid argument(s): No host specified in URI file:/// <- 처음 charUri가 어떤 값도 없기 때문에 발생
+                height: 100.0,
+                child: Image.network(charUri, fit: BoxFit.fitHeight),
+              ),
+              // backgroundImage: AssetImage('images/pokemon.png'),
+            ),
+            otherAccountsPictures: [
+              Icon(Icons.star_rounded,
+                  color: Colors.yellowAccent,
+                  size: 15.0),
+              Text('${user.star ?? 0}',
+                  style: TextStyle(fontSize: 15.0,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white))
+            ],
+            onDetailsPressed: () => {print('clicked')},
+            decoration: const BoxDecoration(
+              color: Color(0xffA876DE),
+            ),
           ),
           ListTile(
             leading: Icon(Icons.notifications_none, color: Colors.grey[500]),
@@ -63,7 +78,8 @@ class BomMenu extends StatelessWidget {
             leading:
             Icon(Icons.shopping_cart_outlined, color: Colors.grey[500]),
             title: const Text('상점'),
-            onTap: () => {
+            onTap: () =>
+            {
               Navigator.push(
                   context,
                   MaterialPageRoute(

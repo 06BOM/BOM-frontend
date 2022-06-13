@@ -41,8 +41,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final user = ref.watch(userProvider);
     // ref.watch(characterListProvider.notifier).state; // collection_view -> didChangeDependencies 내부에서 처음 불러오지 않기 때문에 여기서 먼저 호출 (검색표시 경우)
     // print('current todos length = ${todos.length}');
-    print('Home rebuilding...deviceHeight : ${deviceHeight}');
-    print('current user id = ${user.userId}');
+    // print('Home rebuilding...deviceHeight : ${deviceHeight}');
     // for (var i = 0; i < todos.length; i++) {
     //   print('Each plan\'s userId = ${todos[i].userId}');
     // }

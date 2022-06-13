@@ -44,9 +44,17 @@ class CharacterListNotifier extends StateNotifier<List<Character>> {
     final response = await _repository.deleteCharacterInCollection(id);
     return response;
   }
-
+  Future getCharacterUrl(int id) async{
+    final response = await _repository.fetchCharacterImageUrl(id);
+    ref.read(userCharacterUrlProvider.notifier).state = response;
+    return response;
+  }
 }
 
 final userCharacterProvider = StateProvider<List<int>>((ref) {
   return [];
+});
+
+final userCharacterUrlProvider = StateProvider<String>((ref) {
+  return '';
 });

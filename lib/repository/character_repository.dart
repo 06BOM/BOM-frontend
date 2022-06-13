@@ -82,10 +82,10 @@ class CharacterRepository{
 
   // character id에 해당하는 캐릭터의 image url을 가져온다 (프로필 용도)
 
-  Future<String> fetchCharacterImageUrl() async {
+  Future<String> fetchCharacterImageUrl(int id) async {
     print('Fetch fetchCharacterImageUrl data...');
     var url = Uri.parse(
-        urlApi + '/character/imageurl?characterId=1');
+        urlApi + '/character/imageurl?characterId=$id');
     var response = await http.get(url);
     if (response.body == null) {
       print('error with get');
