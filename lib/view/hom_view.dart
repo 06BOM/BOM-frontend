@@ -39,7 +39,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final todos = ref.watch(filteredTodos);
     final user = ref.watch(userProvider);
-    ref.watch(characterListProvider.notifier).state; // collection_view -> didChangeDependencies 내부에서 처음 불러오지 않기 때문에 여기서 먼저 호출
+    // ref.watch(characterListProvider.notifier).state; // collection_view -> didChangeDependencies 내부에서 처음 불러오지 않기 때문에 여기서 먼저 호출 (검색표시 경우)
     // print('current todos length = ${todos.length}');
     print('Home rebuilding...deviceHeight : ${deviceHeight}');
     print('current user id = ${user.userId}');

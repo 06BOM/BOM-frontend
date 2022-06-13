@@ -48,15 +48,15 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
     'android': 'ca-app-pub-3940256099942544/5224354917',
   };
 
-  void updateList(String value) {
-    setState(() {
-      displayList = ref.watch(characterListProvider)
-          .where((el) =>
-              el.characterName!.toLowerCase().contains(value.toLowerCase()))
-          .toList();
-      print('updateList -> $displayList');
-    });
-  }
+  // void updateList(String value) {
+  //   setState(() {
+  //     displayList = ref.watch(characterListProvider)
+  //         .where((el) =>
+  //             el.characterName!.toLowerCase().contains(value.toLowerCase()))
+  //         .toList();
+  //     print('updateList -> $displayList');
+  //   });
+  // }
 
   void loadRewardedAd() {
     RewardedAd.load(
@@ -94,7 +94,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
       request: AdRequest(),
     )
       ..load();
-    displayList = ref.watch(characterListProvider.notifier).state;
+    // displayList = ref.watch(characterListProvider.notifier).state;
     loadRewardedAd();
   }
 
@@ -108,6 +108,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    displayList = ref.watch(characterListProvider);
     final userCharacters = ref
         .watch(userCharacterProvider.notifier)
         .state;
@@ -124,29 +125,29 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
       drawer: BomMenu(),
       body: Column(
         children: [
-          Container(
-            alignment: Alignment.centerLeft,
-            margin: EdgeInsets.only(top: 15, right: 15, left: 15),
-            width: widthSize * 0.9,
-            height: 45,
-            child: TextField(
-              // focusNode: _focus,
-              keyboardType: TextInputType.text,
-              onChanged: (text) {
-                updateList(text);
-              },
-              decoration: InputDecoration(
-                // filled: true,
-                //   fillColor: Color(0x),
-                hintText: '검색',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                prefixIcon: Icon(Icons.search),
-                prefixIconColor: Colors.grey.shade500,
-              ),
-            ),
-          ),
+          // Container(
+          //   alignment: Alignment.centerLeft,
+          //   margin: EdgeInsets.only(top: 15, right: 15, left: 15),
+          //   width: widthSize * 0.9,
+          //   height: 45,
+          //   child: TextField(
+          //     // focusNode: _focus,
+          //     keyboardType: TextInputType.text,
+          //     onChanged: (text) {
+          //       updateList(text);
+          //     },
+          //     decoration: InputDecoration(
+          //       // filled: true,
+          //       //   fillColor: Color(0x),
+          //       hintText: '검색',
+          //       border: OutlineInputBorder(
+          //         borderRadius: BorderRadius.circular(30.0),
+          //       ),
+          //       prefixIcon: Icon(Icons.search),
+          //       prefixIconColor: Colors.grey.shade500,
+          //     ),
+          //   ),
+          // ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 5.0),
             height: 60,
@@ -216,16 +217,21 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
             .map(
               (bomCharacter) =>
               GestureDetector(
-                onTap: () {
+                onTap: () async{
                   print('clicked');
-                  !userCharacters.contains(bomCharacter.characterId)
-                      ? myShowDialog(context, bomCharacter)
-                      : Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            CharacterDetails(character: bomCharacter)),
-                  );
+                  if(!userCharacters.contains(bomCharacter.characterId)){
+                    myShowDialog(context, bomCharacter);
+                  }else{
+                    // final result = await Navigator.push(
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              CharacterDetails(character: bomCharacter)),
+                    );
+
+                    // displayList = result;
+                  }
                 },
                 child: Container(
                   constraints: BoxConstraints(
@@ -256,10 +262,11 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
                               .characterId) ? Stack(
                             alignment: Alignment.center,
                             children: [
-                              Image.network(
-                                '${bomCharacter.imageUrl}',
+                              Image(
+                                image: NetworkImage('${bomCharacter.imageUrl}'),
                                 height: 60,
                                 fit: BoxFit.fitHeight,
+                                key: ValueKey('${bomCharacter.imageUrl}'),
                               ),
                               Container(
                                   decoration: BoxDecoration(
@@ -286,10 +293,11 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
                                   )
                               ),
                             ],
-                          ) : Image.network(
-                            '${bomCharacter.imageUrl}',
+                          ) : Image(
+                            image: NetworkImage('${bomCharacter.imageUrl}'),
                             height: 60,
                             fit: BoxFit.fitHeight,
+                            key: ValueKey('${bomCharacter.imageUrl}'),
                           ),
                         ),
                         Expanded(
@@ -378,15 +386,16 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
                               content: Text('구매가 완료되었습니다!'),
                             ),
                           );
-                          ref.refresh(characterListProvider.notifier)
-                              .getAllCharacter();
-                          final result = await Navigator.push(
+                          // ref.refresh(characterListProvider.notifier).getAllCharacter();
+                          // final result = await Navigator.push(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
                                     CharacterDetails(character: bomCharacter)),
                           );
-                          displayList = result;
+
+                          // displayList = result;
                         },
                         style: ElevatedButton.styleFrom(
                             primary: Color(0xffA876DE)),

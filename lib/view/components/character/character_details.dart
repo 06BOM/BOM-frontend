@@ -21,7 +21,7 @@ class CharacterDetails extends ConsumerWidget {
     const ticks = [1, 3, 5, 7, 11];
     var features = ["두뇌", "체력", "기술", "스피드", "파워"];
     var data = [
-      [10, 2, 7, 1, 5],
+      [character.brain!, character.strength!, character.teq!, character.speed!, character.power!],
     ];
 
     return Scaffold(
@@ -37,14 +37,11 @@ class CharacterDetails extends ConsumerWidget {
             // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
             //     builder: (BuildContext context) =>
             //         CollectionScreen()), (route) => false);
-            // Navigator.popUntil(context, (route) => route.isFirst);
+            ref.refresh(characterListProvider.notifier).getAllCharacter();
             final theCharacters = ref.watch(characterListProvider);
-            Navigator.pop(context, theCharacters);
-            Navigator.pop(context);
-            // Navigator.push(context,
-            //   MaterialPageRoute<void>(
-            //     builder: (BuildContext context) => const CollectionScreen(),
-            //   ),);
+            Navigator.popUntil(context, (route) => route.isFirst);
+            // Navigator.pop(context, theCharacters);
+            // Navigator.pop(context);
           },
         ),
       ),
@@ -99,7 +96,7 @@ class CharacterDetails extends ConsumerWidget {
                                               children: [
                                                 Icon(Icons.scale),
                                                 SizedBox(width: 3.0),
-                                                Text('10.0kg'),
+                                                Text('${character.weight}.0kg'),
                                               ],
                                             ),
                                             Text('몸무게',
@@ -120,7 +117,7 @@ class CharacterDetails extends ConsumerWidget {
                                                     child:
                                                         Icon(Icons.straighten)),
                                                 SizedBox(width: 3.0),
-                                                Text('0.4m'),
+                                                Text('${(character.height! * 0.1).toStringAsFixed(1)}m'),
                                               ],
                                             ),
                                             Container(
@@ -141,7 +138,7 @@ class CharacterDetails extends ConsumerWidget {
                                           children: [
                                             Row(
                                               children: [
-                                                Text('ENTP'),
+                                                Text('${character.mbti}'),
                                               ],
                                             ),
                                             Text('MBTI',
@@ -154,7 +151,7 @@ class CharacterDetails extends ConsumerWidget {
                                       ],
                                     ),
                                   ),
-                                  Text('당근족의 비선실세,\n 세계 5대 당근을 지키기 위해 밤샘근무 중~'),
+                                  Text('${character.introduction}'),
                                   Container(
                                     width: 200.0,
                                     height: 200.0,
@@ -176,11 +173,12 @@ class CharacterDetails extends ConsumerWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.network(
-                              '${character.imageUrl}',
+                            Image(
+                              image: NetworkImage('${character.imageUrl}'),
                               width: 200,
                               height: 200,
                               fit: BoxFit.fitHeight,
+                              key: ValueKey('${character.imageUrl}'),
                             ),
                           ],
                         ),
