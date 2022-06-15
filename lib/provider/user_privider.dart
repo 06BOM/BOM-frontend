@@ -29,8 +29,14 @@ class UserInfo extends StateNotifier<User> {
 
   Future editUserStar(int star) async {
     print('in editUserSTar');
-    final plans = await _repository.editStar(star);
-    return plans;
+    final flag = await _repository.editStar(star);
+    return flag;
+  }
+
+  Future editCharacter(int id, int characterId) async {
+    print('in editUserCharacter');
+    final flag = await _repository.editCharacter(id, characterId);
+    return flag;
   }
 }
 

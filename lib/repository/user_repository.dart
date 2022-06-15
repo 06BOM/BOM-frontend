@@ -95,5 +95,23 @@ class UserRepository {
     }
   }
 
+  Future editCharacter(int id, int characterId) async {
+    var url = Uri.parse(urlApi + '/user/character');
+    var response = await http.patch(url,
+        body: json.encode({"userId": id, "characterId": characterId}),
+        headers: <String, String>{'Content-type': 'application/json'});
+    print(response.body);
+    // print(response.headers);
+    // print(response.statusCode);
+    if (response.body == null) {
+      print('error with get');
+    }
+    if (response.statusCode == 404) {
+      print('Request failed with status: ${response.statusCode}.');
+      return false;
+    } else {
+      return true;
+    }
+  }
 
 }

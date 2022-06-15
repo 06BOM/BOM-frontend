@@ -125,29 +125,6 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
       drawer: BomMenu(),
       body: Column(
         children: [
-          // Container(
-          //   alignment: Alignment.centerLeft,
-          //   margin: EdgeInsets.only(top: 15, right: 15, left: 15),
-          //   width: widthSize * 0.9,
-          //   height: 45,
-          //   child: TextField(
-          //     // focusNode: _focus,
-          //     keyboardType: TextInputType.text,
-          //     onChanged: (text) {
-          //       updateList(text);
-          //     },
-          //     decoration: InputDecoration(
-          //       // filled: true,
-          //       //   fillColor: Color(0x),
-          //       hintText: '검색',
-          //       border: OutlineInputBorder(
-          //         borderRadius: BorderRadius.circular(30.0),
-          //       ),
-          //       prefixIcon: Icon(Icons.search),
-          //       prefixIconColor: Colors.grey.shade500,
-          //     ),
-          //   ),
-          // ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 5.0),
             height: 60,
@@ -190,7 +167,7 @@ class _CollectionScreenState extends ConsumerState<CollectionScreen> {
               print("${reward.amount} ${reward.type}");
               final int remainStars = ref.watch(userProvider.notifier).state.star! + 5;
               print('$remainStars : remainStars');
-              ref.read(userProvider.notifier).editUserStar(remainStars);
+              ref.read(userProvider.notifier).editUserStar(remainStars); // true 반환시 별을 획득하였습니다 문구 보여주기
             });
           }
         },
