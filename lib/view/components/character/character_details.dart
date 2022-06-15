@@ -21,11 +21,13 @@ class CharacterDetails extends ConsumerStatefulWidget {
 
 class _CharacterDetailsState extends ConsumerState<CharacterDetails> {
 
-  var userInfo;
+  var usersId;
+  var usersCharacterId;
 
   @override
   void didChangeDependencies(){
-    userInfo = ref.watch(userProvider.notifier).state;
+    usersId = ref.watch(userProvider.notifier).state.userId;
+    usersCharacterId = ref.watch(userProvider.notifier).state.characterId;
   }
 
   @override
@@ -45,7 +47,7 @@ class _CharacterDetailsState extends ConsumerState<CharacterDetails> {
       ],
     ];
 
-    print('...토끼맨~');
+    print('$usersCharacterId in build');
 
     return Scaffold(
       backgroundColor: Colors.orange,
@@ -190,29 +192,24 @@ class _CharacterDetailsState extends ConsumerState<CharacterDetails> {
                                       useSides: true,
                                     ),
                                   ),
-                                  userInfo.characterId == widget.character.characterId
-                                      ? ElevatedButton(
-                                          onPressed: null,
-                                          child: Text('장착 중'),
-                                        )
-                                      : ElevatedButton(
-                                          onPressed: () {
-                                            ref.read(userProvider.notifier).editCharacter(userInfo.userId, widget.character.characterId ?? userInfo.characterId).then((value) =>
-                                            {if (value) {
-                                                setState(() {
+                                  ElevatedButton(
+                                          onPressed: usersCharacterId == widget.character.characterId ? null : () {
+                                            setState(() {
                                               // userInfo = ref.watch(userProvider.notifier).state; // 딜레이 때문인지 못 불러오네...
-                                              userInfo.characterId = widget.character.characterId; // 일단 이렇게 대처
-                                            }),
-                                                print(userInfo.characterId),
+                                              usersCharacterId = widget.character.characterId; // 일단 이렇게 대처
+                                            });
+                                            print('$usersCharacterId in onPressed');
+                                            ref.read(userProvider.notifier).editCharacter(usersId, widget.character.characterId ?? usersCharacterId).then((value) =>
+                                            {if (value) {
                                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                               backgroundColor: Colors.teal[400],
-                                              duration: Duration(milliseconds: 2000),
+                                              duration: Duration(milliseconds: 3000),
                                               behavior: SnackBarBehavior.floating,
                                               content: value ? Text('장착되었습니다') : Text('장착되지 않았습니다.'),
                                             )),
                                             }});
                                           },
-                                          child: Text('장착'),
+                                          child: usersCharacterId == widget.character.characterId ? Text('장착 중') : Text('장착'),
                                           style: ElevatedButton.styleFrom(
                                               primary: Colors.orange,
                                               textStyle: const TextStyle(
