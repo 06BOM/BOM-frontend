@@ -1,8 +1,11 @@
+import 'package:bom_front/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:table_calendar/table_calendar.dart';
+import '../provider/character_provider.dart';
 import '../provider/todo_provider.dart';
+import '../provider/user_privider.dart';
 import '../utils.dart';
 import 'add_view.dart';
 import 'components/bom_menu.dart';
@@ -17,7 +20,8 @@ import 'components_statistics/toggle_button_plan.dart';
 import 'components_statistics/weekly_avg_data.dart';
 
 class HomeDetailScreen extends ConsumerStatefulWidget {
-  const HomeDetailScreen({Key? key}) : super(key: key);
+  late User? userInfo;
+  HomeDetailScreen({Key? key, this.userInfo}) : super(key: key);
 
   @override
   ConsumerState<HomeDetailScreen> createState() => _HomeDetailScreenState();
@@ -32,13 +36,14 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
     final userSelectedDay = ref.watch(selectedDate);
     final filter = ref.watch(segmentType);
     final todos = ref.watch(filteredTodos);
+    final user = ref.watch(userProvider.notifier).state;
     AsyncValue<int> userStar = ref.watch(dailyUserStars);
     AsyncValue<int> dailyTimes = ref.watch(loadDailyTotalTimes);
     print('Home detail rebuilding...');
 
-    for (var element in todos) {
-      print(element.time!);
-    }
+    // for (var element in todos) {
+    //   print(element.time!);
+    // }
 
     return Scaffold(
         appBar: const BomAppBar(),
@@ -50,7 +55,7 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
                 child: SlidableAutoCloseBehavior(
                   child: ListView(
                     children: [
-                      BomCalendar(pageCalendarFormat: CalendarFormat.week),
+                      BomCalendar(pageCalendarFormat: CalendarFormat.week, user:user),
                       const SizedBox(height: 15.0),
                       Container(
                         width: MediaQuery.of(context).size.width,

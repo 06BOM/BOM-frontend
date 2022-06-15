@@ -1,16 +1,20 @@
+import 'package:bom_front/model/user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:bom_front/utils.dart';
 import 'package:flutter/material.dart';
 
+import '../../../provider/character_provider.dart';
 import '../../../provider/todo_provider.dart';
+import '../../../provider/user_privider.dart';
 import '../../hom_view.dart';
 import '../../home_detail_view.dart';
 
 class BomCalendar extends ConsumerStatefulWidget {
   late CalendarFormat pageCalendarFormat;
+  late final user;
 
-  BomCalendar({Key? key, required this.pageCalendarFormat}) : super(key: key);
+  BomCalendar({Key? key, required this.pageCalendarFormat, required this.user}) : super(key: key);
 
   @override
   ConsumerState<BomCalendar> createState() => _BomCalendarState();
@@ -30,11 +34,17 @@ class _BomCalendarState extends ConsumerState<BomCalendar>
     );
     super.initState();
   }
+  @override
+  void didChangeDependencies() {
+    ref.watch(characterListProvider.notifier).getCharacterUrl(widget.user?.characterId ?? 1);
+    // ref.watch(userCharacterUrlProvider.notifier).state;
+  }
 
   @override
   Widget build(BuildContext context) {
     final deviceHeight = ref.watch(userDeviceHeight);
     final monthlyStars = ref.watch(montlyStarsProvider);
+    final charUri = ref.watch(userCharacterUrlProvider);
 
     return monthlyStars.when(
         data: (userMonthlyStars) => TableCalendar(
@@ -104,7 +114,7 @@ class _BomCalendarState extends ConsumerState<BomCalendar>
                     // padding: const EdgeInsets.only(top: 5.0, left: 6.0),
                     width: 100,
                     height: 100,
-                    child: Image.asset('images/character.png'));
+                    child: Image.network(charUri));
               }, markerBuilder: (context, day, events) {
                 // 월 변경시 rebuild 된다.
                 if (events.isNotEmpty) {
@@ -147,7 +157,7 @@ class _BomCalendarState extends ConsumerState<BomCalendar>
                   }else{
                     ref.read(selectedDate.notifier).state = selectedDay;
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const HomeDetailScreen()));
+                        MaterialPageRoute(builder: (context) => HomeDetailScreen()));
                   }
                   setState(() {
                     _selectedDay = selectedDay;

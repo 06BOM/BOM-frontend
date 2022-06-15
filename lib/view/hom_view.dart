@@ -45,7 +45,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // for (var i = 0; i < todos.length; i++) {
     //   print('Each plan\'s userId = ${todos[i].userId}');
     // }
-
     return Scaffold(
       appBar: const BomAppBar(),
       drawer: const BomMenu(),
@@ -53,7 +52,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Column(
           children: [
             Expanded(
-                child: BomCalendar(pageCalendarFormat: CalendarFormat.month)),
+                child: BomCalendar(pageCalendarFormat: CalendarFormat.month, user: user)),
             const SizedBox(height: 4), // to protect appBar block
             deviceHeight > 1500.0
                 ? Padding(
@@ -163,7 +162,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const HomeDetailScreen()));
+                  builder: (context) => HomeDetailScreen(userInfo: user)));
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
