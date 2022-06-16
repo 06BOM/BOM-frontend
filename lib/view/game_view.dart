@@ -75,7 +75,19 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               backgroundColor: const Color(0xffA876DE),
               onPressed: () {
                 print('click');
-                Navigator.pushNamed(context, CreateRoomScreen.routeName);
+                // Navigator.pushNamed(context, CreateRoomScreen.routeName);
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      )
+                    ),
+                    context: context,
+                    builder: (context) => buildSheet(),
+                  // isDismissible: false,
+                  // enableDrag: false,
+                );
               },
             ),
           ],
@@ -85,14 +97,26 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       bottomNavigationBar: BottomNavigationBarWidget(),
     );
   }
+
+  Widget buildSheet() => Container(
+    padding: EdgeInsets.all(16),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+Text('gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg', style: TextStyle(fontSize: 17)),
+      ],
+    ),
+  );
 }
 
 Widget gridBody(List<Room> display_list, BuildContext context, SocketMethods _socketMethods) {
   return display_list.length == 0
-      ? Center(
-          child: Text(
-          "결과가 없습니다.",
-        ))
+      ? Expanded(
+        child: Center(
+            child: Text(
+            "방이 존재하지 않습니다.",
+          )),
+      )
       : Expanded(
           // 없었을 때, verticalviewport error 해결
           child: GridView(
