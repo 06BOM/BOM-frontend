@@ -1,12 +1,19 @@
+import 'package:bom_front/model/user.dart';
 import 'package:bom_front/provider/room_provider.dart';
+import 'package:bom_front/view/components/quiz/create_room_sheet.dart';
+import 'package:bom_front/view/components/quiz/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
 import '../model/room.dart';
 import '../network/socket_method.dart';
+import '../provider/user_privider.dart';
+import '../utils/colors.dart';
 import 'components/bom_menu.dart';
 import 'components/bottom_navigation.dart';
 import 'components/plan/appbar.dart';
+import 'components/quiz/custom_textfield.dart';
 import 'create_room_screen.dart';
 
 class GameScreen extends ConsumerStatefulWidget {
@@ -25,15 +32,14 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     _socketMethods.getJoinedUserName(context, ref);
     _socketMethods.joinRoomFailListener(context);
     // _socketMethods.updateRoomListener(context); // 사용할지 고려
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final rooms = ref.watch(roomListProvider);
-    print(rooms);
-    print(ref.read(roomListProvider.notifier).searchTheRoom());
+    // print(rooms);
+    // print(ref.read(roomListProvider.notifier).searchTheRoom());
     return Scaffold(
       appBar: BomAppBar(
         screenName: 'game',
@@ -79,12 +85,13 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 showModalBottomSheet(
                   isScrollControlled: true,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(35),
+                        topRight: Radius.circular(35),
                       )
                     ),
                     context: context,
-                    builder: (context) => buildSheet(),
+                    builder: (context) => CreateRoomSheet(),
                   // isDismissible: false,
                   // enableDrag: false,
                 );
@@ -97,16 +104,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       bottomNavigationBar: BottomNavigationBarWidget(),
     );
   }
-
-  Widget buildSheet() => Container(
-    padding: EdgeInsets.all(16),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-Text('gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg', style: TextStyle(fontSize: 17)),
-      ],
-    ),
-  );
 }
 
 Widget gridBody(List<Room> display_list, BuildContext context, SocketMethods _socketMethods) {

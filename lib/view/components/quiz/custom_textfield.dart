@@ -28,9 +28,14 @@ class CustomTextField extends StatelessWidget {
         readOnly: isReadOnly,
         controller: controller,
         decoration: InputDecoration(
-          fillColor: Colors.white,
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          fillColor: Color(0xFFF4F6F9),
           filled: true,
           hintText: hintText,
+          hintStyle: TextStyle(color: Color(0xFF8F9BB3)),
         ),
       ),
     );

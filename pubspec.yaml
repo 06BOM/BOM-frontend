@@ -42,7 +42,7 @@ dependencies:
   flutter_speed_dial: ^5.1.0
   flutter_slidable: ^1.2.0
   weekday_selector: ^1.1.0
-
+  flutter_switch: ^0.3.2
   flutter_toggle_tab:
   pie_chart:
   fl_chart:

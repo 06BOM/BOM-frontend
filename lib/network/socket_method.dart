@@ -22,6 +22,7 @@ class SocketMethods {
 
   // EMITS
   void createRoom(String nickname, String roomName, String grade, String subject) {
+    print('userNickname : $nickname');
     Map<String, dynamic> data = {
       "roomName": roomName,
       "kind": 0,
