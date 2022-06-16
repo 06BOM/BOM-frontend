@@ -22,6 +22,12 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+
+  @override
+  void didChangeDependencies() {
+    ref.read(userProvider.notifier).getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceHeight = ref
@@ -38,7 +44,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // final todos = ref.watch(todoListProvider);
 
     final todos = ref.watch(filteredTodos);
-    final user = ref.watch(userProvider);
     // ref.watch(characterListProvider.notifier).state; // collection_view -> didChangeDependencies 내부에서 처음 불러오지 않기 때문에 여기서 먼저 호출 (검색표시 경우)
     // print('current todos length = ${todos.length}');
     // print('Home rebuilding...deviceHeight : ${deviceHeight}');
@@ -52,7 +57,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Column(
           children: [
             Expanded(
-                child: BomCalendar(pageCalendarFormat: CalendarFormat.month, user: user)),
+                child: BomCalendar(pageCalendarFormat: CalendarFormat.month)),
             const SizedBox(height: 4), // to protect appBar block
             deviceHeight > 1500.0
                 ? Padding(
@@ -162,7 +167,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => HomeDetailScreen(userInfo: user)));
+                  builder: (context) => HomeDetailScreen()));
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

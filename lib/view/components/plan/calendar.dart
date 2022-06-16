@@ -12,9 +12,8 @@ import '../../home_detail_view.dart';
 
 class BomCalendar extends ConsumerStatefulWidget {
   late CalendarFormat pageCalendarFormat;
-  late final user;
 
-  BomCalendar({Key? key, required this.pageCalendarFormat, required this.user}) : super(key: key);
+  BomCalendar({Key? key, required this.pageCalendarFormat}) : super(key: key);
 
   @override
   ConsumerState<BomCalendar> createState() => _BomCalendarState();
@@ -34,17 +33,18 @@ class _BomCalendarState extends ConsumerState<BomCalendar>
     );
     super.initState();
   }
-  @override
-  void didChangeDependencies() {
-    ref.watch(characterListProvider.notifier).getCharacterUrl(widget.user?.characterId ?? 1);
-    // ref.watch(userCharacterUrlProvider.notifier).state;
-  }
+  // @override
+  // void didChangeDependencies() {
+  // ref.watch(characterListProvider.notifier).getCharacterUrl(widget.user?.characterId ?? 1);
+  //   // ref.watch(userCharacterUrlProvider.notifier).state;
+  // }
 
   @override
   Widget build(BuildContext context) {
     final deviceHeight = ref.watch(userDeviceHeight);
     final monthlyStars = ref.watch(montlyStarsProvider);
     final charUri = ref.watch(userCharacterUrlProvider);
+    // final charUri = ref.watch(userCharacterUrlProvider);
 
     return monthlyStars.when(
         data: (userMonthlyStars) => TableCalendar(
@@ -114,7 +114,12 @@ class _BomCalendarState extends ConsumerState<BomCalendar>
                     // padding: const EdgeInsets.only(top: 5.0, left: 6.0),
                     width: 100,
                     height: 100,
-                    child: Image.network(charUri));
+                    child: charUri.when(
+                        data: ((data) => Image.network(data)),
+                        error: (e, stackTrace) => Text('Monthly Stars Load Error : $e'),
+                        loading: () => Container()
+                    )
+                );
               }, markerBuilder: (context, day, events) {
                 // 월 변경시 rebuild 된다.
                 if (events.isNotEmpty) {

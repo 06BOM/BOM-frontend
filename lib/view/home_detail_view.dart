@@ -20,8 +20,7 @@ import 'components_statistics/toggle_button_plan.dart';
 import 'components_statistics/weekly_avg_data.dart';
 
 class HomeDetailScreen extends ConsumerStatefulWidget {
-  late User? userInfo;
-  HomeDetailScreen({Key? key, this.userInfo}) : super(key: key);
+  HomeDetailScreen({Key? key}) : super(key: key);
 
   @override
   ConsumerState<HomeDetailScreen> createState() => _HomeDetailScreenState();
@@ -55,7 +54,7 @@ class _HomeDetailScreenState extends ConsumerState<HomeDetailScreen> {
                 child: SlidableAutoCloseBehavior(
                   child: ListView(
                     children: [
-                      BomCalendar(pageCalendarFormat: CalendarFormat.week, user:user),
+                      BomCalendar(pageCalendarFormat: CalendarFormat.week),
                       const SizedBox(height: 15.0),
                       Container(
                         width: MediaQuery.of(context).size.width,

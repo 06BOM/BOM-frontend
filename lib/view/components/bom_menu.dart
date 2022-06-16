@@ -19,7 +19,7 @@ class _BomMenuState extends ConsumerState<BomMenu> {
     user = ref
         .watch(userProvider.notifier)
         .state;
-    ref.watch(characterListProvider.notifier).getCharacterUrl(user.characterId!);
+    // ref.watch(characterListProvider.notifier).getCharacterUrl();
     // ref.watch(userCharacterUrlProvider.notifier).state;
   }
 
@@ -40,7 +40,11 @@ class _BomMenuState extends ConsumerState<BomMenu> {
               backgroundColor: Colors.transparent,
               child: charUri == '' ? Container() : Container( //  Invalid argument(s): No host specified in URI file:/// <- 처음 charUri가 어떤 값도 없기 때문에 발생
                 height: 100.0,
-                child: Image.network(charUri, fit: BoxFit.fitHeight),
+                child: charUri.when(
+                    data: ((data) => Image.network(data, fit: BoxFit.fitHeight)),
+                    error: (e, stackTrace) => Text('Monthly Stars Load Error : $e'),
+                    loading: () => Container()
+                ),
               ),
               // backgroundImage: AssetImage('images/pokemon.png'),
             ),
