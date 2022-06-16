@@ -8,11 +8,8 @@ import '../provider/room_data_provider.dart';
 import '../utils/utils.dart';
 
 class SocketMethods {
-  // final _socketClient = SocketClient.instance.socket != null ? SocketClient.instance.socket : throw new Error();
   final _socketClient = SocketClient.instance.socket;
 
-  // dynamic _roomData = '';
-  // dynamic get roomData async => await _roomData;
   // 닉네임 제출은 의도 파악하고 적용하기
   void disconnect() {
     _socketClient.disconnect();
@@ -234,6 +231,7 @@ class SocketMethods {
       print('$data in createRoundListener');
       ref.watch(roundDataProvider.notifier).updateRoundData(data);
       ref.watch(showAnswerProvider.notifier).state = data[2]; // false
+      // data[1]
     });
   }
 

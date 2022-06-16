@@ -50,32 +50,38 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   loading: () => Container()))
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'add',
-        child: const Icon(Icons.add),
-        backgroundColor: const Color(0xffA876DE),
-        onPressed: () {
-          // ref.read(categoryIdToCreate.notifier).state = 1;
-          // ref.read(repetitionTypeToCreate.notifier).state = 0;
-          // ref.read(limitedDate.notifier).state = '';
-          // ref.read(selectedWeek.notifier).state = [
-          //   0,
-          //   0,
-          //   0,
-          //   0,
-          //   0,
-          //   0,
-          //   0
-          // ];
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) =>
-          //             AddPlan()));
-          print('click');
-          Navigator.pushNamed(context, CreateRoomScreen.routeName);
-        },
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              child: const Icon(Icons.refresh, color: Color(0xffA876DE)),
+              backgroundColor: const Color(0xffffffff),
+              foregroundColor: Colors.grey,
+              elevation: 1.5,
+              mini: true,
+              hoverColor: Colors.white,
+              hoverElevation: 0.0,
+              onPressed: () {
+                print('update!');
+                ref.refresh(roomListProvider.notifier).getAllRooms();
+              },
+            ),
+            const SizedBox(width: 105.0),
+            FloatingActionButton(
+              heroTag: 'add',
+              child: const Icon(Icons.add),
+              backgroundColor: const Color(0xffA876DE),
+              onPressed: () {
+                print('click');
+                Navigator.pushNamed(context, CreateRoomScreen.routeName);
+              },
+            ),
+          ],
+        ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: BottomNavigationBarWidget(),
     );
   }
