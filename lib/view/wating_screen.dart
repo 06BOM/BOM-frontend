@@ -65,15 +65,15 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
     pageController.dispose();
   }
 
+  final List<String> Msg = ['hi', 'hello'];
   @override
   Widget build(BuildContext context) {
     // List<dynamic> roomUsers = ref.watch(roomDataProvider.notifier).state;
     List<dynamic> roomUsers = ref.watch(roomUsersProvider);
     print('$roomUsers in waitingScreen');
     // List<String> roomMsgs = ref.watch(roomMsgProvider.notifier).state;
-    // List<String> roomMsgs = ref.watch(roomMsgProvider);
-    //
-    // print('$roomUsers $roomMsgs in watinglobby building...');
+    final roomMsgs = ref.watch(roomMsgProvider);
+    print('$roomUsers ${roomMsgs.length ==0 ? '대기 중...' : roomMsgs[1]} in watinglobby building...');
     return SafeArea(
         child: Container(
       height: MediaQuery.of(context).size.height,
@@ -212,22 +212,9 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
                         Expanded(
                           child: ListView.builder(
                             itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  // for (var msg in roomMsgs)
-                                  //   Container(
-                                  // constraints: BoxConstraints(
-                                  //   maxWidth: MediaQuery.of(context).size.width * 0.80,
-                                  // ),
-                                  // padding: EdgeInsets.all(10),
-                                  // margin: EdgeInsets.symmetric(vertical: 10),
-                                  //     alignment: Alignment.topLeft,
-                                  //     child: Text(msg),
-                                  //   )
-                                  Text('hi')
-                                ],
-                              );
+                              return Text(roomMsgs[1][index]);
                             },
+                            itemCount: roomMsgs.isEmpty ? 0 : roomMsgs[1].length,
                           ),
                         ),
                         sendMessageArea(roomMsgController, _socketMethods, ref)

@@ -61,15 +61,15 @@ class ScoreNotifier extends StateNotifier<List<dynamic>> {
   }
 }
 
-final roomMsgProvider = StateNotifierProvider<MsgNotifier, List<String>>((ref) {
+final roomMsgProvider = StateNotifierProvider<MsgNotifier, List<dynamic>>((ref) {
   return MsgNotifier();
 });
 
-class MsgNotifier extends StateNotifier<List<String>> {
+class MsgNotifier extends StateNotifier<List<dynamic>> {
   MsgNotifier() : super([]);
 
-  void updateMsg(String data){
-    state = [...state, data];
+  void updateMsg(List<dynamic> data){
+    state = data;
   }
 }
 
@@ -88,3 +88,4 @@ final showAnswerProvider = StateProvider<bool>((ref){
 final roomUsersProvider = StateProvider<List<dynamic>>((ref){
   return [];
 });
+

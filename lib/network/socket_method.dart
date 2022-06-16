@@ -260,8 +260,9 @@ class SocketMethods {
 
   void updateMsgListener(WidgetRef ref){
     _socketClient.on('new_message', (data){
-      print('$data in updateMsgListener / ${data.runtimeType}');
-      // ref.read(roomMsgProvider.notifier).updateMsg(data);
+      List<dynamic> list = json.decode(data);
+      print('$list in updateMsgListener / ${list.runtimeType}');
+      ref.read(roomMsgProvider.notifier).updateMsg(list[0]);
     });
   }
 }
