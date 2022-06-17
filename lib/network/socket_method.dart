@@ -104,10 +104,12 @@ class SocketMethods {
     });
   }
 
-  void selectOX(String ox){
+  void selectOX(String ox, WidgetRef ref, String roomName){
     _socketClient.emit("ox", {
       'userId': 1,
       'ox': ox,
+      'roomName': roomName,
+      'index': ref.watch(roundDataProvider.notifier).state[1],
     });
   }
 
@@ -263,7 +265,7 @@ class SocketMethods {
     _socketClient.on('new_message', (data){
       List<dynamic> list = json.decode(data);
       print('$list in updateMsgListener / ${list.runtimeType}');
-      ref.read(roomMsgProvider.notifier).updateMsg(list[0]);
+      // ref.read(roomMsgProvider.notifier).updateMsg(list[0]);
     });
   }
 }

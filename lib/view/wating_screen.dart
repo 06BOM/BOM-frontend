@@ -72,8 +72,8 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
     List<dynamic> roomUsers = ref.watch(roomUsersProvider);
     print('$roomUsers in waitingScreen');
     // List<String> roomMsgs = ref.watch(roomMsgProvider.notifier).state;
-    final roomMsgs = ref.watch(roomMsgProvider);
-    print('$roomUsers ${roomMsgs.length ==0 ? '대기 중...' : roomMsgs[1]} in watinglobby building...');
+    // final roomMsgs = ref.watch(roomMsgProvider);
+    // print('$roomUsers ${roomMsgs.length ==0 ? '대기 중...' : roomMsgs[1]} in watinglobby building...');
     return SafeArea(
         child: Container(
       height: MediaQuery.of(context).size.height,
@@ -212,9 +212,10 @@ class _WaitingLobbyState extends ConsumerState<WaitingLobby>
                         Expanded(
                           child: ListView.builder(
                             itemBuilder: (context, index) {
-                              return Text(roomMsgs[1][index]);
+                              return Column(children: [Text('hi')],);
+                              // return Text(roomMsgs[1][index]);
                             },
-                            itemCount: roomMsgs.isEmpty ? 0 : roomMsgs[1].length,
+                            // itemCount: roomMsgs.isEmpty ? 0 : roomMsgs[1].length,
                           ),
                         ),
                         sendMessageArea(roomMsgController, _socketMethods, ref)

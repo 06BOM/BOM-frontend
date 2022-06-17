@@ -286,7 +286,7 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions>
                       children: [
                         GestureDetector(
                           onTap: () =>
-                              {print('O touch'), _socketMethods.selectOX('o')},
+                              {print('O touch'), _socketMethods.selectOX('o', ref, widget.roomName)},
                           child: Container(
                             child: Center(
                               child: Text(
@@ -307,7 +307,7 @@ class _QuizQuestionsState extends ConsumerState<QuizQuestions>
                         ),
                         GestureDetector(
                           onTap: () =>
-                              {print('X touch'), _socketMethods.selectOX('x')},
+                              {print('X touch'), _socketMethods.selectOX('x', ref, widget.roomName)},
                           child: Container(
                             child: Center(
                               child: Text(
