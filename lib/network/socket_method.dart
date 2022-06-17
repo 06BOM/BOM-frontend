@@ -106,10 +106,12 @@ class SocketMethods {
     });
   }
 
-  void selectOX(String ox){
+  void selectOX(String ox, WidgetRef ref, String roomName){
     _socketClient.emit("ox", {
       'userId': 1,
       'ox': ox,
+      'roomName': roomName,
+      'index': ref.watch(roundDataProvider.notifier).state[1]
     });
   }
 
