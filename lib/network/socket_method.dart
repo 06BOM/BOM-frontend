@@ -3,6 +3,7 @@ import 'package:bom_front/view/wating_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/src/consumer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../provider/room_data_provider.dart';
 import '../utils/utils.dart';
@@ -144,10 +145,12 @@ class SocketMethods {
     });
   }
 
-  void createRoomSuccessListener(BuildContext context, WidgetRef ref) {
+  void createRoomSuccessListener(BuildContext context, WidgetRef ref)  {
     print('listen createRoomSuccessListener in socket_methods');
-    _socketClient.on('create_room', (roomData) {
+    _socketClient.on('create_room', (roomData) async {
       print('$roomData in createRoomSuccessListener function | context : $context'); // [테스트4, 1, 유저1, 0] -> [방이름, 현재인원, 닉네임, 0=> 방장]
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt('flag', 0);
       // List<dynamic> list = json.decode(roomData);
       // print(list);
       // ref.watch(roomDataProvider.notifier).updateRoomData(list);
@@ -171,9 +174,11 @@ class SocketMethods {
     print('listen getJoinedUserName in socket_methods');
     // room -> [유저이름, 방이름, 2(참여인원)] (채팅방에 들어온 유저 표시 위함)
     // -> 이후 첫번째, 두번째 사람들 waiting 방으로 -> 바꾸자
-    _socketClient.on('welcome', (roomData) {
+    _socketClient.on('welcome', (roomData) async{
       // 전역적인 배열에 넣어서 채팅방에 업데이트하기
       print('$roomData in getJoinedUserName function | context : $context'); //
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt('flag', 1);
       // List<dynamic> list = json.decode(roomData);
       // print(list);
       // ref.watch(roomDataProvider.notifier).updateRoomData(list);

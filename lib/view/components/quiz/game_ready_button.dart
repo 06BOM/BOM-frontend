@@ -5,6 +5,7 @@ import 'package:bom_front/utils/colors.dart';
 import 'package:bom_front/view/components/quiz/box_shadow.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'custom_button.dart';
 
@@ -27,12 +28,27 @@ class _GameReadyButtonState extends ConsumerState<GameReadyButton> {
   var playerMe = null;
   bool isBtn = true;
 
+  int _counter = 0;
+
   @override
   void initState() {
-    // widget.socketObj.checkReadyListener(ref);
-    // widget.socketObj.isCompleteReadyListener(ref);
     super.initState();
+    _loadCounter();
   }
+
+  //시작할 때 counter 값을 불러옵니다.
+  _loadCounter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _counter = (prefs.getInt('flag') ?? 0);
+    });
+  }
+  // @override
+  // void initState() {
+  //   // widget.socketObj.checkReadyListener(ref);
+  //   // widget.socketObj.isCompleteReadyListener(ref);
+  //   super.initState();
+  // }
 
   @override
   void didChangeDependencies() {
@@ -49,8 +65,10 @@ class _GameReadyButtonState extends ConsumerState<GameReadyButton> {
 
   @override
   Widget build(BuildContext context) {
-    int isRoomHost = ref.watch(roomDataProvider.notifier).state[3];
-    return isRoomHost != 0
+    print('기기값 : $_counter in ready button widget');
+    // return SizedBox.shrink();
+    // int isRoomHost = ref.watch(roomDataProvider.notifier).state[3];
+    return _counter != 0
         ? (isBtn
             ? CustomGameButton(
                 onTap: () {
@@ -68,6 +86,8 @@ class _GameReadyButtonState extends ConsumerState<GameReadyButton> {
             print('in game ready button');
           }
     });
+
+
     // return CustomGameButton(title: '게임 시작', onTap: () {
     //   if(ref.watch(readyDataProvider.notifier).state){
     //     widget.socketObj.startGame(ref);

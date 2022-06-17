@@ -61,6 +61,7 @@ class ScoreNotifier extends StateNotifier<List<dynamic>> {
   }
 }
 
+
 final roomMsgProvider = StateNotifierProvider<MsgNotifier, List<dynamic>>((ref) {
   return MsgNotifier();
 });
