@@ -22,7 +22,7 @@ class SocketMethods {
 
   // EMITS
   void createRoom(String nickname, String roomName, String grade, String subject) {
-    print('userNickname : $nickname');
+    print('userNickname : $nickname / roomName : $roomName');
     Map<String, dynamic> data = {
       "roomName": roomName,
       "kind": 0,
@@ -46,6 +46,7 @@ class SocketMethods {
       _socketClient.emit('join_room', {
         'nickname': nickname,
         'roomName': roomName,
+        'userId': 2,
       });
     }
   }

@@ -50,30 +50,30 @@ class _GameReadyButtonState extends ConsumerState<GameReadyButton> {
   @override
   Widget build(BuildContext context) {
     int isRoomHost = ref.watch(roomDataProvider.notifier).state[3];
-    // return isRoomHost != 0
-    //     ? (isBtn
-    //         ? CustomGameButton(
-    //             onTap: () {
-    //               toggleButton();
-    //             },
-    //             title: '게임 준비')
-    //         : CustomGameButton(
-    //             onTap: () {
-    //               toggleButton();
-    //             },
-    //             title: '준비 취소'))
-    //     : CustomGameButton(title: '게임 시작', onTap: () {
-    //       if(ref.watch(readyDataProvider.notifier).state){
-    //         widget.socketObj.startGame(ref);
-    //         print('in game ready button');
-    //       }
-    // });
-    return CustomGameButton(title: '게임 시작', onTap: () {
-      if(ref.watch(readyDataProvider.notifier).state){
-        widget.socketObj.startGame(ref);
-        print('in game ready button');
-      }
+    return isRoomHost != 0
+        ? (isBtn
+            ? CustomGameButton(
+                onTap: () {
+                  toggleButton();
+                },
+                title: '게임 준비')
+            : CustomGameButton(
+                onTap: () {
+                  toggleButton();
+                },
+                title: '준비 취소'))
+        : CustomGameButton(title: '게임 시작', onTap: () {
+          if(ref.watch(readyDataProvider.notifier).state){
+            widget.socketObj.startGame(ref);
+            print('in game ready button');
+          }
     });
+    // return CustomGameButton(title: '게임 시작', onTap: () {
+    //   if(ref.watch(readyDataProvider.notifier).state){
+    //     widget.socketObj.startGame(ref);
+    //     print('in game ready button');
+    //   }
+    // });
   }
 
   Widget CustomGameButton({required title, required onTap}){

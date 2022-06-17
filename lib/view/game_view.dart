@@ -134,7 +134,7 @@ Widget gridBody(List<Room> display_list, BuildContext context, SocketMethods _so
                       //           CharacterDetails(character: bomCharacter)),
                       // );
                       _socketMethods.joinRoom(
-                          'BOM', bomRoom.roomName!);
+                          '가희', bomRoom.roomName!);
                     },
                     child: Container(
                       constraints: BoxConstraints(
