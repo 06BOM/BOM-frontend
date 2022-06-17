@@ -36,6 +36,7 @@ class SocketMethods {
       "participantsNum": 0
     };
     if (nickname.isNotEmpty && roomName.isNotEmpty) {
+      print('in createRoom');
       _socketClient.emit('create_room', {
         'nickname': nickname,
         'payload': data,
